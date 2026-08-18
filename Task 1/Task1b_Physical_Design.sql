@@ -94,9 +94,9 @@ CREATE TABLE date_dim
 --  2. CUSTOMER_DIM  ***  SLOWLY CHANGING DIMENSION TYPE 2  ***
 --     Source : Customer + Member + MembershipType
 --     Member is a 1:1 subtype of Customer, so members and walk-in non-members
---     share one dimension and are separated by memberFlag.
+--     share one dimension and are separated by member_flag.
 --
---     Type 2 (a new version row is created)  : customerStatus, memberFlag,
+--     Type 2 (a new version row is created)  : customerStatus, member_flag,
 --                                              membershipType
 --     Type 1 (the existing row is overwritten): customerName, customerICNo,
 --                                              customerEmail, membershipExpiry
@@ -106,21 +106,21 @@ CREATE TABLE date_dim
 --
 --     Member.PointsBalance is deliberately excluded: it changes on every
 --     transaction and would create a new version row per order.  The balance
---     is obtained instead by summing POINT_FACT.netPoints.
+--     is obtained instead by summing POINT_FACT.net_points.
 -- ----------------------------------------------------------------------------
 CREATE TABLE customer_dim
 (
     customer_key          NUMBER(10)    NOT NULL,
-    customerID            VARCHAR2(5),
-    customerName          VARCHAR2(100) DEFAULT 'Unknown'    NOT NULL,
-    customerICNo          VARCHAR2(14)  DEFAULT 'Unknown'    NOT NULL,
-    customerEmail         VARCHAR2(100) DEFAULT 'Unknown'    NOT NULL,
-    customerStatus        VARCHAR2(10)  DEFAULT 'Unknown'    NOT NULL,
-    memberFlag            CHAR(1)       DEFAULT 'N'          NOT NULL,
-    membershipType        VARCHAR2(20)  DEFAULT 'Non-Member' NOT NULL,
-    annualFee             NUMBER(6,2)   DEFAULT 0            NOT NULL,
-    pointEarnRate         NUMBER(4,2)   DEFAULT 0            NOT NULL,
-    membershipExpiry      DATE,
+    customer_id           VARCHAR2(5),
+    customer_name         VARCHAR2(100) DEFAULT 'Unknown'    NOT NULL,
+    customer_ic           VARCHAR2(14)  DEFAULT 'Unknown'    NOT NULL,
+    customer_email        VARCHAR2(100) DEFAULT 'Unknown'    NOT NULL,
+    customer_status       VARCHAR2(10)  DEFAULT 'Unknown'    NOT NULL,
+    member_flag           CHAR(1)       DEFAULT 'N'          NOT NULL,
+    membership_type       VARCHAR2(20)  DEFAULT 'Non-Member' NOT NULL,
+    annual_fee            NUMBER(6,2)   DEFAULT 0            NOT NULL,
+    point_earn_rate       NUMBER(4,2)   DEFAULT 0            NOT NULL,
+    membership_expiry     DATE,
     effective_start_date  DATE          NOT NULL,
     effective_end_date    DATE          DEFAULT DATE '9999-12-31' NOT NULL,
     is_current_flag       CHAR(1)       DEFAULT 'Y'          NOT NULL,
@@ -131,19 +131,19 @@ CREATE TABLE customer_dim
     dq_flag               CHAR(1)       DEFAULT 'V'          NOT NULL,
     CONSTRAINT customer_dim_pk PRIMARY KEY (customer_key),
     CONSTRAINT customer_dim_customerid_fk
-        FOREIGN KEY (customerID) REFERENCES Customer (CustomerID),
+        FOREIGN KEY (customer_id) REFERENCES Customer (customer_id),
     CONSTRAINT customer_dim_version_uq
-        UNIQUE (customerID, effective_start_date),
+        UNIQUE (customer_id, effective_start_date),
     CONSTRAINT chk_customer_dim_status
-        CHECK (customerStatus IN ('Active','Inactive','Unknown')),
-    CONSTRAINT chk_customer_dim_memberflag
-        CHECK (memberFlag IN ('Y','N')),
+        CHECK (customer_status IN ('Active','Inactive','Unknown')),
+    CONSTRAINT chk_customer_dim_member_flag
+        CHECK (member_flag IN ('Y','N')),
     CONSTRAINT chk_customer_dim_type
-        CHECK (membershipType IN ('Normal','VIP','Non-Member','Unknown')),
+        CHECK (membership_type IN ('Normal','VIP','Non-Member','Unknown')),
     CONSTRAINT chk_customer_dim_current
         CHECK (is_current_flag IN ('Y','N')),
-    CONSTRAINT chk_customer_dim_fee     CHECK (annualFee     >= 0),
-    CONSTRAINT chk_customer_dim_rate    CHECK (pointEarnRate >= 0),
+    CONSTRAINT chk_customer_dim_fee     CHECK (annual_fee     >= 0),
+    CONSTRAINT chk_customer_dim_rate    CHECK (point_earn_rate >= 0),
     CONSTRAINT chk_customer_dim_version CHECK (version_no    >= 1),
     CONSTRAINT chk_customer_dim_dates
         CHECK (effective_end_date >= effective_start_date),
@@ -155,41 +155,41 @@ CREATE TABLE customer_dim
 --     Source : Item + Category + Supplier
 --     Item -> Category and Item -> Supplier are both many-to-one, so both are
 --     flattened into this dimension rather than snowflaked.
---     categoryID and supplierID are retained because Supplier.SupplierName
+--     category_id and supplier_id are retained because Supplier.supplier_name
 --     carries no UNIQUE constraint in the source and therefore cannot safely
 --     be used on its own as a grouping key in Task 3.
 -- ----------------------------------------------------------------------------
 CREATE TABLE item_dim
 (
     item_key           NUMBER(10)    NOT NULL,
-    itemID             VARCHAR2(5),
-    itemName           VARCHAR2(100) DEFAULT 'Unknown' NOT NULL,
-    itemUnitPrice      NUMBER(8,2)   DEFAULT 0         NOT NULL,
-    itemStatus         VARCHAR2(12)  DEFAULT 'Unknown' NOT NULL,
-    categoryID         VARCHAR2(4)   DEFAULT 'UNKN'    NOT NULL,
-    categoryName       VARCHAR2(50)  DEFAULT 'Unknown' NOT NULL,
-    supplierID         VARCHAR2(5)   DEFAULT 'UNKN'    NOT NULL,
-    supplierName       VARCHAR2(100) DEFAULT 'Unknown' NOT NULL,
-    supplierContactNo  VARCHAR2(15)  DEFAULT 'Unknown' NOT NULL,
+    item_id             VARCHAR2(5),
+    item_name           VARCHAR2(100) DEFAULT 'Unknown' NOT NULL,
+    item_unit_price      NUMBER(8,2)   DEFAULT 0         NOT NULL,
+    item_status         VARCHAR2(12)  DEFAULT 'Unknown' NOT NULL,
+    category_id         VARCHAR2(4)   DEFAULT 'UNKN'    NOT NULL,
+    category_name       VARCHAR2(50)  DEFAULT 'Unknown' NOT NULL,
+    supplier_id         VARCHAR2(5)   DEFAULT 'UNKN'    NOT NULL,
+    supplier_name       VARCHAR2(100) DEFAULT 'Unknown' NOT NULL,
+    supplier_contact_no  VARCHAR2(15)  DEFAULT 'Unknown' NOT NULL,
     etl_batch_id       NUMBER(8)     NOT NULL,
     etl_load_dt        DATE          DEFAULT SYSDATE   NOT NULL,
     etl_update_dt      DATE,
     dq_flag            CHAR(1)       DEFAULT 'V'       NOT NULL,
     CONSTRAINT item_dim_pk PRIMARY KEY (item_key),
-    CONSTRAINT item_dim_itemid_fk
-        FOREIGN KEY (itemID) REFERENCES Item (ItemID),
-    CONSTRAINT item_dim_itemid_uq UNIQUE (itemID),
+    CONSTRAINT item_dim_item_id_fk
+        FOREIGN KEY (item_id) REFERENCES Item (item_id),
+    CONSTRAINT item_dim_item_id_uq UNIQUE (item_id),
     CONSTRAINT chk_item_dim_status
-        CHECK (itemStatus IN ('Pending QC','Active','Discontinued','Unknown')),
-    CONSTRAINT chk_item_dim_price  CHECK (itemUnitPrice >= 0),
+        CHECK (item_status IN ('Pending QC','Active','Discontinued','Unknown')),
+    CONSTRAINT chk_item_dim_price  CHECK (item_unit_price >= 0),
     CONSTRAINT chk_item_dim_dqflag CHECK (dq_flag IN ('V','S','D'))
 );
 
 -- ----------------------------------------------------------------------------
 --  4. BRANCH_DIM  (Type 1)
---     Source : Branch  (BranchID, City, State, ContactNo only)
---     branchName  is derived  : branchCity || ' Branch'
---     branchRegion is derived : Northern      = Perlis, Kedah, Pulau Pinang, Perak
+--     Source : Branch  (branch_id, City, State, ContactNo only)
+--     branch_name  is derived  : branch_city || ' Branch'
+--     branch_region is derived : Northern      = Perlis, Kedah, Pulau Pinang, Perak
 --                               Central       = Selangor, Kuala Lumpur,
 --                                               Putrajaya, Negeri Sembilan
 --                               Southern      = Melaka, Johor
@@ -202,51 +202,51 @@ CREATE TABLE item_dim
 CREATE TABLE branch_dim
 (
     branch_key       NUMBER(10)    NOT NULL,
-    branchID         VARCHAR2(5),
-    branchName       VARCHAR2(60)  DEFAULT 'Unknown' NOT NULL,
-    branchCity       VARCHAR2(50)  DEFAULT 'Unknown' NOT NULL,
-    branchState      VARCHAR2(30)  DEFAULT 'Unknown' NOT NULL,
-    branchRegion     VARCHAR2(20)  DEFAULT 'Unknown' NOT NULL,
-    branchContactNo  VARCHAR2(15)  DEFAULT 'Unknown' NOT NULL,
+    branch_id         VARCHAR2(5),
+    branch_name       VARCHAR2(60)  DEFAULT 'Unknown' NOT NULL,
+    branch_city       VARCHAR2(50)  DEFAULT 'Unknown' NOT NULL,
+    branch_state      VARCHAR2(30)  DEFAULT 'Unknown' NOT NULL,
+    branch_region     VARCHAR2(20)  DEFAULT 'Unknown' NOT NULL,
+    branch_contact_no  VARCHAR2(15)  DEFAULT 'Unknown' NOT NULL,
     etl_batch_id     NUMBER(8)     NOT NULL,
     etl_load_dt      DATE          DEFAULT SYSDATE   NOT NULL,
     etl_update_dt    DATE,
     dq_flag          CHAR(1)       DEFAULT 'V'       NOT NULL,
     CONSTRAINT branch_dim_pk PRIMARY KEY (branch_key),
-    CONSTRAINT branch_dim_branchid_fk
-        FOREIGN KEY (branchID) REFERENCES Branch (BranchID),
-    CONSTRAINT branch_dim_branchid_uq UNIQUE (branchID),
+    CONSTRAINT branch_dim_branch_id_fk
+        FOREIGN KEY (branch_id) REFERENCES Branch (branch_id),
+    CONSTRAINT branch_dim_branch_id_uq UNIQUE (branch_id),
     CONSTRAINT chk_branch_dim_region
-        CHECK (branchRegion IN ('Northern','Central','Southern',
+        CHECK (branch_region IN ('Northern','Central','Southern',
                                 'East Coast','East Malaysia','Unknown')),
     CONSTRAINT chk_branch_dim_dqflag CHECK (dq_flag IN ('V','S','D'))
 );
 
 -- ----------------------------------------------------------------------------
 --  5. ADDRESS_DIM  (Type 1)  -  ship-to geography for DELIVERY_FACT
---     Source : MemberAddress  (AddressLine, State, Postcode)
---     MemberAddress holds no City column, so addressRegion is derived from
---     addressState using the same mapping as BRANCH_DIM.  This lets a report
+--     Source : MemberAddress  (address_line, State, Postcode)
+--     MemberAddress holds no City column, so address_region is derived from
+--     address_state using the same mapping as BRANCH_DIM.  This lets a report
 --     compare the branch that sold an order with the state it shipped to.
 -- ----------------------------------------------------------------------------
 CREATE TABLE address_dim
 (
     address_key       NUMBER(10)    NOT NULL,
-    addressID         VARCHAR2(5),
-    addressLine       VARCHAR2(150) DEFAULT 'Unknown' NOT NULL,
-    addressState      VARCHAR2(30)  DEFAULT 'Unknown' NOT NULL,
-    addressPostcode   CHAR(5)       DEFAULT '00000'   NOT NULL,
-    addressRegion     VARCHAR2(20)  DEFAULT 'Unknown' NOT NULL,
+    address_id         VARCHAR2(5),
+    address_line       VARCHAR2(150) DEFAULT 'Unknown' NOT NULL,
+    address_state      VARCHAR2(30)  DEFAULT 'Unknown' NOT NULL,
+    address_postcode   CHAR(5)       DEFAULT '00000'   NOT NULL,
+    address_region     VARCHAR2(20)  DEFAULT 'Unknown' NOT NULL,
     etl_batch_id      NUMBER(8)     NOT NULL,
     etl_load_dt       DATE          DEFAULT SYSDATE   NOT NULL,
     etl_update_dt     DATE,
     dq_flag           CHAR(1)       DEFAULT 'V'       NOT NULL,
     CONSTRAINT address_dim_pk PRIMARY KEY (address_key),
-    CONSTRAINT address_dim_addressid_fk
-        FOREIGN KEY (addressID) REFERENCES MemberAddress (AddressID),
-    CONSTRAINT address_dim_addressid_uq UNIQUE (addressID),
+    CONSTRAINT address_dim_address_id_fk
+        FOREIGN KEY (address_id) REFERENCES MemberAddress (address_id),
+    CONSTRAINT address_dim_address_id_uq UNIQUE (address_id),
     CONSTRAINT chk_address_dim_region
-        CHECK (addressRegion IN ('Northern','Central','Southern',
+        CHECK (address_region IN ('Northern','Central','Southern',
                                  'East Coast','East Malaysia','Unknown')),
     CONSTRAINT chk_address_dim_dqflag CHECK (dq_flag IN ('V','S','D'))
 );
@@ -259,42 +259,42 @@ CREATE TABLE address_dim
 --         promo_key = -1  'Unknown'       - the promotion reference was dirty
 --                                           and could not be resolved
 --     ItemPromotion.PromoPrice is item-specific and therefore belongs at fact
---     grain; it is used by the ETL to derive SALES_FACT.discountAmt and is not
+--     grain; it is used by the ETL to derive SALES_FACT.discount_amt and is not
 --     stored in this dimension.
 -- ----------------------------------------------------------------------------
 CREATE TABLE promotion_dim
 (
     promo_key          NUMBER(10)    NOT NULL,
-    promotionID        VARCHAR2(5),
+    promotion_id        VARCHAR2(5),
     promoName          VARCHAR2(100) DEFAULT 'No Promotion' NOT NULL,
-    discountType       VARCHAR2(12)  DEFAULT 'None'         NOT NULL,
-    discountValue      NUMBER(6,2)   DEFAULT 0              NOT NULL,
-    promoStartDate     DATE          DEFAULT DATE '1900-01-01' NOT NULL,
-    promoEndDate       DATE          DEFAULT DATE '9999-12-31' NOT NULL,
-    promoStatus        VARCHAR2(10)  DEFAULT 'None'         NOT NULL,
-    promoDurationDays  NUMBER(6)     DEFAULT 0              NOT NULL,
+    discount_type       VARCHAR2(12)  DEFAULT 'None'         NOT NULL,
+    discount_value      NUMBER(6,2)   DEFAULT 0              NOT NULL,
+    promo_start_date     DATE          DEFAULT DATE '1900-01-01' NOT NULL,
+    promo_end_date       DATE          DEFAULT DATE '9999-12-31' NOT NULL,
+    promo_status        VARCHAR2(10)  DEFAULT 'None'         NOT NULL,
+    promo_duration_days  NUMBER(6)     DEFAULT 0              NOT NULL,
     etl_batch_id       NUMBER(8)     NOT NULL,
     etl_load_dt        DATE          DEFAULT SYSDATE        NOT NULL,
     etl_update_dt      DATE,
     dq_flag            CHAR(1)       DEFAULT 'V'            NOT NULL,
     CONSTRAINT promotion_dim_pk PRIMARY KEY (promo_key),
-    CONSTRAINT promotion_dim_promotionid_fk
-        FOREIGN KEY (promotionID) REFERENCES Promotion (PromotionID),
-    CONSTRAINT promotion_dim_promotionid_uq UNIQUE (promotionID),
+    CONSTRAINT promotion_dim_promotion_id_fk
+        FOREIGN KEY (promotion_id) REFERENCES Promotion (promotion_id),
+    CONSTRAINT promotion_dim_promotion_id_uq UNIQUE (promotion_id),
     CONSTRAINT chk_promotion_dim_type
-        CHECK (discountType IN ('Percentage','Fixed','None','Unknown')),
+        CHECK (discount_type IN ('Percentage','Fixed','None','Unknown')),
     CONSTRAINT chk_promotion_dim_status
-        CHECK (promoStatus IN ('Active','Inactive','None','Unknown')),
-    CONSTRAINT chk_promotion_dim_value    CHECK (discountValue     >= 0),
-    CONSTRAINT chk_promotion_dim_duration CHECK (promoDurationDays >= 0),
-    CONSTRAINT chk_promotion_dim_dates    CHECK (promoEndDate >= promoStartDate),
+        CHECK (promo_status IN ('Active','Inactive','None','Unknown')),
+    CONSTRAINT chk_promotion_dim_value    CHECK (discount_value     >= 0),
+    CONSTRAINT chk_promotion_dim_duration CHECK (promo_duration_days >= 0),
+    CONSTRAINT chk_promotion_dim_dates    CHECK (promo_end_date >= promo_start_date),
     CONSTRAINT chk_promotion_dim_dqflag   CHECK (dq_flag IN ('V','S','D'))
 );
 
 -- ----------------------------------------------------------------------------
 --  7. RETURN_REASON_DIM  (Type 1)
 --     Source : ReturnReason
---     reasonCategory is derived so that management can separate causes the
+--     reason_category is derived so that management can separate causes the
 --     business controls from causes it does not:
 --         'Fulfilment'      = Missing, Wrong Item   (picking / despatch error)
 --         'Product Quality' = Broken, Expired       (stock or supplier issue)
@@ -302,21 +302,21 @@ CREATE TABLE promotion_dim
 CREATE TABLE return_reason_dim
 (
     reason_key      NUMBER(10)   NOT NULL,
-    reasonID        VARCHAR2(4),
-    reasonName      VARCHAR2(30) DEFAULT 'Unknown' NOT NULL,
-    reasonCategory  VARCHAR2(20) DEFAULT 'Unknown' NOT NULL,
+    reason_id        VARCHAR2(4),
+    reason_name      VARCHAR2(30) DEFAULT 'Unknown' NOT NULL,
+    reason_category  VARCHAR2(20) DEFAULT 'Unknown' NOT NULL,
     etl_batch_id    NUMBER(8)    NOT NULL,
     etl_load_dt     DATE         DEFAULT SYSDATE   NOT NULL,
     etl_update_dt   DATE,
     dq_flag         CHAR(1)      DEFAULT 'V'       NOT NULL,
     CONSTRAINT return_reason_dim_pk PRIMARY KEY (reason_key),
-    CONSTRAINT return_reason_dim_reasonid_fk
-        FOREIGN KEY (reasonID) REFERENCES ReturnReason (ReasonID),
-    CONSTRAINT return_reason_dim_reasonid_uq UNIQUE (reasonID),
+    CONSTRAINT return_reason_dim_reason_id_fk
+        FOREIGN KEY (reason_id) REFERENCES ReturnReason (reason_id),
+    CONSTRAINT return_reason_dim_reason_id_uq UNIQUE (reason_id),
     CONSTRAINT chk_return_reason_dim_name
-        CHECK (reasonName IN ('Missing','Broken','Expired','Wrong Item','Unknown')),
+        CHECK (reason_name IN ('Missing','Broken','Expired','Wrong Item','Unknown')),
     CONSTRAINT chk_return_reason_dim_cat
-        CHECK (reasonCategory IN ('Fulfilment','Product Quality','Unknown')),
+        CHECK (reason_category IN ('Fulfilment','Product Quality','Unknown')),
     CONSTRAINT chk_return_reason_dim_dqflag CHECK (dq_flag IN ('V','S','D'))
 );
 
@@ -327,18 +327,18 @@ CREATE TABLE return_reason_dim
 CREATE TABLE delivery_company_dim
 (
     delivery_company_key  NUMBER(10)    NOT NULL,
-    deliveryCompanyID     VARCHAR2(4),
-    companyName           VARCHAR2(100) DEFAULT 'Unknown' NOT NULL,
-    companyContactNo      VARCHAR2(15)  DEFAULT 'Unknown' NOT NULL,
+    delivery_company_id     VARCHAR2(4),
+    company_name           VARCHAR2(100) DEFAULT 'Unknown' NOT NULL,
+    company_contact_no      VARCHAR2(15)  DEFAULT 'Unknown' NOT NULL,
     etl_batch_id          NUMBER(8)     NOT NULL,
     etl_load_dt           DATE          DEFAULT SYSDATE   NOT NULL,
     etl_update_dt         DATE,
     dq_flag               CHAR(1)       DEFAULT 'V'       NOT NULL,
     CONSTRAINT delivery_company_dim_pk PRIMARY KEY (delivery_company_key),
     CONSTRAINT delivery_company_dim_id_fk
-        FOREIGN KEY (deliveryCompanyID)
-        REFERENCES DeliveryCompany (DeliveryCompanyID),
-    CONSTRAINT delivery_company_dim_id_uq UNIQUE (deliveryCompanyID),
+        FOREIGN KEY (delivery_company_id)
+        REFERENCES DeliveryCompany (delivery_company_id),
+    CONSTRAINT delivery_company_dim_id_uq UNIQUE (delivery_company_id),
     CONSTRAINT chk_dlv_company_dim_dqflag CHECK (dq_flag IN ('V','S','D'))
 );
 
@@ -355,10 +355,10 @@ CREATE TABLE delivery_company_dim
 --     Measures
 --       quantity      additive
 --       unitPrice     non-additive  (average it, never sum it)
---       grossSalesAmt additive      = quantity * unitPrice
---       discountAmt   additive      = (unitPrice - PromoPrice) * quantity,
+--       gross_sales_amt additive      = quantity * unitPrice
+--       discount_amt   additive      = (unitPrice - PromoPrice) * quantity,
 --                                     0 when no promotion applies
---       netSalesAmt   additive      = grossSalesAmt - discountAmt
+--       net_sales_amt   additive      = gross_sales_amt - discount_amt
 --
 --     sales_fact_grain_uq enforces the declared grain.  It is required
 --     because CUSTOMER_DIM is Type 2: if an order were re-read after the
@@ -377,20 +377,20 @@ CREATE TABLE sales_fact
     item_key        NUMBER(10)    NOT NULL,
     branch_key      NUMBER(10)    NOT NULL,
     promo_key       NUMBER(10)    NOT NULL,
-    orderNo         VARCHAR2(8)   NOT NULL,
-    orderType       VARCHAR2(10)  NOT NULL,
-    orderHour       NUMBER(2)     NOT NULL,
+    order_no         VARCHAR2(8)   NOT NULL,
+    order_type       VARCHAR2(10)  NOT NULL,
+    order_hour       NUMBER(2)     NOT NULL,
     quantity        NUMBER(4)     NOT NULL,
     unitPrice       NUMBER(8,2)   NOT NULL,
-    grossSalesAmt   NUMBER(10,2)  NOT NULL,
-    discountAmt     NUMBER(10,2)  DEFAULT 0 NOT NULL,
-    netSalesAmt     NUMBER(10,2)  NOT NULL,
+    gross_sales_amt   NUMBER(10,2)  NOT NULL,
+    discount_amt     NUMBER(10,2)  DEFAULT 0 NOT NULL,
+    net_sales_amt     NUMBER(10,2)  NOT NULL,
     etl_batch_id    NUMBER(8)     NOT NULL,
     etl_load_dt     DATE          DEFAULT SYSDATE NOT NULL,
     etl_update_dt   DATE,
     dq_flag         CHAR(1)       DEFAULT 'V' NOT NULL,
     CONSTRAINT sales_fact_pk PRIMARY KEY
-        (order_date_key, customer_key, item_key, branch_key, promo_key, orderNo),
+        (order_date_key, customer_key, item_key, branch_key, promo_key, order_no),
     CONSTRAINT sf_date_fk     FOREIGN KEY (order_date_key)
                               REFERENCES date_dim (date_key),
     CONSTRAINT sf_customer_fk FOREIGN KEY (customer_key)
@@ -401,17 +401,17 @@ CREATE TABLE sales_fact
                               REFERENCES branch_dim (branch_key),
     CONSTRAINT sf_promo_fk    FOREIGN KEY (promo_key)
                               REFERENCES promotion_dim (promo_key),
-    CONSTRAINT sf_orderno_fk  FOREIGN KEY (orderNo)
-                              REFERENCES Orders (OrderNo),
-    CONSTRAINT sales_fact_grain_uq UNIQUE (orderNo, item_key),
-    CONSTRAINT chk_sales_fact_ordertype
-        CHECK (orderType IN ('Online','Walk-in')),
-    CONSTRAINT chk_sales_fact_hour     CHECK (orderHour BETWEEN 0 AND 23),
+    CONSTRAINT sf_order_no_fk  FOREIGN KEY (order_no)
+                              REFERENCES Orders (order_no),
+    CONSTRAINT sales_fact_grain_uq UNIQUE (order_no, item_key),
+    CONSTRAINT chk_sales_fact_order_type
+        CHECK (order_type IN ('Online','Walk-in')),
+    CONSTRAINT chk_sales_fact_hour     CHECK (order_hour BETWEEN 0 AND 23),
     CONSTRAINT chk_sales_fact_qty      CHECK (quantity      > 0),
     CONSTRAINT chk_sales_fact_price    CHECK (unitPrice     >= 0),
-    CONSTRAINT chk_sales_fact_gross    CHECK (grossSalesAmt >= 0),
-    CONSTRAINT chk_sales_fact_discount CHECK (discountAmt   >= 0),
-    CONSTRAINT chk_sales_fact_net      CHECK (netSalesAmt   >= 0),
+    CONSTRAINT chk_sales_fact_gross    CHECK (gross_sales_amt >= 0),
+    CONSTRAINT chk_sales_fact_discount CHECK (discount_amt   >= 0),
+    CONSTRAINT chk_sales_fact_net      CHECK (net_sales_amt   >= 0),
     CONSTRAINT chk_sales_fact_dqflag   CHECK (dq_flag IN ('V','S','D'))
 );
 
@@ -421,14 +421,14 @@ CREATE TABLE sales_fact
 --     SOURCE : ReturnDetails, joined to Returns and Orders
 --
 --     Measures
---       quantityReturned  additive
---       refundAmount      additive
---       daysToReturn      non-additive  (average it, never sum it)
+--       quantity_returned  additive
+--       refund_amount      additive
+--       days_to_return      non-additive  (average it, never sum it)
 --
 --     order_date_key is DATE_DIM in a second role (the original order date),
 --     which allows returns to be aged against the sale.
 --     branch_key is the branch that SOLD the item: the Returns table carries
---     no BranchID, so it is inherited from the originating order.
+--     no branch_id, so it is inherited from the originating order.
 --     promo_key is inherited from the matching sales line so that promotion
 --     performance can be measured net of returns.
 -- ----------------------------------------------------------------------------
@@ -441,19 +441,19 @@ CREATE TABLE return_fact
     branch_key        NUMBER(10)    NOT NULL,
     reason_key        NUMBER(10)    NOT NULL,
     promo_key         NUMBER(10)    NOT NULL,
-    returnID          VARCHAR2(8)   NOT NULL,
-    orderNo           VARCHAR2(8)   NOT NULL,
-    returnStatus      VARCHAR2(10)  NOT NULL,
-    quantityReturned  NUMBER(4)     NOT NULL,
-    refundAmount      NUMBER(10,2)  NOT NULL,
-    daysToReturn      NUMBER(6)     DEFAULT 0 NOT NULL,
+    return_id          VARCHAR2(8)   NOT NULL,
+    order_no           VARCHAR2(8)   NOT NULL,
+    return_status      VARCHAR2(10)  NOT NULL,
+    quantity_returned  NUMBER(4)     NOT NULL,
+    refund_amount      NUMBER(10,2)  NOT NULL,
+    days_to_return      NUMBER(6)     DEFAULT 0 NOT NULL,
     etl_batch_id      NUMBER(8)     NOT NULL,
     etl_load_dt       DATE          DEFAULT SYSDATE NOT NULL,
     etl_update_dt     DATE,
     dq_flag           CHAR(1)       DEFAULT 'V' NOT NULL,
     CONSTRAINT return_fact_pk PRIMARY KEY
         (return_date_key, customer_key, item_key, branch_key,
-         reason_key, returnID),
+         reason_key, return_id),
     CONSTRAINT rf_retdate_fk  FOREIGN KEY (return_date_key)
                               REFERENCES date_dim (date_key),
     CONSTRAINT rf_orddate_fk  FOREIGN KEY (order_date_key)
@@ -468,16 +468,16 @@ CREATE TABLE return_fact
                               REFERENCES return_reason_dim (reason_key),
     CONSTRAINT rf_promo_fk    FOREIGN KEY (promo_key)
                               REFERENCES promotion_dim (promo_key),
-    CONSTRAINT rf_returnid_fk FOREIGN KEY (returnID)
-                              REFERENCES Returns (ReturnID),
-    CONSTRAINT rf_orderno_fk  FOREIGN KEY (orderNo)
-                              REFERENCES Orders (OrderNo),
-    CONSTRAINT return_fact_grain_uq UNIQUE (returnID, orderNo, item_key),
+    CONSTRAINT rf_return_id_fk FOREIGN KEY (return_id)
+                              REFERENCES Returns (return_id),
+    CONSTRAINT rf_order_no_fk  FOREIGN KEY (order_no)
+                              REFERENCES Orders (order_no),
+    CONSTRAINT return_fact_grain_uq UNIQUE (return_id, order_no, item_key),
     CONSTRAINT chk_return_fact_status
-        CHECK (returnStatus IN ('Pending','Approved','Rejected','Refunded')),
-    CONSTRAINT chk_return_fact_qty    CHECK (quantityReturned > 0),
-    CONSTRAINT chk_return_fact_refund CHECK (refundAmount    >= 0),
-    CONSTRAINT chk_return_fact_days   CHECK (daysToReturn    >= 0),
+        CHECK (return_status IN ('Pending','Approved','Rejected','Refunded')),
+    CONSTRAINT chk_return_fact_qty    CHECK (quantity_returned > 0),
+    CONSTRAINT chk_return_fact_refund CHECK (refund_amount    >= 0),
+    CONSTRAINT chk_return_fact_days   CHECK (days_to_return    >= 0),
     CONSTRAINT chk_return_fact_dqflag CHECK (dq_flag IN ('V','S','D'))
 );
 
@@ -487,10 +487,10 @@ CREATE TABLE return_fact
 --     SOURCE : Delivery, joined to Orders
 --
 --     Measures
---       deliveryCharge    additive
---       orderTotalAmount  additive      (safe at this grain: Delivery.OrderNo
+--       delivery_charge    additive
+--       order_total_amount  additive      (safe at this grain: Delivery.order_no
 --                                        is UNIQUE, so one delivery per order)
---       deliveryLeadDays  non-additive  = DeliveryDate - OrderDateTime,
+--       delivery_lead_days  non-additive  = DeliveryDate - OrderDateTime,
 --                                        NULL until the order is delivered
 --
 --     Delivery.DeliveryDate is NULL until despatch completes, so pending and
@@ -507,11 +507,11 @@ CREATE TABLE delivery_fact
     delivery_company_key  NUMBER(10)    NOT NULL,
     address_key           NUMBER(10)    NOT NULL,
     deliveryID            VARCHAR2(8)   NOT NULL,
-    orderNo               VARCHAR2(8)   NOT NULL,
-    deliveryStatus        VARCHAR2(15)  NOT NULL,
-    deliveryCharge        NUMBER(6,2)   DEFAULT 0 NOT NULL,
-    orderTotalAmount      NUMBER(10,2)  DEFAULT 0 NOT NULL,
-    deliveryLeadDays      NUMBER(6),
+    order_no               VARCHAR2(8)   NOT NULL,
+    delivery_status        VARCHAR2(15)  NOT NULL,
+    delivery_charge        NUMBER(6,2)   DEFAULT 0 NOT NULL,
+    order_total_amount      NUMBER(10,2)  DEFAULT 0 NOT NULL,
+    delivery_lead_days      NUMBER(6),
     etl_batch_id          NUMBER(8)     NOT NULL,
     etl_load_dt           DATE          DEFAULT SYSDATE NOT NULL,
     etl_update_dt         DATE,
@@ -533,14 +533,14 @@ CREATE TABLE delivery_fact
                               REFERENCES address_dim (address_key),
     CONSTRAINT df_deliveryid_fk FOREIGN KEY (deliveryID)
                               REFERENCES Delivery (DeliveryID),
-    CONSTRAINT df_orderno_fk  FOREIGN KEY (orderNo)
-                              REFERENCES Orders (OrderNo),
+    CONSTRAINT df_order_no_fk  FOREIGN KEY (order_no)
+                              REFERENCES Orders (order_no),
     CONSTRAINT delivery_fact_grain_uq UNIQUE (deliveryID),
     CONSTRAINT chk_delivery_fact_status
-        CHECK (deliveryStatus IN ('Pending','In Transit','Delivered','Cancelled')),
-    CONSTRAINT chk_delivery_fact_charge CHECK (deliveryCharge   >= 0),
-    CONSTRAINT chk_delivery_fact_total  CHECK (orderTotalAmount >= 0),
-    CONSTRAINT chk_delivery_fact_lead   CHECK (deliveryLeadDays >= 0),
+        CHECK (delivery_status IN ('Pending','In Transit','Delivered','Cancelled')),
+    CONSTRAINT chk_delivery_fact_charge CHECK (delivery_charge   >= 0),
+    CONSTRAINT chk_delivery_fact_total  CHECK (order_total_amount >= 0),
+    CONSTRAINT chk_delivery_fact_lead   CHECK (delivery_lead_days >= 0),
     CONSTRAINT chk_delivery_fact_dqflag CHECK (dq_flag IN ('V','S','D'))
 );
 
@@ -550,19 +550,19 @@ CREATE TABLE delivery_fact
 --     SOURCE : PointTransaction
 --
 --     Measures
---       pointsEarned    additive
+--       points_earned    additive
 --       pointsRedeemed  additive
---       netPoints       additive  = pointsEarned - pointsRedeemed
+--       net_points       additive  = points_earned - pointsRedeemed
 --
 --     The source stores a single positive Point value and carries the sign in
---     TransType.  Splitting it into two measures lets earn and redeem be
+--     trans_type.  Splitting it into two measures lets earn and redeem be
 --     summed independently without a CASE expression at query time, and
---     SUM(netPoints) per customer reproduces Member.PointsBalance - which is
+--     SUM(net_points) per customer reproduces Member.PointsBalance - which is
 --     the reason PointsBalance is not stored in CUSTOMER_DIM.
 --
 --     chk_pointtrans_order in the source enforces that an 'Earn' row has an
---     OrderNo and a 'Redeem' row does not.  Redemptions therefore have no
---     order and no branch: orderNo is NULL and branch_key points at the
+--     order_no and a 'Redeem' row does not.  Redemptions therefore have no
+--     order and no branch: order_no is NULL and branch_key points at the
 --     seeded branch_key = -1 'Unknown / Not Applicable' row, which keeps the
 --     fact uniform and every dimension join valid.
 -- ----------------------------------------------------------------------------
@@ -571,37 +571,37 @@ CREATE TABLE point_fact
     trans_date_key  NUMBER(8)     NOT NULL,
     customer_key    NUMBER(10)    NOT NULL,
     branch_key      NUMBER(10)    NOT NULL,
-    pointTransID    VARCHAR2(7)   NOT NULL,
-    orderNo         VARCHAR2(8),
-    transType       VARCHAR2(10)  NOT NULL,
-    pointsEarned    NUMBER(8)     DEFAULT 0 NOT NULL,
+    point_trans_id    VARCHAR2(7)   NOT NULL,
+    order_no         VARCHAR2(8),
+    trans_type       VARCHAR2(10)  NOT NULL,
+    points_earned    NUMBER(8)     DEFAULT 0 NOT NULL,
     pointsRedeemed  NUMBER(8)     DEFAULT 0 NOT NULL,
-    netPoints       NUMBER(9)     DEFAULT 0 NOT NULL,
+    net_points       NUMBER(9)     DEFAULT 0 NOT NULL,
     etl_batch_id    NUMBER(8)     NOT NULL,
     etl_load_dt     DATE          DEFAULT SYSDATE NOT NULL,
     etl_update_dt   DATE,
     dq_flag         CHAR(1)       DEFAULT 'V' NOT NULL,
     CONSTRAINT point_fact_pk PRIMARY KEY
-        (trans_date_key, customer_key, branch_key, pointTransID),
+        (trans_date_key, customer_key, branch_key, point_trans_id),
     CONSTRAINT pf_date_fk     FOREIGN KEY (trans_date_key)
                               REFERENCES date_dim (date_key),
     CONSTRAINT pf_customer_fk FOREIGN KEY (customer_key)
                               REFERENCES customer_dim (customer_key),
     CONSTRAINT pf_branch_fk   FOREIGN KEY (branch_key)
                               REFERENCES branch_dim (branch_key),
-    CONSTRAINT pf_pointtrans_fk FOREIGN KEY (pointTransID)
-                              REFERENCES PointTransaction (PointTransID),
-    CONSTRAINT pf_orderno_fk  FOREIGN KEY (orderNo)
-                              REFERENCES Orders (OrderNo),
-    CONSTRAINT point_fact_grain_uq UNIQUE (pointTransID),
+    CONSTRAINT pf_pointtrans_fk FOREIGN KEY (point_trans_id)
+                              REFERENCES PointTransaction (point_trans_id),
+    CONSTRAINT pf_order_no_fk  FOREIGN KEY (order_no)
+                              REFERENCES Orders (order_no),
+    CONSTRAINT point_fact_grain_uq UNIQUE (point_trans_id),
     CONSTRAINT chk_point_fact_type
-        CHECK (transType IN ('Earn','Redeem')),
-    CONSTRAINT chk_point_fact_earned   CHECK (pointsEarned   >= 0),
+        CHECK (trans_type IN ('Earn','Redeem')),
+    CONSTRAINT chk_point_fact_earned   CHECK (points_earned   >= 0),
     CONSTRAINT chk_point_fact_redeemed CHECK (pointsRedeemed >= 0),
-    CONSTRAINT chk_point_fact_net      CHECK (netPoints = pointsEarned - pointsRedeemed),
+    CONSTRAINT chk_point_fact_net      CHECK (net_points = points_earned - pointsRedeemed),
     CONSTRAINT chk_point_fact_order
-        CHECK ((transType = 'Earn'   AND orderNo IS NOT NULL) OR
-               (transType = 'Redeem' AND orderNo IS NULL)),
+        CHECK ((trans_type = 'Earn'   AND order_no IS NOT NULL) OR
+               (trans_type = 'Redeem' AND order_no IS NULL)),
     CONSTRAINT chk_point_fact_dqflag   CHECK (dq_flag IN ('V','S','D'))
 );
 
