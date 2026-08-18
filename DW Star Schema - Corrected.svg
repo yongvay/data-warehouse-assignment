@@ -1,0 +1,296 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2130" height="1470" viewBox="0 0 2130 1470">
+<rect width="2130" height="1470" fill="#ffffff"/>
+<text x="1065.0" y="1440" font-family="Arial" font-size="13" font-weight="bold" text-anchor="middle" fill="#444">Task 1(a) — Logical Design: Sales &amp; Returns Data Warehouse (Fact Constellation with Conformed Dimensions)</text>
+<path d="M700,73.0 L560,73.0 L560,574.0 L518,574.0" fill="none" stroke="#333333" stroke-width="1.2"/><g stroke="#333333" stroke-width="1.2"><line x1="692" y1="67.0" x2="692" y2="79.0"/></g><g stroke="#333333" stroke-width="1.2" fill="none"><line x1="518" y1="574.0" x2="511" y2="568.0"/><line x1="518" y1="574.0" x2="511" y2="580.0"/><line x1="518" y1="574.0" x2="511" y2="574.0"/></g>
+<path d="M700,458.0 L600,458.0 L600,556.0 L518,556.0" fill="none" stroke="#333333" stroke-width="1.2"/><g stroke="#333333" stroke-width="1.2"><line x1="692" y1="452.0" x2="692" y2="464.0"/></g><g stroke="#333333" stroke-width="1.2" fill="none"><line x1="518" y1="556.0" x2="511" y2="550.0"/><line x1="518" y1="556.0" x2="511" y2="562.0"/><line x1="518" y1="556.0" x2="511" y2="556.0"/></g>
+<path d="M700,673.0 L640,673.0 L640,592.0 L518,592.0" fill="none" stroke="#333333" stroke-width="1.2"/><g stroke="#333333" stroke-width="1.2"><line x1="692" y1="667.0" x2="692" y2="679.0"/></g><g stroke="#333333" stroke-width="1.2" fill="none"><line x1="518" y1="592.0" x2="511" y2="586.0"/><line x1="518" y1="592.0" x2="511" y2="598.0"/><line x1="518" y1="592.0" x2="511" y2="592.0"/></g>
+<path d="M700,963.0 L620,963.0 L620,610.0 L518,610.0" fill="none" stroke="#333333" stroke-width="1.2"/><g stroke="#333333" stroke-width="1.2"><line x1="692" y1="957.0" x2="692" y2="969.0"/></g><g stroke="#333333" stroke-width="1.2" fill="none"><line x1="518" y1="610.0" x2="511" y2="604.0"/><line x1="518" y1="610.0" x2="511" y2="616.0"/><line x1="518" y1="610.0" x2="511" y2="610.0"/></g>
+<path d="M700,1153.0 L580,1153.0 L580,628.0 L518,628.0" fill="none" stroke="#333333" stroke-width="1.2"/><g stroke="#333333" stroke-width="1.2"><line x1="692" y1="1147.0" x2="692" y2="1159.0"/></g><g stroke="#333333" stroke-width="1.2" fill="none"><line x1="518" y1="628.0" x2="511" y2="622.0"/><line x1="518" y1="628.0" x2="511" y2="634.0"/><line x1="518" y1="628.0" x2="511" y2="628.0"/></g>
+<path d="M1000,73.0 L1200,73.0 L1200,539.0 L1222,539.0" fill="none" stroke="#333333" stroke-width="1.2"/><g stroke="#333333" stroke-width="1.2"><line x1="1008" y1="67.0" x2="1008" y2="79.0"/></g><g stroke="#333333" stroke-width="1.2" fill="none"><line x1="1222" y1="539.0" x2="1229" y2="533.0"/><line x1="1222" y1="539.0" x2="1229" y2="545.0"/><line x1="1222" y1="539.0" x2="1229" y2="539.0"/></g>
+<path d="M1000,73.0 L1180,73.0 L1180,557.0 L1222,557.0" fill="none" stroke="#333333" stroke-width="1.2"/><g stroke="#333333" stroke-width="1.2"><line x1="1008" y1="67.0" x2="1008" y2="79.0"/></g><g stroke="#333333" stroke-width="1.2" fill="none"><line x1="1222" y1="557.0" x2="1229" y2="551.0"/><line x1="1222" y1="557.0" x2="1229" y2="563.0"/><line x1="1222" y1="557.0" x2="1229" y2="557.0"/></g>
+<path d="M1000,458.0 L1160,458.0 L1160,521.0 L1222,521.0" fill="none" stroke="#333333" stroke-width="1.2"/><g stroke="#333333" stroke-width="1.2"><line x1="1008" y1="452.0" x2="1008" y2="464.0"/></g><g stroke="#333333" stroke-width="1.2" fill="none"><line x1="1222" y1="521.0" x2="1229" y2="515.0"/><line x1="1222" y1="521.0" x2="1229" y2="527.0"/><line x1="1222" y1="521.0" x2="1229" y2="521.0"/></g>
+<path d="M1000,673.0 L1120,673.0 L1120,575.0 L1222,575.0" fill="none" stroke="#333333" stroke-width="1.2"/><g stroke="#333333" stroke-width="1.2"><line x1="1008" y1="667.0" x2="1008" y2="679.0"/></g><g stroke="#333333" stroke-width="1.2" fill="none"><line x1="1222" y1="575.0" x2="1229" y2="569.0"/><line x1="1222" y1="575.0" x2="1229" y2="581.0"/><line x1="1222" y1="575.0" x2="1229" y2="575.0"/></g>
+<path d="M1000,963.0 L1080,963.0 L1080,593.0 L1222,593.0" fill="none" stroke="#333333" stroke-width="1.2"/><g stroke="#333333" stroke-width="1.2"><line x1="1008" y1="957.0" x2="1008" y2="969.0"/></g><g stroke="#333333" stroke-width="1.2" fill="none"><line x1="1222" y1="593.0" x2="1229" y2="587.0"/><line x1="1222" y1="593.0" x2="1229" y2="599.0"/><line x1="1222" y1="593.0" x2="1229" y2="593.0"/></g>
+<path d="M1000,1153.0 L1040,1153.0 L1040,629.0 L1222,629.0" fill="none" stroke="#333333" stroke-width="1.2"/><g stroke="#333333" stroke-width="1.2"><line x1="1008" y1="1147.0" x2="1008" y2="1159.0"/></g><g stroke="#333333" stroke-width="1.2" fill="none"><line x1="1222" y1="629.0" x2="1229" y2="623.0"/><line x1="1222" y1="629.0" x2="1229" y2="635.0"/><line x1="1222" y1="629.0" x2="1229" y2="629.0"/></g>
+<path d="M1760,603.0 L1700,603.0 L1700,611.0 L1648,611.0" fill="none" stroke="#333333" stroke-width="1.2"/><g stroke="#333333" stroke-width="1.2"><line x1="1752" y1="597.0" x2="1752" y2="609.0"/></g><g stroke="#333333" stroke-width="1.2" fill="none"><line x1="1648" y1="611.0" x2="1641" y2="605.0"/><line x1="1648" y1="611.0" x2="1641" y2="617.0"/><line x1="1648" y1="611.0" x2="1641" y2="611.0"/></g>
+<g><rect x="700" y="40" width="300" height="348" fill="#EAF2FB" stroke="#333333" stroke-width="1.2" rx="3"/>
+<rect x="700" y="40" width="300" height="24" fill="#5B8DB8" stroke="#333333" stroke-width="1.2" rx="3"/>
+<rect x="700" y="60" width="300" height="4" fill="#5B8DB8"/>
+<text x="850.0" y="56.0" font-family="Arial" font-size="12" font-weight="bold" fill="#ffffff" text-anchor="middle">DATE_DIM</text>
+<line x1="760" y1="64" x2="760" y2="388" stroke="#9aa5b1" stroke-width="0.8"/>
+<text x="707" y="76.6" font-family="Arial" font-size="9.6" font-weight="bold" fill="#7a2f2f">PK</text>
+<text x="767" y="76.6" font-family="Arial" font-size="10.2" font-weight="normal" fill="#1a1a1a">date_key  (INT YYYYMMDD)</text>
+<text x="767" y="94.6" font-family="Arial" font-size="10.2" font-weight="normal" fill="#1a1a1a">cal_date</text>
+<line x1="700" y1="82" x2="1000" y2="82" stroke="#d3dae1" stroke-width="0.5"/>
+<text x="767" y="112.6" font-family="Arial" font-size="10.2" font-weight="normal" fill="#1a1a1a">full_desc</text>
+<line x1="700" y1="100" x2="1000" y2="100" stroke="#d3dae1" stroke-width="0.5"/>
+<text x="767" y="130.6" font-family="Arial" font-size="10.2" font-weight="normal" fill="#1a1a1a">day_week</text>
+<line x1="700" y1="118" x2="1000" y2="118" stroke="#d3dae1" stroke-width="0.5"/>
+<text x="767" y="148.6" font-family="Arial" font-size="10.2" font-weight="normal" fill="#1a1a1a">day_num_month</text>
+<line x1="700" y1="136" x2="1000" y2="136" stroke="#d3dae1" stroke-width="0.5"/>
+<text x="767" y="166.6" font-family="Arial" font-size="10.2" font-weight="normal" fill="#1a1a1a">day_num_year</text>
+<line x1="700" y1="154" x2="1000" y2="154" stroke="#d3dae1" stroke-width="0.5"/>
+<text x="767" y="184.6" font-family="Arial" font-size="10.2" font-weight="normal" fill="#1a1a1a">last_day_ind (&#x27;Y&#x27;/&#x27;N&#x27;)</text>
+<line x1="700" y1="172" x2="1000" y2="172" stroke="#d3dae1" stroke-width="0.5"/>
+<text x="767" y="202.6" font-family="Arial" font-size="10.2" font-weight="normal" fill="#1a1a1a">cal_week_end_date</text>
+<line x1="700" y1="190" x2="1000" y2="190" stroke="#d3dae1" stroke-width="0.5"/>
+<text x="767" y="220.6" font-family="Arial" font-size="10.2" font-weight="normal" fill="#1a1a1a">cal_week_year</text>
+<line x1="700" y1="208" x2="1000" y2="208" stroke="#d3dae1" stroke-width="0.5"/>
+<text x="767" y="238.6" font-family="Arial" font-size="10.2" font-weight="normal" fill="#1a1a1a">cal_month_name</text>
+<line x1="700" y1="226" x2="1000" y2="226" stroke="#d3dae1" stroke-width="0.5"/>
+<text x="767" y="256.6" font-family="Arial" font-size="10.2" font-weight="normal" fill="#1a1a1a">cal_month_year</text>
+<line x1="700" y1="244" x2="1000" y2="244" stroke="#d3dae1" stroke-width="0.5"/>
+<text x="767" y="274.6" font-family="Arial" font-size="10.2" font-weight="normal" fill="#1a1a1a">cal_year_month</text>
+<line x1="700" y1="262" x2="1000" y2="262" stroke="#d3dae1" stroke-width="0.5"/>
+<text x="767" y="292.6" font-family="Arial" font-size="10.2" font-weight="normal" fill="#1a1a1a">cal_quarter</text>
+<line x1="700" y1="280" x2="1000" y2="280" stroke="#d3dae1" stroke-width="0.5"/>
+<text x="767" y="310.6" font-family="Arial" font-size="10.2" font-weight="normal" fill="#1a1a1a">cal_year_quarter</text>
+<line x1="700" y1="298" x2="1000" y2="298" stroke="#d3dae1" stroke-width="0.5"/>
+<text x="767" y="328.6" font-family="Arial" font-size="10.2" font-weight="normal" fill="#1a1a1a">cal_year</text>
+<line x1="700" y1="316" x2="1000" y2="316" stroke="#d3dae1" stroke-width="0.5"/>
+<text x="767" y="346.6" font-family="Arial" font-size="10.2" font-weight="normal" fill="#1a1a1a">holiday_ind (&#x27;N&#x27; default)</text>
+<line x1="700" y1="334" x2="1000" y2="334" stroke="#d3dae1" stroke-width="0.5"/>
+<text x="767" y="364.6" font-family="Arial" font-size="10.2" font-weight="normal" fill="#1a1a1a">weekday_ind (&#x27;Y&#x27;/&#x27;N&#x27;)</text>
+<line x1="700" y1="352" x2="1000" y2="352" stroke="#d3dae1" stroke-width="0.5"/>
+<text x="767" y="382.6" font-family="Arial" font-size="10.2" font-weight="bold" fill="#0A7D3E">festive_event  DEFAULT &#x27;None&#x27;</text>
+<line x1="700" y1="370" x2="1000" y2="370" stroke="#d3dae1" stroke-width="0.5"/>
+</g>
+<g><rect x="700" y="425" width="300" height="186" fill="#EAF2FB" stroke="#333333" stroke-width="1.2" rx="3"/>
+<rect x="700" y="425" width="300" height="24" fill="#5B8DB8" stroke="#333333" stroke-width="1.2" rx="3"/>
+<rect x="700" y="445" width="300" height="4" fill="#5B8DB8"/>
+<text x="850.0" y="441.0" font-family="Arial" font-size="12" font-weight="bold" fill="#ffffff" text-anchor="middle">PRODUCT_DIM  (SCD Type 1)</text>
+<line x1="760" y1="449" x2="760" y2="611" stroke="#9aa5b1" stroke-width="0.8"/>
+<text x="707" y="461.6" font-family="Arial" font-size="9.6" font-weight="bold" fill="#7a2f2f">PK</text>
+<text x="767" y="461.6" font-family="Arial" font-size="10.2" font-weight="normal" fill="#1a1a1a">product_key  (surrogate)</text>
+<text x="707" y="479.6" font-family="Arial" font-size="9.6" font-weight="bold" fill="#7a2f2f">NK</text>
+<text x="767" y="479.6" font-family="Arial" font-size="10.2" font-weight="bold" fill="#0A7D3E">item_id   UNIQUE</text>
+<line x1="700" y1="467" x2="1000" y2="467" stroke="#d3dae1" stroke-width="0.5"/>
+<text x="767" y="497.6" font-family="Arial" font-size="10.2" font-weight="normal" fill="#1a1a1a">item_name</text>
+<line x1="700" y1="485" x2="1000" y2="485" stroke="#d3dae1" stroke-width="0.5"/>
+<text x="767" y="515.6" font-family="Arial" font-size="10.2" font-weight="normal" fill="#1a1a1a">item_status</text>
+<line x1="700" y1="503" x2="1000" y2="503" stroke="#d3dae1" stroke-width="0.5"/>
+<text x="767" y="533.6" font-family="Arial" font-size="10.2" font-weight="bold" fill="#0A7D3E">current_unit_price</text>
+<line x1="700" y1="521" x2="1000" y2="521" stroke="#d3dae1" stroke-width="0.5"/>
+<text x="767" y="551.6" font-family="Arial" font-size="10.2" font-weight="normal" fill="#1a1a1a">category_name</text>
+<line x1="700" y1="539" x2="1000" y2="539" stroke="#d3dae1" stroke-width="0.5"/>
+<text x="767" y="569.6" font-family="Arial" font-size="10.2" font-weight="normal" fill="#1a1a1a">supplier_name</text>
+<line x1="700" y1="557" x2="1000" y2="557" stroke="#d3dae1" stroke-width="0.5"/>
+<text x="767" y="587.6" font-family="Arial" font-size="10.2" font-weight="normal" fill="#1a1a1a">supplier_contact_no</text>
+<line x1="700" y1="575" x2="1000" y2="575" stroke="#d3dae1" stroke-width="0.5"/>
+<text x="767" y="605.6" font-family="Arial" font-size="10.2" font-weight="bold" fill="#0A7D3E">etl_batch_id / load_dt / dq_flag</text>
+<line x1="700" y1="593" x2="1000" y2="593" stroke="#d3dae1" stroke-width="0.5"/>
+</g>
+<g><rect x="700" y="640" width="300" height="276" fill="#EAF2FB" stroke="#333333" stroke-width="1.2" rx="3"/>
+<rect x="700" y="640" width="300" height="24" fill="#5B8DB8" stroke="#333333" stroke-width="1.2" rx="3"/>
+<rect x="700" y="660" width="300" height="4" fill="#5B8DB8"/>
+<text x="850.0" y="656.0" font-family="Arial" font-size="12" font-weight="bold" fill="#ffffff" text-anchor="middle">CUSTOMER_DIM  (SCD Type 2)</text>
+<line x1="760" y1="664" x2="760" y2="916" stroke="#9aa5b1" stroke-width="0.8"/>
+<text x="707" y="676.6" font-family="Arial" font-size="9.6" font-weight="bold" fill="#7a2f2f">PK</text>
+<text x="767" y="676.6" font-family="Arial" font-size="10.2" font-weight="normal" fill="#1a1a1a">customer_key  (surrogate)</text>
+<text x="707" y="694.6" font-family="Arial" font-size="9.6" font-weight="bold" fill="#7a2f2f">NK</text>
+<text x="767" y="694.6" font-family="Arial" font-size="10.2" font-weight="bold" fill="#0A7D3E">customer_id   †</text>
+<line x1="700" y1="682" x2="1000" y2="682" stroke="#d3dae1" stroke-width="0.5"/>
+<text x="767" y="712.6" font-family="Arial" font-size="10.2" font-weight="normal" fill="#1a1a1a">customer_name</text>
+<line x1="700" y1="700" x2="1000" y2="700" stroke="#d3dae1" stroke-width="0.5"/>
+<text x="767" y="730.6" font-family="Arial" font-size="10.2" font-weight="normal" fill="#1a1a1a">ic_no</text>
+<line x1="700" y1="718" x2="1000" y2="718" stroke="#d3dae1" stroke-width="0.5"/>
+<text x="767" y="748.6" font-family="Arial" font-size="10.2" font-weight="normal" fill="#1a1a1a">email</text>
+<line x1="700" y1="736" x2="1000" y2="736" stroke="#d3dae1" stroke-width="0.5"/>
+<text x="767" y="766.6" font-family="Arial" font-size="10.2" font-weight="normal" fill="#1a1a1a">customer_status</text>
+<line x1="700" y1="754" x2="1000" y2="754" stroke="#d3dae1" stroke-width="0.5"/>
+<text x="767" y="784.6" font-family="Arial" font-size="10.2" font-weight="normal" fill="#1a1a1a">member_flag (&#x27;Y&#x27;/&#x27;N&#x27;)</text>
+<line x1="700" y1="772" x2="1000" y2="772" stroke="#d3dae1" stroke-width="0.5"/>
+<text x="767" y="802.6" font-family="Arial" font-size="10.2" font-weight="normal" fill="#1a1a1a">membership_type</text>
+<line x1="700" y1="790" x2="1000" y2="790" stroke="#d3dae1" stroke-width="0.5"/>
+<text x="767" y="820.6" font-family="Arial" font-size="10.2" font-weight="normal" fill="#1a1a1a">membership_fee</text>
+<line x1="700" y1="808" x2="1000" y2="808" stroke="#d3dae1" stroke-width="0.5"/>
+<text x="767" y="838.6" font-family="Arial" font-size="10.2" font-weight="normal" fill="#1a1a1a">effective_start_date</text>
+<line x1="700" y1="826" x2="1000" y2="826" stroke="#d3dae1" stroke-width="0.5"/>
+<text x="767" y="856.6" font-family="Arial" font-size="10.2" font-weight="bold" fill="#0A7D3E">effective_end_date  DEF 9999-12-31</text>
+<line x1="700" y1="844" x2="1000" y2="844" stroke="#d3dae1" stroke-width="0.5"/>
+<text x="767" y="874.6" font-family="Arial" font-size="10.2" font-weight="normal" fill="#1a1a1a">is_current_flag (&#x27;Y&#x27;/&#x27;N&#x27;)</text>
+<line x1="700" y1="862" x2="1000" y2="862" stroke="#d3dae1" stroke-width="0.5"/>
+<text x="767" y="892.6" font-family="Arial" font-size="10.2" font-weight="normal" fill="#1a1a1a">version_no</text>
+<line x1="700" y1="880" x2="1000" y2="880" stroke="#d3dae1" stroke-width="0.5"/>
+<text x="767" y="910.6" font-family="Arial" font-size="10.2" font-weight="bold" fill="#0A7D3E">etl_batch_id / load_dt / dq_flag</text>
+<line x1="700" y1="898" x2="1000" y2="898" stroke="#d3dae1" stroke-width="0.5"/>
+</g>
+<g><rect x="700" y="930" width="300" height="168" fill="#EAF2FB" stroke="#333333" stroke-width="1.2" rx="3"/>
+<rect x="700" y="930" width="300" height="24" fill="#5B8DB8" stroke="#333333" stroke-width="1.2" rx="3"/>
+<rect x="700" y="950" width="300" height="4" fill="#5B8DB8"/>
+<text x="850.0" y="946.0" font-family="Arial" font-size="12" font-weight="bold" fill="#ffffff" text-anchor="middle">BRANCH_DIM  (SCD Type 1)</text>
+<line x1="760" y1="954" x2="760" y2="1098" stroke="#9aa5b1" stroke-width="0.8"/>
+<text x="707" y="966.6" font-family="Arial" font-size="9.6" font-weight="bold" fill="#7a2f2f">PK</text>
+<text x="767" y="966.6" font-family="Arial" font-size="10.2" font-weight="normal" fill="#1a1a1a">branch_key  (surrogate)</text>
+<text x="707" y="984.6" font-family="Arial" font-size="9.6" font-weight="bold" fill="#7a2f2f">NK</text>
+<text x="767" y="984.6" font-family="Arial" font-size="10.2" font-weight="bold" fill="#0A7D3E">branch_id   UNIQUE</text>
+<line x1="700" y1="972" x2="1000" y2="972" stroke="#d3dae1" stroke-width="0.5"/>
+<text x="767" y="1002.6" font-family="Arial" font-size="10.2" font-weight="bold" fill="#0A7D3E">branch_name   (derived)</text>
+<line x1="700" y1="990" x2="1000" y2="990" stroke="#d3dae1" stroke-width="0.5"/>
+<text x="767" y="1020.6" font-family="Arial" font-size="10.2" font-weight="normal" fill="#1a1a1a">city</text>
+<line x1="700" y1="1008" x2="1000" y2="1008" stroke="#d3dae1" stroke-width="0.5"/>
+<text x="767" y="1038.6" font-family="Arial" font-size="10.2" font-weight="normal" fill="#1a1a1a">state</text>
+<line x1="700" y1="1026" x2="1000" y2="1026" stroke="#d3dae1" stroke-width="0.5"/>
+<text x="767" y="1056.6" font-family="Arial" font-size="10.2" font-weight="normal" fill="#1a1a1a">region   (derived from state)</text>
+<line x1="700" y1="1044" x2="1000" y2="1044" stroke="#d3dae1" stroke-width="0.5"/>
+<text x="767" y="1074.6" font-family="Arial" font-size="10.2" font-weight="normal" fill="#1a1a1a">contact_no</text>
+<line x1="700" y1="1062" x2="1000" y2="1062" stroke="#d3dae1" stroke-width="0.5"/>
+<text x="767" y="1092.6" font-family="Arial" font-size="10.2" font-weight="bold" fill="#0A7D3E">etl_batch_id / load_dt / dq_flag</text>
+<line x1="700" y1="1080" x2="1000" y2="1080" stroke="#d3dae1" stroke-width="0.5"/>
+</g>
+<g><rect x="700" y="1120" width="300" height="204" fill="#EAF2FB" stroke="#333333" stroke-width="1.2" rx="3"/>
+<rect x="700" y="1120" width="300" height="24" fill="#5B8DB8" stroke="#333333" stroke-width="1.2" rx="3"/>
+<rect x="700" y="1140" width="300" height="4" fill="#5B8DB8"/>
+<text x="850.0" y="1136.0" font-family="Arial" font-size="12" font-weight="bold" fill="#ffffff" text-anchor="middle">PROMOTION_DIM  (SCD Type 1)</text>
+<line x1="760" y1="1144" x2="760" y2="1324" stroke="#9aa5b1" stroke-width="0.8"/>
+<text x="707" y="1156.6" font-family="Arial" font-size="9.6" font-weight="bold" fill="#7a2f2f">PK</text>
+<text x="767" y="1156.6" font-family="Arial" font-size="10.2" font-weight="bold" fill="#0A7D3E">promo_key   0 = No Promotion</text>
+<text x="707" y="1174.6" font-family="Arial" font-size="9.6" font-weight="bold" fill="#7a2f2f">NK</text>
+<text x="767" y="1174.6" font-family="Arial" font-size="10.2" font-weight="bold" fill="#0A7D3E">promotion_id   UNIQUE</text>
+<line x1="700" y1="1162" x2="1000" y2="1162" stroke="#d3dae1" stroke-width="0.5"/>
+<text x="767" y="1192.6" font-family="Arial" font-size="10.2" font-weight="normal" fill="#1a1a1a">promo_name</text>
+<line x1="700" y1="1180" x2="1000" y2="1180" stroke="#d3dae1" stroke-width="0.5"/>
+<text x="767" y="1210.6" font-family="Arial" font-size="10.2" font-weight="normal" fill="#1a1a1a">discount_type</text>
+<line x1="700" y1="1198" x2="1000" y2="1198" stroke="#d3dae1" stroke-width="0.5"/>
+<text x="767" y="1228.6" font-family="Arial" font-size="10.2" font-weight="normal" fill="#1a1a1a">discount_value</text>
+<line x1="700" y1="1216" x2="1000" y2="1216" stroke="#d3dae1" stroke-width="0.5"/>
+<text x="767" y="1246.6" font-family="Arial" font-size="10.2" font-weight="normal" fill="#1a1a1a">promo_start_date</text>
+<line x1="700" y1="1234" x2="1000" y2="1234" stroke="#d3dae1" stroke-width="0.5"/>
+<text x="767" y="1264.6" font-family="Arial" font-size="10.2" font-weight="normal" fill="#1a1a1a">promo_end_date</text>
+<line x1="700" y1="1252" x2="1000" y2="1252" stroke="#d3dae1" stroke-width="0.5"/>
+<text x="767" y="1282.6" font-family="Arial" font-size="10.2" font-weight="normal" fill="#1a1a1a">promo_status</text>
+<line x1="700" y1="1270" x2="1000" y2="1270" stroke="#d3dae1" stroke-width="0.5"/>
+<text x="767" y="1300.6" font-family="Arial" font-size="10.2" font-weight="bold" fill="#0A7D3E">promo_duration_days  (derived)</text>
+<line x1="700" y1="1288" x2="1000" y2="1288" stroke="#d3dae1" stroke-width="0.5"/>
+<text x="767" y="1318.6" font-family="Arial" font-size="10.2" font-weight="bold" fill="#0A7D3E">etl_batch_id / load_dt / dq_flag</text>
+<line x1="700" y1="1306" x2="1000" y2="1306" stroke="#d3dae1" stroke-width="0.5"/>
+</g>
+<g><rect x="110" y="505" width="400" height="276" fill="#FFF4D6" stroke="#333333" stroke-width="1.2" rx="3"/>
+<rect x="110" y="505" width="400" height="24" fill="#E8B33A" stroke="#333333" stroke-width="1.2" rx="3"/>
+<rect x="110" y="525" width="400" height="4" fill="#E8B33A"/>
+<text x="310.0" y="521.0" font-family="Arial" font-size="12" font-weight="bold" fill="#ffffff" text-anchor="middle">SALES_FACT</text>
+<line x1="170" y1="529" x2="170" y2="781" stroke="#9aa5b1" stroke-width="0.8"/>
+<text x="117" y="541.6" font-family="Arial" font-size="9.6" font-weight="bold" fill="#7a2f2f">PK</text>
+<text x="177" y="541.6" font-family="Arial" font-size="10.2" font-weight="bold" fill="#0A7D3E">order_no          (degenerate)</text>
+<text x="117" y="559.6" font-family="Arial" font-size="9.6" font-weight="bold" fill="#7a2f2f">PK</text>
+<text x="177" y="559.6" font-family="Arial" font-size="10.2" font-weight="bold" fill="#0A7D3E">product_key                 → PRODUCT</text>
+<line x1="110" y1="547" x2="510" y2="547" stroke="#d3dae1" stroke-width="0.5"/>
+<text x="117" y="577.6" font-family="Arial" font-size="9.6" font-weight="bold" fill="#7a2f2f">FK</text>
+<text x="177" y="577.6" font-family="Arial" font-size="10.2" font-weight="bold" fill="#0A7D3E">order_date_key         → DATE</text>
+<line x1="110" y1="565" x2="510" y2="565" stroke="#d3dae1" stroke-width="0.5"/>
+<text x="117" y="595.6" font-family="Arial" font-size="9.6" font-weight="bold" fill="#7a2f2f">FK</text>
+<text x="177" y="595.6" font-family="Arial" font-size="10.2" font-weight="normal" fill="#1a1a1a">customer_key           → CUSTOMER</text>
+<line x1="110" y1="583" x2="510" y2="583" stroke="#d3dae1" stroke-width="0.5"/>
+<text x="117" y="613.6" font-family="Arial" font-size="9.6" font-weight="bold" fill="#7a2f2f">FK</text>
+<text x="177" y="613.6" font-family="Arial" font-size="10.2" font-weight="normal" fill="#1a1a1a">branch_key                → BRANCH</text>
+<line x1="110" y1="601" x2="510" y2="601" stroke="#d3dae1" stroke-width="0.5"/>
+<text x="117" y="631.6" font-family="Arial" font-size="9.6" font-weight="bold" fill="#7a2f2f">FK</text>
+<text x="177" y="631.6" font-family="Arial" font-size="10.2" font-weight="normal" fill="#1a1a1a">promo_key                 → PROMOTION</text>
+<line x1="110" y1="619" x2="510" y2="619" stroke="#d3dae1" stroke-width="0.5"/>
+<text x="177" y="649.6" font-family="Arial" font-size="10.2" font-weight="normal" fill="#1a1a1a">order_type   (CHECK)</text>
+<line x1="110" y1="637" x2="510" y2="637" stroke="#d3dae1" stroke-width="0.5"/>
+<text x="177" y="667.6" font-family="Arial" font-size="10.2" font-weight="bold" fill="#0A7D3E">order_hour   (0-23)</text>
+<line x1="110" y1="655" x2="510" y2="655" stroke="#d3dae1" stroke-width="0.5"/>
+<text x="177" y="685.6" font-family="Arial" font-size="10.2" font-weight="normal" fill="#1a1a1a">quantity                       [additive]</text>
+<line x1="110" y1="673" x2="510" y2="673" stroke="#d3dae1" stroke-width="0.5"/>
+<text x="177" y="703.6" font-family="Arial" font-size="10.2" font-weight="normal" fill="#1a1a1a">unit_price                  [non-additive]</text>
+<line x1="110" y1="691" x2="510" y2="691" stroke="#d3dae1" stroke-width="0.5"/>
+<text x="177" y="721.6" font-family="Arial" font-size="10.2" font-weight="normal" fill="#1a1a1a">gross_sales_amt      [additive]</text>
+<line x1="110" y1="709" x2="510" y2="709" stroke="#d3dae1" stroke-width="0.5"/>
+<text x="177" y="739.6" font-family="Arial" font-size="10.2" font-weight="normal" fill="#1a1a1a">discount_amt            [additive]</text>
+<line x1="110" y1="727" x2="510" y2="727" stroke="#d3dae1" stroke-width="0.5"/>
+<text x="177" y="757.6" font-family="Arial" font-size="10.2" font-weight="normal" fill="#1a1a1a">net_sales_amt           [additive]</text>
+<line x1="110" y1="745" x2="510" y2="745" stroke="#d3dae1" stroke-width="0.5"/>
+<text x="177" y="775.6" font-family="Arial" font-size="10.2" font-weight="bold" fill="#0A7D3E">etl_batch_id / load_dt / dq_flag</text>
+<line x1="110" y1="763" x2="510" y2="763" stroke="#d3dae1" stroke-width="0.5"/>
+</g>
+<g><rect x="1230" y="470" width="410" height="276" fill="#FFF4D6" stroke="#333333" stroke-width="1.2" rx="3"/>
+<rect x="1230" y="470" width="410" height="24" fill="#E8B33A" stroke="#333333" stroke-width="1.2" rx="3"/>
+<rect x="1230" y="490" width="410" height="4" fill="#E8B33A"/>
+<text x="1435.0" y="486.0" font-family="Arial" font-size="12" font-weight="bold" fill="#ffffff" text-anchor="middle">RETURNS_FACT</text>
+<line x1="1290" y1="494" x2="1290" y2="746" stroke="#9aa5b1" stroke-width="0.8"/>
+<text x="1237" y="506.6" font-family="Arial" font-size="9.6" font-weight="bold" fill="#7a2f2f">PK</text>
+<text x="1297" y="506.6" font-family="Arial" font-size="10.2" font-weight="bold" fill="#0A7D3E">return_id          (degenerate)</text>
+<text x="1237" y="524.6" font-family="Arial" font-size="9.6" font-weight="bold" fill="#7a2f2f">PK</text>
+<text x="1297" y="524.6" font-family="Arial" font-size="10.2" font-weight="bold" fill="#0A7D3E">product_key                 → PRODUCT</text>
+<line x1="1230" y1="512" x2="1640" y2="512" stroke="#d3dae1" stroke-width="0.5"/>
+<text x="1237" y="542.6" font-family="Arial" font-size="9.6" font-weight="bold" fill="#7a2f2f">FK</text>
+<text x="1297" y="542.6" font-family="Arial" font-size="10.2" font-weight="normal" fill="#1a1a1a">return_date_key        → DATE</text>
+<line x1="1230" y1="530" x2="1640" y2="530" stroke="#d3dae1" stroke-width="0.5"/>
+<text x="1237" y="560.6" font-family="Arial" font-size="9.6" font-weight="bold" fill="#7a2f2f">FK</text>
+<text x="1297" y="560.6" font-family="Arial" font-size="10.2" font-weight="normal" fill="#1a1a1a">order_date_key         → DATE  (role)</text>
+<line x1="1230" y1="548" x2="1640" y2="548" stroke="#d3dae1" stroke-width="0.5"/>
+<text x="1237" y="578.6" font-family="Arial" font-size="9.6" font-weight="bold" fill="#7a2f2f">FK</text>
+<text x="1297" y="578.6" font-family="Arial" font-size="10.2" font-weight="normal" fill="#1a1a1a">customer_key           → CUSTOMER</text>
+<line x1="1230" y1="566" x2="1640" y2="566" stroke="#d3dae1" stroke-width="0.5"/>
+<text x="1237" y="596.6" font-family="Arial" font-size="9.6" font-weight="bold" fill="#7a2f2f">FK</text>
+<text x="1297" y="596.6" font-family="Arial" font-size="10.2" font-weight="normal" fill="#1a1a1a">branch_key                → BRANCH</text>
+<line x1="1230" y1="584" x2="1640" y2="584" stroke="#d3dae1" stroke-width="0.5"/>
+<text x="1237" y="614.6" font-family="Arial" font-size="9.6" font-weight="bold" fill="#7a2f2f">FK</text>
+<text x="1297" y="614.6" font-family="Arial" font-size="10.2" font-weight="normal" fill="#1a1a1a">reason_key                → REASON</text>
+<line x1="1230" y1="602" x2="1640" y2="602" stroke="#d3dae1" stroke-width="0.5"/>
+<text x="1237" y="632.6" font-family="Arial" font-size="9.6" font-weight="bold" fill="#7a2f2f">FK</text>
+<text x="1297" y="632.6" font-family="Arial" font-size="10.2" font-weight="bold" fill="#0A7D3E">promo_key                 → PROMOTION</text>
+<line x1="1230" y1="620" x2="1640" y2="620" stroke="#d3dae1" stroke-width="0.5"/>
+<text x="1237" y="650.6" font-family="Arial" font-size="9.6" font-weight="bold" fill="#7a2f2f">DD</text>
+<text x="1297" y="650.6" font-family="Arial" font-size="10.2" font-weight="normal" fill="#1a1a1a">order_no</text>
+<line x1="1230" y1="638" x2="1640" y2="638" stroke="#d3dae1" stroke-width="0.5"/>
+<text x="1297" y="668.6" font-family="Arial" font-size="10.2" font-weight="normal" fill="#1a1a1a">return_status   (CHECK)</text>
+<line x1="1230" y1="656" x2="1640" y2="656" stroke="#d3dae1" stroke-width="0.5"/>
+<text x="1297" y="686.6" font-family="Arial" font-size="10.2" font-weight="normal" fill="#1a1a1a">quantity_returned    [additive]</text>
+<line x1="1230" y1="674" x2="1640" y2="674" stroke="#d3dae1" stroke-width="0.5"/>
+<text x="1297" y="704.6" font-family="Arial" font-size="10.2" font-weight="normal" fill="#1a1a1a">refund_amount         [additive]</text>
+<line x1="1230" y1="692" x2="1640" y2="692" stroke="#d3dae1" stroke-width="0.5"/>
+<text x="1297" y="722.6" font-family="Arial" font-size="10.2" font-weight="normal" fill="#1a1a1a">days_to_return       [non-additive]</text>
+<line x1="1230" y1="710" x2="1640" y2="710" stroke="#d3dae1" stroke-width="0.5"/>
+<text x="1297" y="740.6" font-family="Arial" font-size="10.2" font-weight="bold" fill="#0A7D3E">etl_batch_id / load_dt / dq_flag</text>
+<line x1="1230" y1="728" x2="1640" y2="728" stroke="#d3dae1" stroke-width="0.5"/>
+</g>
+<g><rect x="1760" y="570" width="290" height="114" fill="#EAF2FB" stroke="#333333" stroke-width="1.2" rx="3"/>
+<rect x="1760" y="570" width="290" height="24" fill="#5B8DB8" stroke="#333333" stroke-width="1.2" rx="3"/>
+<rect x="1760" y="590" width="290" height="4" fill="#5B8DB8"/>
+<text x="1905.0" y="586.0" font-family="Arial" font-size="12" font-weight="bold" fill="#ffffff" text-anchor="middle">RETURN_REASON_DIM</text>
+<line x1="1820" y1="594" x2="1820" y2="684" stroke="#9aa5b1" stroke-width="0.8"/>
+<text x="1767" y="606.6" font-family="Arial" font-size="9.6" font-weight="bold" fill="#7a2f2f">PK</text>
+<text x="1827" y="606.6" font-family="Arial" font-size="10.2" font-weight="normal" fill="#1a1a1a">reason_key  (surrogate)</text>
+<text x="1767" y="624.6" font-family="Arial" font-size="9.6" font-weight="bold" fill="#7a2f2f">NK</text>
+<text x="1827" y="624.6" font-family="Arial" font-size="10.2" font-weight="bold" fill="#0A7D3E">reason_id   UNIQUE</text>
+<line x1="1760" y1="612" x2="2050" y2="612" stroke="#d3dae1" stroke-width="0.5"/>
+<text x="1827" y="642.6" font-family="Arial" font-size="10.2" font-weight="normal" fill="#1a1a1a">reason_name</text>
+<line x1="1760" y1="630" x2="2050" y2="630" stroke="#d3dae1" stroke-width="0.5"/>
+<text x="1827" y="660.6" font-family="Arial" font-size="10.2" font-weight="normal" fill="#1a1a1a">reason_category  (derived)</text>
+<line x1="1760" y1="648" x2="2050" y2="648" stroke="#d3dae1" stroke-width="0.5"/>
+<text x="1827" y="678.6" font-family="Arial" font-size="10.2" font-weight="bold" fill="#0A7D3E">etl_batch_id / load_dt / dq_flag</text>
+<line x1="1760" y1="666" x2="2050" y2="666" stroke="#d3dae1" stroke-width="0.5"/>
+</g>
+<rect x="70" y="960" width="492" height="312.5" fill="#FFE96B" stroke="#D8BE2F" stroke-width="1"/>
+<text x="84" y="982.0" font-family="Arial" font-size="11.5" font-weight="bold" fill="#1a1a1a">Design notes</text>
+<text x="84" y="997.5" font-family="Arial" font-size="10.4" font-weight="normal" fill="#1a1a1a">1.  Fact constellation (galaxy schema).  DATE, PRODUCT, CUSTOMER, BRANCH and</text>
+<text x="84" y="1013.0" font-family="Arial" font-size="10.4" font-weight="normal" fill="#1a1a1a">     PROMOTION are conformed — identical keys and identical meaning in both facts.</text>
+<text x="84" y="1028.5" font-family="Arial" font-size="10.4" font-weight="normal" fill="#1a1a1a">2.  DATE_DIM is a role-playing dimension, referenced three times: order date</text>
+<text x="84" y="1044.0" font-family="Arial" font-size="10.4" font-weight="normal" fill="#1a1a1a">     (SALES_FACT), return date and original order date (RETURNS_FACT).  Expose it</text>
+<text x="84" y="1059.5" font-family="Arial" font-size="10.4" font-weight="normal" fill="#1a1a1a">     as views ORDER_DATE_DIM and RETURN_DATE_DIM for the BI layer.</text>
+<text x="84" y="1075.0" font-family="Arial" font-size="10.4" font-weight="normal" fill="#1a1a1a">3.  Grain — SALES_FACT: one row per item line per order.  RETURNS_FACT: one row</text>
+<text x="84" y="1090.5" font-family="Arial" font-size="10.4" font-weight="normal" fill="#1a1a1a">     per returned item line.  The PK is the minimal key that enforces that grain;</text>
+<text x="84" y="1106.0" font-family="Arial" font-size="10.4" font-weight="normal" fill="#1a1a1a">     dimension keys are NOT NULL FKs and are indexed, but are not part of the PK.</text>
+<text x="84" y="1121.5" font-family="Arial" font-size="10.4" font-weight="normal" fill="#1a1a1a">4.  Natural keys are marked NK, not FK — there is no parent table in the warehouse.</text>
+<text x="84" y="1137.0" font-family="Arial" font-size="10.4" font-weight="normal" fill="#1a1a1a">     † CUSTOMER_DIM is Type 2, so customer_id is deliberately not unique:</text>
+<text x="84" y="1152.5" font-family="Arial" font-size="10.4" font-weight="normal" fill="#1a1a1a">        UNIQUE (customer_id, effective_start_date).</text>
+<text x="84" y="1168.0" font-family="Arial" font-size="10.4" font-weight="normal" fill="#1a1a1a">5.  Every dimension is seeded with key = -1 &#x27;Unknown&#x27; for dirty source data.</text>
+<text x="84" y="1183.5" font-family="Arial" font-size="10.4" font-weight="normal" fill="#1a1a1a">     PROMOTION_DIM additionally seeds key = 0 &#x27;No Promotion&#x27;, so a non-promotional</text>
+<text x="84" y="1199.0" font-family="Arial" font-size="10.4" font-weight="normal" fill="#1a1a1a">     sale is never confused with an unresolvable promotion reference.</text>
+<text x="84" y="1214.5" font-family="Arial" font-size="10.4" font-weight="normal" fill="#1a1a1a">6.  Cost and gross-profit measures are omitted: the source system records no cost</text>
+<text x="84" y="1230.0" font-family="Arial" font-size="10.4" font-weight="normal" fill="#1a1a1a">     column.  Profitability is analysed through discount leakage and net-of-returns</text>
+<text x="84" y="1245.5" font-family="Arial" font-size="10.4" font-weight="normal" fill="#1a1a1a">     revenue instead.</text>
+<text x="84" y="1261.0" font-family="Arial" font-size="10.4" font-weight="normal" fill="#1a1a1a">7.  Green text marks a change from the previous draft.</text>
+<rect x="70" y="820" width="430" height="120" fill="#ffffff" stroke="#c7ced6"/>
+<text x="84" y="842" font-family="Arial" font-size="11.5" font-weight="bold">Legend</text>
+<text x="84" y="864" font-family="Arial" font-size="10.4" font-weight="bold" fill="#7a2f2f">PK</text>
+<text x="122" y="864" font-family="Arial" font-size="10.4">Primary key (enforces the declared grain)</text>
+<text x="84" y="885" font-family="Arial" font-size="10.4" font-weight="bold" fill="#7a2f2f">FK</text>
+<text x="122" y="885" font-family="Arial" font-size="10.4">Foreign key to a dimension — NOT NULL, indexed</text>
+<text x="84" y="906" font-family="Arial" font-size="10.4" font-weight="bold" fill="#7a2f2f">NK</text>
+<text x="122" y="906" font-family="Arial" font-size="10.4">Natural / business key from the source system</text>
+<text x="84" y="927" font-family="Arial" font-size="10.4" font-weight="bold" fill="#7a2f2f">DD</text>
+<text x="122" y="927" font-family="Arial" font-size="10.4">Degenerate dimension (operational reference number)</text>
+</svg>
