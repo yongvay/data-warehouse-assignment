@@ -1,0 +1,15 @@
+EXEC load_date_dim;
+
+EXEC load_return_reason_dim;
+
+EXEC load_delivery_company_dim;
+
+EXEC load_branch_dim;
+
+EXEC load_address_dim;
+
+EXEC load_promotion_dim;
+
+EXEC load_item_dim;
+
+EXEC load_customer_dim_init;
