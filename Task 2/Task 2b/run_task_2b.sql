@@ -1,3 +1,22 @@
+-- PROMPT --- COMPILING TASK 2B DIMENSIONS ---
+-- @"C:\Users\Lenovo\Desktop\Database Warehouse\data-warehouse-assignment\Task 2\Task 2b\DIM\ADDRESS_DIM_INCREMENTAL.sql"
+-- @"C:\Users\Lenovo\Desktop\Database Warehouse\data-warehouse-assignment\Task 2\Task 2b\DIM\BRANCH_DIM_INCREMENTAL.sql"
+-- @"C:\Users\Lenovo\Desktop\Database Warehouse\data-warehouse-assignment\Task 2\Task 2b\DIM\CUSTOMER_DIM_INCREMENTAL.sql"
+-- @"C:\Users\Lenovo\Desktop\Database Warehouse\data-warehouse-assignment\Task 2\Task 2b\DIM\DATE_DIM_INCREMENTAL.sql"
+-- @"C:\Users\Lenovo\Desktop\Database Warehouse\data-warehouse-assignment\Task 2\Task 2b\DIM\DELIVERY_COMPANY_DIM_INCREMENTAL.sql"
+-- @"C:\Users\Lenovo\Desktop\Database Warehouse\data-warehouse-assignment\Task 2\Task 2b\DIM\ITEM_DIM_INCREMENTAL.sql"
+-- @"C:\Users\Lenovo\Desktop\Database Warehouse\data-warehouse-assignment\Task 2\Task 2b\DIM\PROMOTION_DIM_INCREMENTAL.sql"
+-- @"C:\Users\Lenovo\Desktop\Database Warehouse\data-warehouse-assignment\Task 2\Task 2b\DIM\RETURN_REASON_DIM_INCREMENTAL.sql"
+
+-- PROMPT --- COMPILING TASK 2B FACTS ---
+-- @"C:\Users\Lenovo\Desktop\Database Warehouse\data-warehouse-assignment\Task 2\Task 2b\FACT\DELIVERY_FACT_INCREMENTAL.sql"
+-- @"C:\Users\Lenovo\Desktop\Database Warehouse\data-warehouse-assignment\Task 2\Task 2b\FACT\POINT_FACT_INCREMENTAL.sql"
+-- @"C:\Users\Lenovo\Desktop\Database Warehouse\data-warehouse-assignment\Task 2\Task 2b\FACT\RETURN_FACT_INCREMENTAL.sql"
+-- @"C:\Users\Lenovo\Desktop\Database Warehouse\data-warehouse-assignment\Task 2\Task 2b\FACT\SALES_FACT_INCREMENTAL.sql"
+
+-- PROMPT --- COMPILING TASK 2B DRIVER ---
+-- @"C:\Users\Lenovo\Desktop\Database Warehouse\data-warehouse-assignment\Task 2\Task 2b\run_task2b.sql"
+
 CREATE OR REPLACE PROCEDURE run_task2b AS
 BEGIN
     DBMS_OUTPUT.PUT_LINE('--- STARTING TASK 2B INCREMENTAL LOAD ---');

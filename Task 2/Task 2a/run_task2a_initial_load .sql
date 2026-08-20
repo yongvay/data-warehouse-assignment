@@ -1,3 +1,26 @@
+-- SET SQLBLANKLINES ON;
+-- SET SERVEROUTPUT ON;
+
+-- PROMPT --- COMPILING TASK 2A DIMENSIONS ---
+-- @"C:\Users\Lenovo\Desktop\Database Warehouse\data-warehouse-assignment\Task 2\Task 2a\DIM\CREATE_SEQUENCE.sql"
+-- @"C:\Users\Lenovo\Desktop\Database Warehouse\data-warehouse-assignment\Task 2\Task 2a\DIM\ADDRESS_DIM.sql"
+-- @"C:\Users\Lenovo\Desktop\Database Warehouse\data-warehouse-assignment\Task 2\Task 2a\DIM\BRANCH_DIM.sql"
+-- @"C:\Users\Lenovo\Desktop\Database Warehouse\data-warehouse-assignment\Task 2\Task 2a\DIM\CUSTOMER_DIM_INIT.sql"
+-- @"C:\Users\Lenovo\Desktop\Database Warehouse\data-warehouse-assignment\Task 2\Task 2a\DIM\DATE_DIM.sql"
+-- @"C:\Users\Lenovo\Desktop\Database Warehouse\data-warehouse-assignment\Task 2\Task 2a\DIM\DELIVERY_COMPANY_DIM.sql"
+-- @"C:\Users\Lenovo\Desktop\Database Warehouse\data-warehouse-assignment\Task 2\Task 2a\DIM\ITEM_DIM.sql"
+-- @"C:\Users\Lenovo\Desktop\Database Warehouse\data-warehouse-assignment\Task 2\Task 2a\DIM\PROMOTION_DIM.sql"
+-- @"C:\Users\Lenovo\Desktop\Database Warehouse\data-warehouse-assignment\Task 2\Task 2a\DIM\RETURN_REASON_DIM.sql"
+
+-- PROMPT --- COMPILING TASK 2A FACTS ---
+-- @"C:\Users\Lenovo\Desktop\Database Warehouse\data-warehouse-assignment\Task 2\Task 2a\FACT\DELIVERY_FACT.sql"
+-- @"C:\Users\Lenovo\Desktop\Database Warehouse\data-warehouse-assignment\Task 2\Task 2a\FACT\POINT_FACT.sql"
+-- @"C:\Users\Lenovo\Desktop\Database Warehouse\data-warehouse-assignment\Task 2\Task 2a\FACT\RETURN_FACT.sql"
+-- @"C:\Users\Lenovo\Desktop\Database Warehouse\data-warehouse-assignment\Task 2\Task 2a\FACT\SALES_FACT.sql"
+
+-- PROMPT --- COMPILING TASK 2A DRIVER ---
+-- @"C:\Users\Lenovo\Desktop\Database Warehouse\data-warehouse-assignment\Task 2\Task 2a\run_task2a_initial_load.sql"
+
 CREATE OR REPLACE PROCEDURE run_task2a_initial_load AS
 BEGIN
     DBMS_OUTPUT.PUT_LINE('--- STARTING TASK 2A: INITIAL HISTORICAL LOAD ---');
