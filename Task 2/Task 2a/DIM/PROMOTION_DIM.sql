@@ -1,3 +1,15 @@
+CREATE OR REPLACE VIEW vw_load_promotion_dim AS
+SELECT 
+    PromotionID AS promotion_id,
+    PromoName AS promo_name,
+    DiscountType AS discount_type,
+    DiscountValue AS discount_value,
+    StartDate AS promo_start_date,
+    EndDate AS promo_end_date,
+    Status AS promo_status,
+    (EndDate - StartDate) AS promo_duration_days
+FROM adm.Promotion;
+
 CREATE OR REPLACE PROCEDURE load_promotion_dim AS
     v_batch_id NUMBER := 1;
 BEGIN
@@ -15,16 +27,16 @@ BEGIN
     )
     SELECT 
         seq_dw_promo.NEXTVAL,
-        PromotionID,
-        PromoName,
-        DiscountType,
-        DiscountValue,
-        StartDate,
-        EndDate,
-        Status,
-        (EndDate - StartDate) AS promo_duration_days, -- Duration Calculation
+        v.promotion_id,
+        v.promo_name,
+        v.discount_type,
+        v.discount_value,
+        v.promo_start_date,
+        v.promo_end_date,
+        v.promo_status,
+        v.promo_duration_days,
         v_batch_id
-    FROM adm.Promotion;
+    FROM vw_load_promotion_dim v;
 
     COMMIT;
     DBMS_OUTPUT.PUT_LINE('PROMOTION_DIM loaded.');
