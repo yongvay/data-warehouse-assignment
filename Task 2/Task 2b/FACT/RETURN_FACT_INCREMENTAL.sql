@@ -48,11 +48,12 @@ BEGIN
         CASE WHEN r.Status IN ('Pending','Approved','Rejected','Refunded') THEN r.Status ELSE 'Pending' END, -- Scrubbing: Domain validation
         ABS(rd.QuantityReturned), -- Scrubbing: Prevent negative returns
         ABS(rd.RefundAmount), -- Scrubbing: Prevent negative refunds
-        GREATEST(TRUNC(r.ReturnDate) - TRUNC(o.OrderDateTime), 0), -- Scrubbing: chk_return_fact_days requires >= 0
+        TRUNC(r.ReturnDate) - TRUNC(o.OrderDateTime), -- Calculate number of days between order and return
         2
     FROM adm.ReturnDetails rd
     JOIN adm.Returns r ON rd.ReturnID = r.ReturnID
     JOIN adm.Orders o ON r.OrderNo = o.OrderNo
+    JOIN adm.OrderDetails od ON od.OrderNo = o.OrderNo AND od.ItemID = rd.ItemID
     LEFT JOIN customer_dim cd ON o.CustomerID = cd.customer_id AND TRUNC(r.ReturnDate) BETWEEN TRUNC(cd.effective_start_date) AND TRUNC(cd.effective_end_date)
     LEFT JOIN item_dim id ON rd.ItemID = id.item_id
     LEFT JOIN branch_dim bd ON o.BranchID = bd.branch_id
@@ -63,7 +64,7 @@ BEGIN
     LEFT JOIN (
         SELECT OrderNo, ItemID, PromoPrice, PromotionID FROM (
             SELECT o.OrderNo, od.ItemID, ip.PromoPrice, p.PromotionID,
-            ROW_NUMBER() OVER (PARTITION BY o.OrderNo, od.ItemID ORDER BY ip.PromoPrice ASC) as rn
+            ROW_NUMBER() OVER (PARTITION BY o.OrderNo, od.ItemID ORDER BY ip.PromoPrice ASC, p.PromotionID ASC) as rn
             FROM adm.Orders o
             JOIN adm.OrderDetails od ON o.OrderNo = od.OrderNo
             JOIN adm.ItemPromotion ip ON od.ItemID = ip.ItemID
@@ -77,6 +78,11 @@ BEGIN
         SELECT 1 FROM return_fact rf 
         WHERE rf.return_id = r.ReturnID AND rf.item_key = NVL(id.item_key, -1)
     )
+    -- Data quality validation:
+    -- Returned quantity cannot exceed quantity originally purchased
+    AND ABS(rd.QuantityReturned) <= ABS(od.Quantity)
+    -- Return date cannot be earlier than original order date
+    AND TRUNC(r.ReturnDate) >= TRUNC(o.OrderDateTime)
     AND r.ReturnDate >= p_load_date - 1;
 
     v_count := SQL%ROWCOUNT;
@@ -91,13 +97,21 @@ BEGIN
             SYSDATE
         FROM adm.ReturnDetails rd
         JOIN adm.Returns r ON rd.ReturnID = r.ReturnID
+        JOIN adm.Orders o ON r.OrderNo = o.OrderNo
+        JOIN adm.OrderDetails od ON od.OrderNo = o.OrderNo AND od.ItemID = rd.ItemID
         WHERE rf.return_id = r.ReturnID 
+          AND ABS(rd.QuantityReturned) <= ABS(od.Quantity)
+          AND TRUNC(r.ReturnDate) >= TRUNC(o.OrderDateTime)
           AND rf.item_key = NVL((SELECT i.item_key FROM item_dim i WHERE i.item_id = rd.ItemID), -1)
     )
     WHERE EXISTS (
         SELECT 1 FROM adm.ReturnDetails rd
         JOIN adm.Returns r ON rd.ReturnID = r.ReturnID
+        JOIN adm.Orders o ON r.OrderNo = o.OrderNo
+        JOIN adm.OrderDetails od ON od.OrderNo = o.OrderNo AND od.ItemID = rd.ItemID
         WHERE rf.return_id = r.ReturnID 
+          AND ABS(rd.QuantityReturned) <= ABS(od.Quantity)
+          AND TRUNC(r.ReturnDate) >= TRUNC(o.OrderDateTime)
           AND rf.item_key = NVL((SELECT i.item_key FROM item_dim i WHERE i.item_id = rd.ItemID), -1)
         AND (rf.return_status != CASE WHEN r.Status IN ('Pending','Approved','Rejected','Refunded') THEN r.Status ELSE 'Pending' END
              OR rf.quantity_returned != ABS(rd.QuantityReturned)
