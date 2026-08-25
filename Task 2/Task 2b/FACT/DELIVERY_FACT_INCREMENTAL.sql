@@ -24,7 +24,7 @@ BEGIN
         2
     FROM adm.Delivery d
     JOIN adm.Orders o ON d.OrderNo = o.OrderNo
-    LEFT JOIN customer_dim cd ON o.CustomerID = cd.customer_id AND cd.is_current_flag = 'Y'
+    LEFT JOIN customer_dim cd ON o.CustomerID = cd.customer_id AND TRUNC(o.OrderDateTime) BETWEEN TRUNC(cd.effective_start_date) AND TRUNC(cd.effective_end_date)
     LEFT JOIN branch_dim bd ON o.BranchID = bd.branch_id
     LEFT JOIN delivery_company_dim dcd ON d.DeliveryCompanyID = dcd.delivery_company_id
     LEFT JOIN address_dim ad ON d.AddressID = ad.address_id
