@@ -1,7 +1,7 @@
 -- PROMPT --- COMPILING TASK 2B DIMENSIONS ---
 -- @"C:\Users\Lenovo\Desktop\Database Warehouse\data-warehouse-assignment\Task 2\Task 2b\DIM\ADDRESS_DIM_INCREMENTAL.sql"
 -- @"C:\Users\Lenovo\Desktop\Database Warehouse\data-warehouse-assignment\Task 2\Task 2b\DIM\BRANCH_DIM_INCREMENTAL.sql"
--- @"C:\Users\Lenovo\Desktop\Database Warehouse\data-warehouse-assignment\Task 2\Task 2b\DIM\CUSTOMER_DIM_INCREMENTAL.sql"
+-- @"C:\Users\Lenovo\Desktop\Database Warehouse\data-warehouse-assignment\Task 2\Task 2b\DIM\CUSTOMER_DIM_NEW_RECORD.sql"
 -- @"C:\Users\Lenovo\Desktop\Database Warehouse\data-warehouse-assignment\Task 2\Task 2b\DIM\DATE_DIM_INCREMENTAL.sql"
 -- @"C:\Users\Lenovo\Desktop\Database Warehouse\data-warehouse-assignment\Task 2\Task 2b\DIM\DELIVERY_COMPANY_DIM_INCREMENTAL.sql"
 -- @"C:\Users\Lenovo\Desktop\Database Warehouse\data-warehouse-assignment\Task 2\Task 2b\DIM\ITEM_DIM_INCREMENTAL.sql"
