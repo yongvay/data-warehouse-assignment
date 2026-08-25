@@ -33,7 +33,11 @@ BEGIN
         NVL(cd.customer_key, -1) AS customer_key,
         NVL(id.item_key, -1) AS item_key,
         NVL(bd.branch_key, -1) AS branch_key,
-        NVL(pd.promo_key, 0) AS promo_key, 
+        CASE
+            WHEN active_promo.PromotionID IS NULL THEN 0
+            WHEN pd.promo_key IS NULL THEN -1
+            ELSE pd.promo_key
+        END AS promo_key,
         o.OrderNo,
         CASE WHEN o.OrderType IN ('Online', 'Walk-in') THEN o.OrderType ELSE 'Walk-in' END AS order_type, -- Data Scrubbing
         NVL(TO_NUMBER(TO_CHAR(o.OrderDateTime, 'HH24')), 0) AS order_hour,
