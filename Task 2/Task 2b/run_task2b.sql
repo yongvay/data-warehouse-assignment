@@ -34,6 +34,7 @@ BEGIN
 
     -- 3. Type 2 Dimension (Customer)
     load_customer_dim_new_records();
+    maintain_customer_dim_type1();
     maintain_customer_dim_scd2();
 
     -- 4. Fact Tables (Looking back 7 days to catch recent entries)
