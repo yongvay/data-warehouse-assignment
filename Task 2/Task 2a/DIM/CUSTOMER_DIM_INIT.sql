@@ -7,7 +7,7 @@ SELECT
             '[[:space:]]+',
             ' '
         )
-    ) AS customer_name
+    ) AS customer_name,
     NVL(TRIM(c.ICNo), 'Unknown') AS customer_ic,
     NVL(LOWER(TRIM(c.Email)), 'Unknown') AS customer_email,
     c.Status AS customer_status,
@@ -16,7 +16,7 @@ SELECT
     NVL(mt.AnnualFee, 0) AS annual_fee,
     NVL(mt.PointEarnRate, 0) AS point_earn_rate,
     m.MembershipExpiry AS membership_expiry,
-    DATE '1900-01-01' AS effective_start_date，
+    DATE '1900-01-01' AS effective_start_date,
     TO_DATE('9999-12-31', 'YYYY-MM-DD') AS effective_end_date,
     'Y' AS is_current_flag,
     1 AS version_no
