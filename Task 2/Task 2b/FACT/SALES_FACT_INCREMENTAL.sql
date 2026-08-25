@@ -54,7 +54,7 @@ BEGIN
         2 AS etl_batch_id
     FROM adm.OrderDetails od
     JOIN adm.Orders o ON od.OrderNo = o.OrderNo
-    LEFT JOIN customer_dim cd ON o.CustomerID = cd.customer_id AND cd.is_current_flag = 'Y'
+    LEFT JOIN customer_dim cd ON o.CustomerID = cd.customer_id AND TRUNC(o.OrderDateTime) BETWEEN TRUNC(cd.effective_start_date) AND TRUNC(cd.effective_end_date)
     LEFT JOIN item_dim id ON od.ItemID = id.item_id
     LEFT JOIN branch_dim bd ON o.BranchID = bd.branch_id
     LEFT JOIN (
