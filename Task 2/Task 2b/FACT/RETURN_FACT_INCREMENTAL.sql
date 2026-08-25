@@ -53,7 +53,7 @@ BEGIN
     FROM adm.ReturnDetails rd
     JOIN adm.Returns r ON rd.ReturnID = r.ReturnID
     JOIN adm.Orders o ON r.OrderNo = o.OrderNo
-    LEFT JOIN customer_dim cd ON o.CustomerID = cd.customer_id AND cd.is_current_flag = 'Y'
+    LEFT JOIN customer_dim cd ON o.CustomerID = cd.customer_id AND TRUNC(r.ReturnDate) BETWEEN TRUNC(cd.effective_start_date) AND TRUNC(cd.effective_end_date)
     LEFT JOIN item_dim id ON rd.ItemID = id.item_id
     LEFT JOIN branch_dim bd ON o.BranchID = bd.branch_id
     LEFT JOIN return_reason_dim rrd ON rd.ReasonID = rrd.reason_id
