@@ -20,7 +20,7 @@ BEGIN
         CASE WHEN d.Status IN ('Pending','In Transit','Delivered','Cancelled') THEN d.Status ELSE 'Pending' END, -- Scrubbing
         ABS(d.DeliveryCharge), -- Scrubbing
         ABS(o.TotalAmount), -- Scrubbing
-        CASE WHEN d.DeliveryDate IS NULL THEN NULL ELSE GREATEST(TRUNC(d.DeliveryDate) - TRUNC(o.OrderDateTime), 0) END,
+        CASE WHEN d.DeliveryDate IS NULL THEN NULL ELSE TRUNC(d.DeliveryDate) - TRUNC(o.OrderDateTime) END,
         2
     FROM adm.Delivery d
     JOIN adm.Orders o ON d.OrderNo = o.OrderNo
@@ -31,6 +31,11 @@ BEGIN
     WHERE NOT EXISTS (
         SELECT 1 FROM delivery_fact df WHERE df.delivery_id = d.DeliveryID
     )
+    AND (
+        d.DeliveryDate IS NULL
+        OR TRUNC(d.DeliveryDate) >= TRUNC(o.OrderDateTime)
+    )
+
     -- Use OrderDateTime for filtering because DeliveryDate is initially NULL
     AND o.OrderDateTime >= p_load_date - 1; 
 
@@ -42,7 +47,7 @@ BEGIN
         SELECT 
             CASE WHEN d.Status IN ('Pending','In Transit','Delivered','Cancelled') THEN d.Status ELSE 'Pending' END,
             NVL(TO_NUMBER(TO_CHAR(d.DeliveryDate, 'YYYYMMDD')), -1),
-            CASE WHEN d.DeliveryDate IS NULL THEN NULL ELSE GREATEST(TRUNC(d.DeliveryDate) - TRUNC(o.OrderDateTime), 0) END,
+            CASE WHEN d.DeliveryDate IS NULL THEN NULL ELSE TRUNC(d.DeliveryDate) - TRUNC(o.OrderDateTime) END,
             ABS(d.DeliveryCharge),
             SYSDATE
         FROM adm.Delivery d
