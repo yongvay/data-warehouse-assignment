@@ -53,10 +53,19 @@ BEGIN
         FROM adm.Delivery d
         JOIN adm.Orders o ON d.OrderNo = o.OrderNo
         WHERE df.delivery_id = d.DeliveryID
+          AND (
+              d.DeliveryDate IS NULL
+              OR TRUNC(d.DeliveryDate) >= TRUNC(o.OrderDateTime)
+          )
     )
     WHERE EXISTS (
         SELECT 1 FROM adm.Delivery d
+        JOIN adm.Orders o ON d.OrderNo = o.OrderNo
         WHERE df.delivery_id = d.DeliveryID
+          AND (
+              d.DeliveryDate IS NULL
+              OR TRUNC(d.DeliveryDate) >= TRUNC(o.OrderDateTime)
+          )
         AND (df.delivery_status != CASE WHEN d.Status IN ('Pending','In Transit','Delivered','Cancelled') THEN d.Status ELSE 'Pending' END
              OR df.delivery_date_key != NVL(TO_NUMBER(TO_CHAR(d.DeliveryDate, 'YYYYMMDD')), -1)
              OR df.delivery_charge != ABS(d.DeliveryCharge))
