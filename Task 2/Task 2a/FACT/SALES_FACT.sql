@@ -32,7 +32,7 @@ LEFT JOIN (
     FROM (
         SELECT 
             o.OrderNo, od.ItemID, ip.PromoPrice, p.PromotionID,
-            ROW_NUMBER() OVER (PARTITION BY o.OrderNo, od.ItemID ORDER BY ip.PromoPrice ASC) as rn
+            ROW_NUMBER() OVER (PARTITION BY o.OrderNo, od.ItemID ORDER BY ip.PromoPrice ASC, p.PromotionID ASC) as rn
         FROM adm.Orders o
         JOIN adm.OrderDetails od ON o.OrderNo = od.OrderNo
         JOIN adm.ItemPromotion ip ON od.ItemID = ip.ItemID
