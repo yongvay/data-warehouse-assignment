@@ -43,3 +43,15 @@ BEGIN
     DBMS_OUTPUT.PUT_LINE('DATE_DIM expanded load complete.');
 END;
 /
+
+CREATE OR REPLACE VIEW order_date_dim AS
+SELECT * FROM date_dim;
+
+CREATE OR REPLACE VIEW return_date_dim AS
+SELECT * FROM date_dim;
+
+CREATE OR REPLACE VIEW delivery_date_dim AS
+SELECT * FROM date_dim;
+
+CREATE OR REPLACE VIEW trans_date_dim AS
+SELECT * FROM date_dim;
