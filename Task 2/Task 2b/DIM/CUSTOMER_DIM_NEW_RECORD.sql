@@ -108,6 +108,54 @@ END;
 /
 
 -- ----------------------------------------------------------------------------
+-- PART C: Maintain customer_dim_type1;
+
+CREATE OR REPLACE PROCEDURE maintain_customer_dim_type1 AS
+    v_updated NUMBER := 0;
+BEGIN
+
+    UPDATE customer_dim cd
+    SET (
+        customer_name,
+        customer_ic,
+        customer_email,
+        membership_expiry,
+        etl_update_dt
+    ) =
+    (
+        SELECT
+            s.customer_name,
+            s.customer_ic,
+            s.customer_email,
+            s.membership_expiry,
+            SYSDATE
+        FROM vw_load_customer_dim s
+        WHERE s.customer_id = cd.customer_id
+    )
+    WHERE cd.customer_key <> -1
+    AND EXISTS (
+        SELECT 1
+        FROM vw_load_customer_dim s
+        WHERE s.customer_id = cd.customer_id
+        AND (
+            NVL(cd.customer_name, '~') <> NVL(s.customer_name, '~')
+            OR NVL(cd.customer_ic, '~') <> NVL(s.customer_ic, '~')
+            OR NVL(cd.customer_email, '~') <> NVL(s.customer_email, '~')
+            OR NVL(cd.membership_expiry, DATE '1900-01-01')
+               <> NVL(s.membership_expiry, DATE '1900-01-01')
+        )
+    );
+
+    v_updated := SQL%ROWCOUNT;
+
+    COMMIT;
+
+    DBMS_OUTPUT.PUT_LINE(
+        'CUSTOMER_DIM Type 1: ' || v_updated || ' rows updated.'
+    );
+END;
+/
+-- ----------------------------------------------------------------------------
 --  NOTE: run_task2b is deliberately NOT defined here.
 --        It is defined once, in run_task_2b.sql.
 -- ----------------------------------------------------------------------------
