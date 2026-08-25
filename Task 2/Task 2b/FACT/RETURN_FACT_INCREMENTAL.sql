@@ -42,7 +42,11 @@ BEGIN
         NVL(id.item_key, -1),
         NVL(bd.branch_key, -1),
         NVL(rrd.reason_key, -1),
-        NVL(pd.promo_key, 0),
+        CASE
+            WHEN active_promo.PromotionID IS NULL THEN 0
+            WHEN pd.promo_key IS NULL THEN -1
+            ELSE pd.promo_key
+        END AS promo_key,
         r.ReturnID,
         o.OrderNo,
         CASE WHEN r.Status IN ('Pending','Approved','Rejected','Refunded') THEN r.Status ELSE 'Pending' END, -- Scrubbing: Domain validation
