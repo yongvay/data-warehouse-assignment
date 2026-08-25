@@ -1,9 +1,15 @@
 CREATE OR REPLACE VIEW vw_load_customer_dim AS
 SELECT 
     c.CustomerID AS customer_id,
-    c.Name AS customer_name,
-    NVL(c.ICNo, 'Unknown') AS customer_ic,
-    NVL(c.Email, 'Unknown') AS customer_email,
+    INITCAP(
+        REGEXP_REPLACE(
+            TRIM(c.Name),
+            '[[:space:]]+',
+            ' '
+        )
+    ) AS customer_name
+    NVL(TRIM(c.ICNo), 'Unknown') AS customer_ic,
+    NVL(LOWER(TRIM(c.Email)), 'Unknown') AS customer_email,
     c.Status AS customer_status,
     CASE WHEN m.MemberID IS NOT NULL THEN 'Y' ELSE 'N' END AS member_flag,
     NVL(mt.TypeName, 'Non-Member') AS membership_type,
