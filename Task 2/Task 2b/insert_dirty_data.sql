@@ -64,6 +64,18 @@
 --           inconsistency permitted                                  -> Test F
 -- ============================================================================
 
+-- ============================================================================
+-- Please note that if you encountered access issue: (Run this as sysdba)
+-- sqlplus sys/your_sys_password@localhost:1521/FREEPDB1 as sysdba
+-- GRANT SELECT, INSERT, UPDATE, DELETE ON adm.Customer TO dw;
+-- GRANT SELECT, INSERT, UPDATE, DELETE ON adm.Orders TO dw;
+-- GRANT SELECT, INSERT, UPDATE, DELETE ON adm.OrderDetails TO dw;
+-- GRANT SELECT, INSERT, UPDATE, DELETE ON adm.Returns TO dw;
+-- GRANT SELECT, INSERT, UPDATE, DELETE ON adm.ReturnDetails TO dw;
+-- GRANT SELECT, INSERT, UPDATE, DELETE ON adm.Delivery TO dw;
+-- GRANT SELECT, INSERT, UPDATE, DELETE ON adm.ItemPromotion TO dw;
+-- ============================================================================
+
 SET SERVEROUTPUT ON
 SET LINESIZE 200
 SET PAGESIZE 200

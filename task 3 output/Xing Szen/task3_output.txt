@@ -1,0 +1,394 @@
+SQL> @"C:\Users\PC\Desktop\DW\Task 3\task3_xs_reports.sql"
+
+============================================================================
+REPORT 1 - RANGE EXPANSION AND SEASONAL DEMAND
+Dimensions: date_dim (year, quarter) x item_dim (category)
+Measures  : orders, order lines, gross, discount, net revenue
+============================================================================
+
+--- EXHIBIT 1.1  Trading range and revenue, by year ------------------------ PROMPT WHAT: the headline. Range doubles, revenue grows roughly fivefold.
+NOTE: 2026 is Jan-Aug only and is shown for completeness, not comparison.
+
+  CAL_YEAR CATEGORIES ITEMS_SOLD     ORDERS ORDER_LINES NET_REVENUE AVG_BASKET
+---------- ---------- ---------- ---------- ----------- ----------- ----------
+      2016          6         28        250         695       14337      57.35
+      2017          7         32        330         937       19155      58.05
+      2018          8         36        430        1242       26101       60.7
+      2019          9         39        540        1493       32144      59.53
+      2020         10         43        330         878       19640      59.51
+      2021         10         47        450        1235       28213       62.7
+      2022         11         49        680        1796       47682      70.12
+      2023         12         54        900        2438       73699      81.89
+      2024         12         54       1100        3012       93023      84.57
+      2025         12         54       1350        3746      124891      92.51
+      2026         12         54       1002        2709       81865       81.7
+
+--- EXHIBIT 1.2  Year-on-year growth, and the 2020 shock ------------------ PROMPT WHY: isolates the pandemic dip and the speed of recovery.
+2026 excluded - a part year cannot carry a YoY percentage.
+
+  CAL_YEAR     ORDERS NET_REVENUE REVENUE_CHANGE    YOY_PCT
+---------- ---------- ----------- -------------- ----------
+      2016        250       14337
+      2017        330       19155           4818       33.6
+      2018        430       26101           6946       36.3
+      2019        540       32144           6043       23.2
+      2020        330       19640         -12504      -38.9
+      2021        450       28213           8573       43.7
+      2022        680       47682          19469         69
+      2023        900       73699          26017       54.6
+      2024       1100       93023          19324       26.2
+      2025       1350      124891          31868       34.3
+
+--- EXHIBIT 1.3  Revenue by category by year  [CHART: stacked area] ------- PROMPT Long format on purpose - this is the shape Excel wants for a stacked chart.
+
+  CAL_YEAR CATEGORY_NAME            NET_REVENUE
+---------- ------------------------ -----------
+      2016 Bakery                          1352
+      2016 Beverages                       1772
+      2016 Dairy and Eggs                  2960
+      2016 Frozen Food                     3690
+      2016 Rice and Noodles                2487
+      2016 Snacks                          2076
+      2017 Bakery                          1570
+      2017 Beverages                       2396
+      2017 Cooking Essentials              3087
+      2017 Dairy and Eggs                  3942
+      2017 Frozen Food                     3602
+      2017 Rice and Noodles                2317
+      2017 Snacks                          2242
+      2018 Bakery                          1880
+      2018 Beverages                       2704
+      2018 Canned Food                     1811
+      2018 Cooking Essentials              4137
+      2018 Dairy and Eggs                  4165
+      2018 Frozen Food                     5630
+      2018 Rice and Noodles                3153
+      2018 Snacks                          2621
+      2019 Bakery                          2171
+      2019 Beverages                       3186
+      2019 Canned Food                     3132
+      2019 Cooking Essentials              3846
+      2019 Dairy and Eggs                  4876
+      2019 Frozen Food                     6213
+      2019 Personal Care                   2023
+      2019 Rice and Noodles                3875
+      2019 Snacks                          2821
+      2020 Bakery                          1290
+      2020 Beverages                       1540
+      2020 Canned Food                     1729
+      2020 Cooking Essentials              2473
+      2020 Dairy and Eggs                  2602
+      2020 Frozen Food                     3074
+      2020 Household Cleaning               351
+      2020 Personal Care                   3039
+      2020 Rice and Noodles                1956
+      2020 Snacks                          1586
+      2021 Bakery                          1333
+      2021 Beverages                       1999
+      2021 Canned Food                     2480
+      2021 Cooking Essentials              3553
+      2021 Dairy and Eggs                  3533
+      2021 Frozen Food                     4429
+      2021 Household Cleaning              3132
+      2021 Personal Care                   3113
+      2021 Rice and Noodles                2595
+      2021 Snacks                          2045
+      2022 Baby Products                   9695
+      2022 Bakery                          2260
+      2022 Beverages                       2604
+      2022 Canned Food                     3196
+      2022 Cooking Essentials              4868
+      2022 Dairy and Eggs                  3704
+      2022 Frozen Food                     5671
+      2022 Household Cleaning              4518
+      2022 Personal Care                   5064
+      2022 Rice and Noodles                3517
+      2022 Snacks                          2586
+      2023 Baby Products                  15237
+      2023 Bakery                          2598
+      2023 Beverages                       3598
+      2023 Canned Food                     4997
+      2023 Cooking Essentials              5807
+      2023 Dairy and Eggs                  5505
+      2023 Frozen Food                     6662
+      2023 Household Cleaning              4512
+      2023 Personal Care                   7385
+      2023 Pet Care                       10566
+      2023 Rice and Noodles                4165
+      2023 Snacks                          2667
+      2024 Baby Products                  18182
+      2024 Bakery                          3611
+      2024 Beverages                       5599
+      2024 Canned Food                     5784
+      2024 Cooking Essentials              7751
+      2024 Dairy and Eggs                  8091
+      2024 Frozen Food                     9495
+      2024 Household Cleaning              6982
+      2024 Personal Care                   7408
+      2024 Pet Care                       11440
+      2024 Rice and Noodles                5134
+      2024 Snacks                          3547
+      2025 Baby Products                  27619
+      2025 Bakery                          4546
+      2025 Beverages                       5860
+      2025 Canned Food                     7066
+      2025 Cooking Essentials              8454
+      2025 Dairy and Eggs                  9392
+      2025 Frozen Food                    11385
+      2025 Household Cleaning              8903
+      2025 Personal Care                   9667
+      2025 Pet Care                       18969
+      2025 Rice and Noodles                8724
+      2025 Snacks                          4305
+      2026 Baby Products                  16073
+      2026 Bakery                          3099
+      2026 Beverages                       4033
+      2026 Canned Food                     4065
+      2026 Cooking Essentials              6538
+      2026 Dairy and Eggs                  7466
+      2026 Frozen Food                     8135
+      2026 Household Cleaning              5814
+      2026 Personal Care                   6580
+      2026 Pet Care                       11917
+      2026 Rice and Noodles                4697
+      2026 Snacks                          3448
+
+--- EXHIBIT 1.4  When each category entered the range --------------------- PROMPT WHAT CAUSED IT: revenue growth is partly volume, partly a wider range.
+This separates the two.
+
+CATEGORY_NAME            FIRST_YEAR_SOLD ITEMS_IN_CATEGORY LIFETIME_REVENUE PCT_OF_TOTAL
+------------------------ --------------- ----------------- ---------------- ------------
+Frozen Food                         2016                 5            67987         12.1
+Dairy and Eggs                      2016                 4            56235           10
+Rice and Noodles                    2016                 4            42621          7.6
+Beverages                           2016                 5            35290          6.3
+Snacks                              2016                 5            29943          5.3
+Bakery                              2016                 5            25708          4.6
+Cooking Essentials                  2017                 5            50514            9
+Canned Food                         2018                 5            34259          6.1
+Personal Care                       2019                 4            44281          7.9
+Household Cleaning                  2020                 5            34212          6.1
+Baby Products                       2022                 4            86807         15.5
+Pet Care                            2023                 4            52892          9.4
+
+--- EXHIBIT 1.5  Quarterly seasonality  [CHART: column] ------------------- PROMPT Indexed so 100 = the average quarter. Q1 is Chinese New Year,
+Q4 the year-end run, Q3 the mid-year trough.
+2026 excluded: it contributes to Q1-Q3 only and would distort the index.
+
+CA     ORDERS NET_REVENUE ORDER_INDEX
+-- ---------- ----------- -----------
+Q1       1709      121694         107
+Q2       1544      120135          97
+Q3       1455      112070          92
+Q4       1652      124984         104
+
+--- EXHIBIT 1.6  Does every category share the same season? --------------- PROMPT HOW: a category whose Q1 share is well above 25% is CNY-driven.
+PIVOT ( ROUND(SUM(net_sales_amt)) FOR cal_quarter
+        *
+ERROR at line 8:
+ORA-56902: expect aggregate function inside pivot operation
+
+
+
+============================================================================
+REPORT 2 - SUPPLIER CONTRIBUTION AND RETURN EXPOSURE
+Dimensions: item_dim (supplier, category) x return_reason_dim x date_dim
+Measures  : revenue, concentration, units returned, return rate
+
+FRAMING: this is a CONCENTRATION and EXPOSURE report, not a quality
+scorecard. Exhibit 2.3 shows why - return rates cluster too tightly
+for any supplier to be called an outlier.
+============================================================================
+
+--- EXHIBIT 2.1  Supplier revenue Pareto  [CHART: Pareto] ---------------- PROMPT WHAT: how much of the business rests on how few suppliers.
+
+SUPPLIER_NAME                      ITEMS_SUPPLIED NET_REVENUE PCT_OF_TOTAL CUMULATIVE_PCT
+---------------------------------- -------------- ----------- ------------ --------------
+LittleStar Baby Products Sdn Bhd                4       86807         15.5           15.5
+Polar Frozen Foods Sdn Bhd                      5       67987         12.1           27.6
+Fresh Dairy Farm Sdn Bhd                        4       56235           10           37.6
+PetJoy Trading Sdn Bhd                          4       52892          9.4             47
+Selera Cooking Products Sdn Bhd                 5       50514            9             56
+CarePlus Consumer Goods Sdn Bhd                 4       44281          7.9           63.9
+Padi Emas Rice Mills Sdn Bhd                    4       42621          7.6           71.5
+Sunshine Beverages Sdn Bhd                      5       35290          6.3           77.8
+Ocean Canned Food Sdn Bhd                       5       34259          6.1           83.9
+KleenHome Supplies Sdn Bhd                      5       34212          6.1             90
+Snacko Food Industries Sdn Bhd                  5       29943          5.3           95.3
+Gardenview Bakery Sdn Bhd                       5       25708          4.6           99.9
+
+--- EXHIBIT 2.2  Supplier x category contribution ------------------------ PROMPT WHERE the dependency sits: a supplier that is the sole source of a
+category is a single point of failure regardless of its revenue rank.
+
+SUPPLIER_NAME                      CATEGORY_NAME                 ITEMS NET_REVENUE
+---------------------------------- ------------------------ ---------- -----------
+LittleStar Baby Products Sdn Bhd   Baby Products                     4       86807
+Polar Frozen Foods Sdn Bhd         Frozen Food                       5       67987
+Fresh Dairy Farm Sdn Bhd           Dairy and Eggs                    4       56235
+PetJoy Trading Sdn Bhd             Pet Care                          4       52892
+Selera Cooking Products Sdn Bhd    Cooking Essentials                5       50514
+CarePlus Consumer Goods Sdn Bhd    Personal Care                     4       44281
+Padi Emas Rice Mills Sdn Bhd       Rice and Noodles                  4       42621
+Sunshine Beverages Sdn Bhd         Beverages                         5       35290
+Ocean Canned Food Sdn Bhd          Canned Food                       5       34259
+KleenHome Supplies Sdn Bhd         Household Cleaning                5       34212
+Snacko Food Industries Sdn Bhd     Snacks                            5       29943
+Gardenview Bakery Sdn Bhd          Bakery                            5       25708
+
+--- EXHIBIT 2.3  Return rate by supplier, WITH the noise band ------------- PROMPT THE KEY EXHIBIT. expected_returns is what each supplier would see if
+returns were distributed purely in proportion to units sold.
+z_score measures how far the actual result sits from that expectation
+in standard deviations. Roughly: |z| under 2 is indistinguishable from
+chance. If every supplier lands inside that band, there is no quality
+outlier and the honest finding is that no supplier warrants action.
+           (SELECT NVL(SUM(units_returned), 0) FROM returned) AS all_returned
+                   *
+ERROR at line 14:
+ORA-00937: not a single-group group function
+
+
+
+--- EXHIBIT 2.4  Why customers return  [CHART: 100% stacked bar] ---------- PROMPT Fulfilment failures are an operations problem; Product Quality is a
+supplier problem. The split tells management which lever to pull.
+
+REASON_GROUP       REASON_NAME    RETURN_LINES      UNITS REFUND_VALUE PCT_OF_RETURNS
+------------------ -------------- ------------ ---------- ------------ --------------
+Fulfilment         Wrong Item              243        482         4493           25.7
+Product Quality    Broken                  235        435         3906           24.9
+Product Quality    Expired                 233        454         4161           24.7
+Fulfilment         Missing                 233        465         4619           24.7
+
+--- EXHIBIT 2.5  Is the return rate getting worse over time? -------------- PROMPT 2026 included but flagged: a part year, so read the RATE not the volume.
+
+  CAL_YEAR UNITS_SOLD UNITS_RETURNED RETURN_PCT
+---------- ---------- -------------- ----------
+      2016       2091             52       2.49
+      2017       2750             77        2.8
+      2018       3682             65       1.77
+      2019       4457            109       2.45
+      2020       2683             55       2.05
+      2021       3703             95       2.57
+      2022       5391            140        2.6
+      2023       7378            209       2.83
+      2024      10003            321       3.21
+      2025      12417            479       3.86
+      2026       8657            234        2.7
+
+--- EXHIBIT 2.6  Speed of return - an operational service metric --------- SELECT rr.reason_category AS reason_group,
+SP2-0734: unknown command beginning "COUNT(*)  ..." - rest of line ignored.
+SP2-0734: unknown command beginning "ROUND(AVG(..." - rest of line ignored.
+SP2-0734: unknown command beginning "MIN(r.days..." - rest of line ignored.
+SP2-0734: unknown command beginning "MAX(r.days..." - rest of line ignored.
+SP2-0044: For a list of known commands enter HELP
+and to leave enter EXIT.
+SP2-0734: unknown command beginning "FROM   ret..." - rest of line ignored.
+SP2-0734: unknown command beginning "JOIN   ret..." - rest of line ignored.
+SP2-0734: unknown command beginning "GROUP  BY ..." - rest of line ignored.
+SP2-0734: unknown command beginning "ORDER  BY ..." - rest of line ignored.
+SP2-0044: For a list of known commands enter HELP
+and to leave enter EXIT.
+
+============================================================================
+REPORT 3 - CHANNEL MIGRATION: ONLINE VERSUS WALK-IN
+Dimensions: date_dim x branch_dim (region) x customer_dim (membership)
+Measures  : order share, basket value, delivery lead time
+
+membership comes from customer_dim, which sales_fact joins on a
+point-in-time basis - so a customer who changed tier is counted
+correctly in each era rather than being back-dated. That is the
+Type 2 dimension doing real work.
+============================================================================
+
+--- EXHIBIT 3.1  The migration  [CHART: line] ----------------------------- PROMPT WHAT: online share of orders, year by year. 2026 is a part year but the
+SHARE is unaffected by that - only the volume is.
+
+  CAL_YEAR     ORDERS ONLINE_ORDERS ONLINE_PCT
+---------- ---------- ------------- ----------
+      2016        250            44       17.6
+      2017        330            68       20.6
+      2018        430           120       27.9
+      2019        540           164       30.4
+      2020        330           114       34.5
+      2021        450           167       37.1
+      2022        680           290       42.6
+      2023        900           384       42.7
+      2024       1100           471       42.8
+      2025       1350           606       44.9
+      2026       1002           506       50.5
+
+--- EXHIBIT 3.2  Channel by region, 2024-2026 ONLY  [CHART: bar] --------- PROMPT WHY RESTRICTED: online share rises every year, so a branch that opened
+in 2021 trades only in the online-heavy era and appears digitally
+advanced when it is merely young. From 2024 every branch was trading,
+so this comparison is like for like and any gap is real.
+
+BRANCH_REGION      BRANCHES     ORDERS ONLINE_PCT AVG_BASKET
+---------------- ---------- ---------- ---------- ----------
+Northern                  3        876       48.5      89.46
+East Malaysia             1        287         46      83.86
+Central                   5       1403       45.9      87.47
+East Coast                1        299       44.8      85.37
+Southern                  2        587       42.2      83.62
+
+--- EXHIBIT 3.3  Who is migrating - by membership tier ------------------- PROMPT Only members can take delivery: Delivery.AddressID references
+MemberAddress, which references Member. So membership is structurally
+tied to the online channel, and this quantifies how tightly.
+
+MEMBERSHIP         ORDERS ONLINE_PCT AVG_BASKET NET_REVENUE
+-------------- ---------- ---------- ---------- -----------
+Normal               2776       43.1      77.27      214490
+Non-Member           2368       31.4      74.45      176303
+VIP                  2218       44.9      76.63      169955
+
+--- EXHIBIT 3.4  Is an online basket worth more than a walk-in one? ------ PROMPT SO WHAT: if online baskets are larger, the migration is accretive and
+should be accelerated. If not, it is merely cannibalising the stores.
+
+  CAL_YEAR CHANNEL        ORDERS AVG_UNITS_PER_LINE AVG_BASKET
+---------- ---------- ---------- ------------------ ----------
+      2022 Online            290               3.02      70.66
+      2022 Walk-in           390               2.99      69.72
+      2023 Online            384               2.96      76.55
+      2023 Walk-in           516               3.07      85.86
+      2024 Online            471                3.3      84.35
+      2024 Walk-in           629               3.34      84.73
+      2025 Online            606               3.29      92.02
+      2025 Walk-in           744               3.34      92.91
+      2026 Online            506                3.2      81.54
+      2026 Walk-in           496               3.19      81.87
+
+--- EXHIBIT 3.5  Can fulfilment keep up?  [CHART: line, dual axis] ------- PROMPT HOW the migration is being served. Rising volume with a rising lead
+time is a capacity warning; rising volume with a flat lead time says
+the network is coping.
+
+  CAL_YEAR DELIVERIES AVG_LEAD_DAYS  DELIVERED  CANCELLED CANCEL_PCT
+---------- ---------- ------------- ---------- ---------- ----------
+      2016         29           3.7         27          2        6.9
+      2017         34          3.97         31          3       8.82
+      2018         64          4.18         61          3       4.69
+      2019         97          3.74         85         12      12.37
+      2020         63          4.46         54          9      14.29
+      2021         95          4.39         84         11      11.58
+      2022        147          4.02        129         18      12.24
+      2023        219          3.99        199         20       9.13
+      2024        349           2.6        329         20       5.73
+      2025        408          2.87        387         21       5.15
+      2026        317          3.08        279         28       8.83
+
+--- EXHIBIT 3.6  Which courier serves which region ----------------------- SELECT dc.company_name, b.branch_region,
+SP2-0734: unknown command beginning "COUNT(*) A..." - rest of line ignored.
+SP2-0734: unknown command beginning "ROUND(AVG(..." - rest of line ignored.
+SP2-0734: unknown command beginning "ROUND(AVG(..." - rest of line ignored.
+SP2-0734: unknown command beginning "FROM   del..." - rest of line ignored.
+SP2-0044: For a list of known commands enter HELP
+and to leave enter EXIT.
+SP2-0734: unknown command beginning "JOIN   del..." - rest of line ignored.
+SP2-0734: unknown command beginning "JOIN   bra..." - rest of line ignored.
+SP2-0734: unknown command beginning "WHERE  f.d..." - rest of line ignored.
+SP2-0734: unknown command beginning "GROUP  BY ..." - rest of line ignored.
+SP2-0044: For a list of known commands enter HELP
+and to leave enter EXIT.
+SP2-0734: unknown command beginning "ORDER  BY ..." - rest of line ignored.
+
+============================================================================
+END OF EXHIBITS
+============================================================================
+SQL> SPOOL OFF
