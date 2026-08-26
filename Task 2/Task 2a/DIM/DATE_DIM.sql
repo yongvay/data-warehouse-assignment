@@ -1,6 +1,21 @@
 CREATE OR REPLACE PROCEDURE load_date_dim AS
     v_batch_id NUMBER := 1;
-    v_curr_date DATE := TO_DATE('2020-01-01', 'YYYY-MM-DD'); -- Starts in 2020
+    -- ------------------------------------------------------------------------
+    --  CALENDAR RANGE
+    --
+    --  Starts in 2016 because the operational source now carries transactions
+    --  from 2016-01-01.  Every fact table FK-references date_dim, so a single
+    --  order dated before the first calendar row aborts the load with
+    --  ORA-02291 and rolls the whole thing back.
+    --
+    --  Ends in 2030, deliberately later than any transaction.  The calendar is
+    --  generated, not extracted, so it is built wider than the data on purpose:
+    --  future-dated values such as Member.MembershipExpiry, Promotion.EndDate
+    --  and scheduled deliveries all need a key to point at, and a month with
+    --  no sales still needs a row so a report can show the zero rather than
+    --  silently dropping the month.
+    -- ------------------------------------------------------------------------
+    v_curr_date DATE := TO_DATE('2016-01-01', 'YYYY-MM-DD'); -- Starts in 2016
     v_end_date  DATE := TO_DATE('2030-12-31', 'YYYY-MM-DD'); -- Ends in 2030
 BEGIN
     -- 1. Insert Seeded Unknown Row (Key -1)
@@ -24,21 +39,21 @@ BEGIN
             cal_month_year, cal_year_month, cal_quarter, cal_year_quarter, cal_year,
             holiday_ind, weekday_ind, festive_event, etl_batch_id, etl_load_dt, dq_flag
         ) VALUES (
-            TO_NUMBER(TO_CHAR(v_curr_date, 'YYYYMMDD')), 
+            TO_NUMBER(TO_CHAR(v_curr_date, 'YYYYMMDD')),
             v_curr_date, TO_CHAR(v_curr_date, 'fmMonth DD, YYYY'), TO_CHAR(v_curr_date, 'fmDay'),
             EXTRACT(DAY FROM v_curr_date), TO_NUMBER(TO_CHAR(v_curr_date, 'DDD')),
             CASE WHEN v_curr_date = LAST_DAY(v_curr_date) THEN 'Y' ELSE 'N' END,
-            v_curr_date + (7 - TO_NUMBER(TO_CHAR(v_curr_date, 'D'))), 
+            v_curr_date + (7 - TO_NUMBER(TO_CHAR(v_curr_date, 'D'))),
             TO_NUMBER(TO_CHAR(v_curr_date, 'WW')), TO_CHAR(v_curr_date, 'fmMonth'),
             EXTRACT(MONTH FROM v_curr_date), TO_CHAR(v_curr_date, 'YYYY-MM'),
             'Q' || TO_CHAR(v_curr_date, 'Q'), TO_CHAR(v_curr_date, 'YYYY') || '-Q' || TO_CHAR(v_curr_date, 'Q'),
-            EXTRACT(YEAR FROM v_curr_date), 'N', 
+            EXTRACT(YEAR FROM v_curr_date), 'N',
             CASE WHEN TO_CHAR(v_curr_date, 'DY', 'NLS_DATE_LANGUAGE=ENGLISH') IN ('SAT', 'SUN') THEN 'N' ELSE 'Y' END,
             'None', v_batch_id, SYSDATE, 'V'
         );
         v_curr_date := v_curr_date + 1;
     END LOOP;
-    
+
     COMMIT;
     DBMS_OUTPUT.PUT_LINE('DATE_DIM expanded load complete.');
 END;

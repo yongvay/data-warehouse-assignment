@@ -1,2 +1,5 @@
 Star Schema/88speedmart_star_diagrams/
 Task 2/Task 2b (Claude)
+
+# SQL*Plus spool logs
+*.log
