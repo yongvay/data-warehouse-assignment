@@ -6,7 +6,11 @@ SELECT
     id.item_key,
     bd.branch_key,
     rrd.reason_key,
-    NVL(pd.promo_key, 0) AS promo_key,
+    CASE
+        WHEN active_promo.PromotionID IS NULL THEN 0
+        WHEN pd.promo_key IS NULL THEN -1
+        ELSE pd.promo_key
+    END AS promo_key,
     r.ReturnID AS return_id,
     o.OrderNo AS order_no,
     r.Status AS return_status,
@@ -16,7 +20,7 @@ SELECT
 FROM adm.ReturnDetails rd
 JOIN adm.Returns r ON rd.ReturnID = r.ReturnID
 JOIN adm.Orders o ON r.OrderNo = o.OrderNo
-JOIN customer_dim cd ON o.CustomerID = cd.customer_id AND cd.is_current_flag = 'Y'
+JOIN customer_dim cd ON o.CustomerID = cd.customer_id AND TRUNC(r.ReturnDate) BETWEEN TRUNC(cd.effective_start_date) AND TRUNC(cd.effective_end_date)
 JOIN item_dim id ON rd.ItemID = id.item_id
 JOIN branch_dim bd ON o.BranchID = bd.branch_id
 JOIN return_reason_dim rrd ON rd.ReasonID = rrd.reason_id
@@ -25,7 +29,7 @@ LEFT JOIN (
     FROM (
         SELECT 
             o.OrderNo, od.ItemID, ip.PromoPrice, p.PromotionID,
-            ROW_NUMBER() OVER (PARTITION BY o.OrderNo, od.ItemID ORDER BY ip.PromoPrice ASC) as rn
+            ROW_NUMBER() OVER (PARTITION BY o.OrderNo, od.ItemID ORDER BY ip.PromoPrice ASC, p.PromotionID ASC) as rn
         FROM adm.Orders o
         JOIN adm.OrderDetails od ON o.OrderNo = od.OrderNo
         JOIN adm.ItemPromotion ip ON od.ItemID = ip.ItemID

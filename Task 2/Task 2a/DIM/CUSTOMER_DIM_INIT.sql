@@ -1,16 +1,22 @@
 CREATE OR REPLACE VIEW vw_load_customer_dim AS
 SELECT 
     c.CustomerID AS customer_id,
-    c.Name AS customer_name,
-    NVL(c.ICNo, 'Unknown') AS customer_ic,
-    NVL(c.Email, 'Unknown') AS customer_email,
+    INITCAP(
+        REGEXP_REPLACE(
+            TRIM(c.Name),
+            '[[:space:]]+',
+            ' '
+        )
+    ) AS customer_name,
+    NVL(TRIM(c.ICNo), 'Unknown') AS customer_ic,
+    NVL(LOWER(TRIM(c.Email)), 'Unknown') AS customer_email,
     c.Status AS customer_status,
     CASE WHEN m.MemberID IS NOT NULL THEN 'Y' ELSE 'N' END AS member_flag,
     NVL(mt.TypeName, 'Non-Member') AS membership_type,
     NVL(mt.AnnualFee, 0) AS annual_fee,
     NVL(mt.PointEarnRate, 0) AS point_earn_rate,
     m.MembershipExpiry AS membership_expiry,
-    SYSDATE AS effective_start_date,
+    DATE '1900-01-01' AS effective_start_date,
     TO_DATE('9999-12-31', 'YYYY-MM-DD') AS effective_end_date,
     'Y' AS is_current_flag,
     1 AS version_no

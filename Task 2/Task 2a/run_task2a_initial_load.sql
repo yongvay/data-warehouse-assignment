@@ -2,7 +2,7 @@
 -- SET SERVEROUTPUT ON;
 
 -- PROMPT --- COMPILING TASK 2A DIMENSIONS ---
--- @"C:\Users\Lenovo\Desktop\Database Warehouse\data-warehouse-assignment\Task 2\Task 2a\DIM\CREATE_SEQUENCE.sql"
+-- @"C:\Users\Lenovo\Desktop\Database Warehouse\data-warehouse-assignment\Task 2\Task 2a\CREATE_SEQUENCE.sql"
 -- @"C:\Users\Lenovo\Desktop\Database Warehouse\data-warehouse-assignment\Task 2\Task 2a\DIM\ADDRESS_DIM.sql"
 -- @"C:\Users\Lenovo\Desktop\Database Warehouse\data-warehouse-assignment\Task 2\Task 2a\DIM\BRANCH_DIM.sql"
 -- @"C:\Users\Lenovo\Desktop\Database Warehouse\data-warehouse-assignment\Task 2\Task 2a\DIM\CUSTOMER_DIM_INIT.sql"

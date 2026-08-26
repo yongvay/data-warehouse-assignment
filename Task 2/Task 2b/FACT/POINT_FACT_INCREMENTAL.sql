@@ -17,7 +17,7 @@ BEGIN
         CASE WHEN pt.TransType = 'Earn' THEN ABS(pt.Point) ELSE -ABS(pt.Point) END AS net_points,
         2
     FROM adm.PointTransaction pt
-    LEFT JOIN customer_dim cd ON pt.MemberID = cd.customer_id AND cd.is_current_flag = 'Y'
+    LEFT JOIN customer_dim cd ON pt.MemberID = cd.customer_id AND TRUNC(pt.TransDate) BETWEEN TRUNC(cd.effective_start_date) AND TRUNC(cd.effective_end_date)
     LEFT JOIN adm.Orders o ON pt.OrderNo = o.OrderNo
     LEFT JOIN branch_dim bd ON o.BranchID = bd.branch_id
     WHERE NOT EXISTS (

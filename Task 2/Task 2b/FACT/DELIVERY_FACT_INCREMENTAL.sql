@@ -20,17 +20,22 @@ BEGIN
         CASE WHEN d.Status IN ('Pending','In Transit','Delivered','Cancelled') THEN d.Status ELSE 'Pending' END, -- Scrubbing
         ABS(d.DeliveryCharge), -- Scrubbing
         ABS(o.TotalAmount), -- Scrubbing
-        CASE WHEN d.DeliveryDate IS NULL THEN NULL ELSE GREATEST(TRUNC(d.DeliveryDate) - TRUNC(o.OrderDateTime), 0) END,
+        CASE WHEN d.DeliveryDate IS NULL THEN NULL ELSE TRUNC(d.DeliveryDate) - TRUNC(o.OrderDateTime) END,
         2
     FROM adm.Delivery d
     JOIN adm.Orders o ON d.OrderNo = o.OrderNo
-    LEFT JOIN customer_dim cd ON o.CustomerID = cd.customer_id AND cd.is_current_flag = 'Y'
+    LEFT JOIN customer_dim cd ON o.CustomerID = cd.customer_id AND TRUNC(o.OrderDateTime) BETWEEN TRUNC(cd.effective_start_date) AND TRUNC(cd.effective_end_date)
     LEFT JOIN branch_dim bd ON o.BranchID = bd.branch_id
     LEFT JOIN delivery_company_dim dcd ON d.DeliveryCompanyID = dcd.delivery_company_id
     LEFT JOIN address_dim ad ON d.AddressID = ad.address_id
     WHERE NOT EXISTS (
         SELECT 1 FROM delivery_fact df WHERE df.delivery_id = d.DeliveryID
     )
+    AND (
+        d.DeliveryDate IS NULL
+        OR TRUNC(d.DeliveryDate) >= TRUNC(o.OrderDateTime)
+    )
+
     -- Use OrderDateTime for filtering because DeliveryDate is initially NULL
     AND o.OrderDateTime >= p_load_date - 1; 
 
@@ -42,16 +47,25 @@ BEGIN
         SELECT 
             CASE WHEN d.Status IN ('Pending','In Transit','Delivered','Cancelled') THEN d.Status ELSE 'Pending' END,
             NVL(TO_NUMBER(TO_CHAR(d.DeliveryDate, 'YYYYMMDD')), -1),
-            CASE WHEN d.DeliveryDate IS NULL THEN NULL ELSE GREATEST(TRUNC(d.DeliveryDate) - TRUNC(o.OrderDateTime), 0) END,
+            CASE WHEN d.DeliveryDate IS NULL THEN NULL ELSE TRUNC(d.DeliveryDate) - TRUNC(o.OrderDateTime) END,
             ABS(d.DeliveryCharge),
             SYSDATE
         FROM adm.Delivery d
         JOIN adm.Orders o ON d.OrderNo = o.OrderNo
         WHERE df.delivery_id = d.DeliveryID
+          AND (
+              d.DeliveryDate IS NULL
+              OR TRUNC(d.DeliveryDate) >= TRUNC(o.OrderDateTime)
+          )
     )
     WHERE EXISTS (
         SELECT 1 FROM adm.Delivery d
+        JOIN adm.Orders o ON d.OrderNo = o.OrderNo
         WHERE df.delivery_id = d.DeliveryID
+          AND (
+              d.DeliveryDate IS NULL
+              OR TRUNC(d.DeliveryDate) >= TRUNC(o.OrderDateTime)
+          )
         AND (df.delivery_status != CASE WHEN d.Status IN ('Pending','In Transit','Delivered','Cancelled') THEN d.Status ELSE 'Pending' END
              OR df.delivery_date_key != NVL(TO_NUMBER(TO_CHAR(d.DeliveryDate, 'YYYYMMDD')), -1)
              OR df.delivery_charge != ABS(d.DeliveryCharge))

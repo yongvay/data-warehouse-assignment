@@ -1,3 +1,30 @@
+-- ============================================================================
+--  RETURN FACT INCREMENTAL
+-- ----------------------------------------------------------------------------
+--  CORRECTIONS APPLIED TO THIS FILE
+--
+--  1. NVL(id.item_key, -1) in the NOT EXISTS guard and in the UPDATE match.
+--     id.item_key is NULL when the item is absent from ITEM_DIM, and a
+--     comparison against NULL is UNKNOWN rather than TRUE - so the guard
+--     never matched and the row was re-inserted on every run.
+--
+--  2. THE REAL PROMOTION LOOKUP IS RESTORED.
+--     The previous version wrote  LEFT JOIN promotion_dim pd ON
+--     pd.promotion_id = 'NONE' , which pins promo_key to 0 on every return
+--     regardless of whether the item was actually bought on promotion.  That
+--     makes "promotion performance net of returns" impossible to report,
+--     which is a real analytical loss in Task 3.  The subquery below is the
+--     same one used by SALES_FACT, so a promotion's sales and its returns
+--     attribute to the same promotion.
+--
+--  3. THE MUTABLE-STATUS UPDATE IS PRESERVED.
+--     Returns.Status moves Pending -> Approved -> Refunded over several days.
+--     Without the UPDATE branch a return loaded once as Pending stays Pending
+--     for ever.  (A weaker copy of this procedure without the UPDATE used to
+--     live at the bottom of SALES_FACT_INCREMENTAL.sql and silently replaced
+--     this one; that copy has been deleted.)
+-- ============================================================================
+
 CREATE OR REPLACE PROCEDURE load_return_fact_incr (p_load_date IN DATE DEFAULT SYSDATE) AS
     v_count NUMBER := 0;
     v_updated NUMBER := 0;
@@ -15,26 +42,51 @@ BEGIN
         NVL(id.item_key, -1),
         NVL(bd.branch_key, -1),
         NVL(rrd.reason_key, -1),
-        NVL(pd.promo_key, 0),
+        CASE
+            WHEN active_promo.PromotionID IS NULL THEN 0
+            WHEN pd.promo_key IS NULL THEN -1
+            ELSE pd.promo_key
+        END AS promo_key,
         r.ReturnID,
         o.OrderNo,
         CASE WHEN r.Status IN ('Pending','Approved','Rejected','Refunded') THEN r.Status ELSE 'Pending' END, -- Scrubbing: Domain validation
         ABS(rd.QuantityReturned), -- Scrubbing: Prevent negative returns
         ABS(rd.RefundAmount), -- Scrubbing: Prevent negative refunds
-        GREATEST(TRUNC(r.ReturnDate) - TRUNC(o.OrderDateTime), 0),
+        TRUNC(r.ReturnDate) - TRUNC(o.OrderDateTime), -- Calculate number of days between order and return
         2
     FROM adm.ReturnDetails rd
     JOIN adm.Returns r ON rd.ReturnID = r.ReturnID
     JOIN adm.Orders o ON r.OrderNo = o.OrderNo
-    LEFT JOIN customer_dim cd ON o.CustomerID = cd.customer_id AND cd.is_current_flag = 'Y'
+    JOIN adm.OrderDetails od ON od.OrderNo = o.OrderNo AND od.ItemID = rd.ItemID
+    LEFT JOIN customer_dim cd ON o.CustomerID = cd.customer_id AND TRUNC(r.ReturnDate) BETWEEN TRUNC(cd.effective_start_date) AND TRUNC(cd.effective_end_date)
     LEFT JOIN item_dim id ON rd.ItemID = id.item_id
     LEFT JOIN branch_dim bd ON o.BranchID = bd.branch_id
     LEFT JOIN return_reason_dim rrd ON rd.ReasonID = rrd.reason_id
-    LEFT JOIN promotion_dim pd ON pd.promotion_id = 'NONE'
+
+    -- Same active-promotion logic as SALES_FACT, so that a promotion's sales
+    -- and its returns are attributed to the same promotion.
+    LEFT JOIN (
+        SELECT OrderNo, ItemID, PromoPrice, PromotionID FROM (
+            SELECT o.OrderNo, od.ItemID, ip.PromoPrice, p.PromotionID,
+            ROW_NUMBER() OVER (PARTITION BY o.OrderNo, od.ItemID ORDER BY ip.PromoPrice ASC, p.PromotionID ASC) as rn
+            FROM adm.Orders o
+            JOIN adm.OrderDetails od ON o.OrderNo = od.OrderNo
+            JOIN adm.ItemPromotion ip ON od.ItemID = ip.ItemID
+            JOIN adm.Promotion p ON ip.PromotionID = p.PromotionID
+            WHERE o.OrderDateTime BETWEEN p.StartDate AND p.EndDate
+        ) WHERE rn = 1
+    ) active_promo ON active_promo.OrderNo = r.OrderNo AND active_promo.ItemID = rd.ItemID
+    LEFT JOIN promotion_dim pd ON active_promo.PromotionID = pd.promotion_id
+
     WHERE NOT EXISTS (
         SELECT 1 FROM return_fact rf 
-        WHERE rf.return_id = r.ReturnID AND rf.item_key = id.item_key
+        WHERE rf.return_id = r.ReturnID AND rf.item_key = NVL(id.item_key, -1)
     )
+    -- Data quality validation:
+    -- Returned quantity cannot exceed quantity originally purchased
+    AND ABS(rd.QuantityReturned) <= ABS(od.Quantity)
+    -- Return date cannot be earlier than original order date
+    AND TRUNC(r.ReturnDate) >= TRUNC(o.OrderDateTime)
     AND r.ReturnDate >= p_load_date - 1;
 
     v_count := SQL%ROWCOUNT;
@@ -49,12 +101,22 @@ BEGIN
             SYSDATE
         FROM adm.ReturnDetails rd
         JOIN adm.Returns r ON rd.ReturnID = r.ReturnID
-        WHERE rf.return_id = r.ReturnID AND rf.item_key = NVL((SELECT i.item_key FROM item_dim i WHERE i.item_id = rd.ItemID), -1)
+        JOIN adm.Orders o ON r.OrderNo = o.OrderNo
+        JOIN adm.OrderDetails od ON od.OrderNo = o.OrderNo AND od.ItemID = rd.ItemID
+        WHERE rf.return_id = r.ReturnID 
+          AND ABS(rd.QuantityReturned) <= ABS(od.Quantity)
+          AND TRUNC(r.ReturnDate) >= TRUNC(o.OrderDateTime)
+          AND rf.item_key = NVL((SELECT i.item_key FROM item_dim i WHERE i.item_id = rd.ItemID), -1)
     )
     WHERE EXISTS (
         SELECT 1 FROM adm.ReturnDetails rd
         JOIN adm.Returns r ON rd.ReturnID = r.ReturnID
-        WHERE rf.return_id = r.ReturnID AND rf.item_key = NVL((SELECT i.item_key FROM item_dim i WHERE i.item_id = rd.ItemID), -1)
+        JOIN adm.Orders o ON r.OrderNo = o.OrderNo
+        JOIN adm.OrderDetails od ON od.OrderNo = o.OrderNo AND od.ItemID = rd.ItemID
+        WHERE rf.return_id = r.ReturnID 
+          AND ABS(rd.QuantityReturned) <= ABS(od.Quantity)
+          AND TRUNC(r.ReturnDate) >= TRUNC(o.OrderDateTime)
+          AND rf.item_key = NVL((SELECT i.item_key FROM item_dim i WHERE i.item_id = rd.ItemID), -1)
         AND (rf.return_status != CASE WHEN r.Status IN ('Pending','Approved','Rejected','Refunded') THEN r.Status ELSE 'Pending' END
              OR rf.quantity_returned != ABS(rd.QuantityReturned)
              OR rf.refund_amount != ABS(rd.RefundAmount))

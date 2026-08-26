@@ -82,7 +82,7 @@ walk-in non-members share one dimension and are separated by `memberFlag`.
 
 ```
 PK  customer_key         NUMBER(10)
-FK  customerID           -> Customer(CustomerID)
+BK  customerID           -> Customer(CustomerID)
     customerName         [Type 1 overwrite]
     customerICNo         [Type 1 overwrite]   DEFAULT 'Unknown'
     customerEmail        [Type 1 overwrite]   DEFAULT 'Unknown'
@@ -329,8 +329,7 @@ join valid.
 4. **SCD2 join rule.** A fact points at the customer version **current at the time of the event** —
    `SALES_FACT` uses the order date, `RETURN_FACT` the return date, `DELIVERY_FACT` the order date,
    `POINT_FACT` the transaction date.
-5. **Surrogate keys everywhere.** Every dimension has a system-generated `xxx_key`; the operational
-   identifier is retained alongside it and declared as a `FOREIGN KEY` back to its source table.
+5. **Surrogate keys everywhere.** Every dimension has a system-generated `xxx_key`;Operational identifiers are retained as business/source keys for       lineage and ETL matching. The warehouse does not enforce foreign keys back to the operational schema.
 6. **Unknown handling.** Every dimension is seeded with key `-1` = 'Unknown'. `PROMOTION_DIM` additionally
    seeds key `0` = 'No Promotion'. `DATE_DIM`'s `-1` row uses `cal_date = 1900-01-01`. The operational
    identifier column is the one column left nullable so that this seeded row — which has no counterpart in

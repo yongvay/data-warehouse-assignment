@@ -4,7 +4,11 @@ SELECT
     cd.customer_key,
     id.item_key,
     bd.branch_key,
-    NVL(pd.promo_key, 0) AS promo_key, 
+    CASE
+        WHEN active_promo.PromotionID IS NULL THEN 0
+        WHEN pd.promo_key IS NULL THEN -1
+        ELSE pd.promo_key
+    END AS promo_key,
     o.OrderNo AS order_no,
     o.OrderType AS order_type,
     TO_NUMBER(TO_CHAR(o.OrderDateTime, 'HH24')) AS order_hour,
@@ -24,7 +28,7 @@ SELECT
      END) AS net_sales_amt
 FROM adm.OrderDetails od
 JOIN adm.Orders o ON od.OrderNo = o.OrderNo
-JOIN customer_dim cd ON o.CustomerID = cd.customer_id AND cd.is_current_flag = 'Y'
+JOIN customer_dim cd ON o.CustomerID = cd.customer_id AND TRUNC(o.OrderDateTime) BETWEEN TRUNC(cd.effective_start_date) AND TRUNC(cd.effective_end_date)
 JOIN item_dim id ON od.ItemID = id.item_id
 JOIN branch_dim bd ON o.BranchID = bd.branch_id
 LEFT JOIN (
@@ -32,7 +36,7 @@ LEFT JOIN (
     FROM (
         SELECT 
             o.OrderNo, od.ItemID, ip.PromoPrice, p.PromotionID,
-            ROW_NUMBER() OVER (PARTITION BY o.OrderNo, od.ItemID ORDER BY ip.PromoPrice ASC) as rn
+            ROW_NUMBER() OVER (PARTITION BY o.OrderNo, od.ItemID ORDER BY ip.PromoPrice ASC, p.PromotionID ASC) as rn
         FROM adm.Orders o
         JOIN adm.OrderDetails od ON o.OrderNo = od.OrderNo
         JOIN adm.ItemPromotion ip ON od.ItemID = ip.ItemID
