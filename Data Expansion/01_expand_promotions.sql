@@ -2,7 +2,7 @@
 --  01_expand_promotions.sql
 --  RUN AS THE ADM (OPERATIONAL) USER.  RUN AFTER 00_backup_adm.sql.
 --
---      SQL> @"C:\Users\PC\Desktop\DW\Data Expansion\01_expand_promotions.sql"
+--      SQL> @"Data Expansion\01_expand_promotions.sql"
 --
 --  WHAT THIS DOES
 --

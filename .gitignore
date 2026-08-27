@@ -1,7 +1,24 @@
+# ---- Large / binary source material (kept locally, not in git) --------------
 Star Schema/88speedmart_star_diagrams/
-Task 2/Task 2b (Claude)
 docs/Chapter 3 - Sample.pdf
 docs/01 Assignment Question.pdf
 docs/01-A5 AssessmentForm.xlsx
 docs/1.2 Physical Design.pdf
 docs/Sample-Report.pdf
+
+# ---- Unused alternate Task 2b implementation (see README) ------------------
+Task 2/Task 2b (Claude)
+
+# ---- Run artefacts ---------------------------------------------------------
+# SQL*Plus spool output and CSV exports
+*.log
+*.lst
+Task 3 output/**/csv/
+Task 3/*/charts/
+
+# Notebook / Python scratch
+.ipynb_checkpoints/
+__pycache__/
+*.pyc
+.venv/
+venv/

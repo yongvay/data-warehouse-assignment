@@ -1,10 +1,10 @@
 -- ============================================================================
---  utils/verify_task2a.sql
+--  Task 2/Task 2a/verify_task2a.sql
 --  GATE CHECK: run this AS DW after  EXEC run_task2a_initial_load
 --  Every gate must pass BEFORE you run Task 2b.
 --
 --      SQL> SET SERVEROUTPUT ON
---      SQL> @"C:\Users\PC\Desktop\DW\utils\verify_task2a.sql"
+--      SQL> @"Task 2\Task 2a\verify_task2a.sql"
 --
 --  Gate 10 saves a BASELINE row-count snapshot so that after Task 2b you can
 --  prove the incremental load actually added/changed rows.

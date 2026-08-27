@@ -1,7 +1,7 @@
 -- ============================================================================
 --  utils/data_audit.sql   -   RUN AS THE DW USER
 --
---      SQL> @"C:\Users\PC\Desktop\DW\utils\data_audit.sql"
+--      SQL> @"utils\data_audit.sql"
 --
 --  A plausibility audit, not a constraint audit.  final_acceptance.sql already
 --  proves the warehouse is internally CORRECT - every FK resolves, every CHECK

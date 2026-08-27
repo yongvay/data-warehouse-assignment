@@ -3,13 +3,13 @@
 --  Domain A : Sales & Product
 --  RUN AS THE DW USER
 --
---      SQL> SPOOL C:\Users\PC\Desktop\DW\task3_output.txt
---      SQL> @"C:\Users\PC\Desktop\DW\Task 3\task3_xs_reports.sql"
+--      SQL> SPOOL "Task 3 output\Xing Szen\task3_output.txt"
+--      SQL> @"Task 3\Xing Szen\task3_xs_reports.sql"
 --      SQL> SPOOL OFF
 --
 --  TO EXPORT FOR CHARTING IN EXCEL (Oracle 12.2 and later):
 --      SQL> SET MARKUP CSV ON
---      SQL> SPOOL C:\Users\PC\Desktop\DW\r1.csv
+--      SQL> SPOOL "Task 3 output\Xing Szen\r1.csv"
 --      ... run just the exhibit you want ...
 --      SQL> SPOOL OFF
 --      SQL> SET MARKUP CSV OFF

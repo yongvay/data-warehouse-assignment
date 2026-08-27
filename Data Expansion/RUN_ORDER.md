@@ -12,7 +12,7 @@ already in `adm` keep their dates, their keys and their children.
 
 ```sql
 SQL> connect adm
-SQL> @"C:\Users\PC\Desktop\DW\Data Expansion\00_backup_adm.sql"
+SQL> @"Data Expansion\00_backup_adm.sql"
 ```
 
 Creates `*_BAK` copies of all 21 tables plus a row-count baseline.
@@ -21,7 +21,7 @@ Creates `*_BAK` copies of all 21 tables plus a row-count baseline.
 ## Step 2 — as ADM: extend promotions and build the existence-year tables
 
 ```sql
-SQL> @"C:\Users\PC\Desktop\DW\Data Expansion\01_expand_promotions.sql"
+SQL> @"Data Expansion\01_expand_promotions.sql"
 ```
 
 Adds 32 promotions (4/year, 2016–2023) anchored to real CNY, Hari Raya,
@@ -35,7 +35,7 @@ item or branch that did not exist yet.
 ## Step 3 — as ADM: generate the history
 
 ```sql
-SQL> @"C:\Users\PC\Desktop\DW\Data Expansion\02_expand_orders.sql"
+SQL> @"Data Expansion\02_expand_orders.sql"
 ```
 
 Expect **1–3 minutes** — every insert fires the source's own triggers.
@@ -45,7 +45,7 @@ deliveries, returns and point transactions.
 ## Step 4 — as ADM: validate the source
 
 ```sql
-SQL> @"C:\Users\PC\Desktop\DW\Data Expansion\03_validate_source.sql"
+SQL> @"Data Expansion\03_validate_source.sql"
 ```
 
 **Every check must read PASS before you go any further.** Validating here
@@ -56,13 +56,15 @@ reading an ORA-02291 out of a half-finished procedure.
 
 ```sql
 SQL> connect dw
-SQL> @"C:\Users\PC\Desktop\DW\Task 1\Task1b_Physical_Design.sql"
-SQL> @"C:\Users\PC\Desktop\DW\Task 2\Task 2a\CREATE_SEQUENCE.sql"
+SQL> @"Task 1\Task1b_Physical_Design.sql"
+SQL> @"Task 2\Task 2a\CREATE_SEQUENCE.sql"
 ```
 
-then every DIM script, every FACT script, the 2a driver, and:
+then compile the ETL and run it. `compile_task2a.sql` calls every DIM
+script, every FACT script and the driver, in dependency order:
 
 ```sql
+SQL> @"Task 2\Task 2a\compile_task2a.sql"
 SQL> SET SERVEROUTPUT ON
 SQL> EXEC run_task2a_initial_load
 ```
@@ -70,7 +72,7 @@ SQL> EXEC run_task2a_initial_load
 ## Step 6 — as DW: verify
 
 ```sql
-SQL> @"C:\Users\PC\Desktop\DW\utils\verify_task2a.sql"
+SQL> @"Task 2\Task 2a\verify_task2a.sql"
 ```
 
 Gate 7 must now report **5,479 contiguous calendar days** (2016-01-01 →
@@ -80,7 +82,7 @@ Gate 7 must now report **5,479 contiguous calendar days** (2016-01-01 →
 
 ```sql
 SQL> connect adm
-SQL> @"C:\Users\PC\Desktop\DW\Task 2\Task 2b\insert_dirty_data.sql"
+SQL> @"Task 2\Task 2b\insert_dirty_data.sql"
 ```
 
 **This comes AFTER the initial load, never before.** The dirty rows break the
@@ -105,7 +107,7 @@ reserved — step 3 winds the sequences past them, so nothing collides.
 SQL> connect dw
 SQL> SET SERVEROUTPUT ON
 SQL> EXEC run_task2b
-SQL> @"C:\Users\PC\Desktop\DW\utils\compare_after_2b.sql"
+SQL> @"utils\compare_after_2b.sql"
 ```
 
 ---
@@ -114,7 +116,7 @@ SQL> @"C:\Users\PC\Desktop\DW\utils\compare_after_2b.sql"
 
 ```sql
 SQL> connect adm
-SQL> @"C:\Users\PC\Desktop\DW\Data Expansion\99_rollback.sql"
+SQL> @"Data Expansion\99_rollback.sql"
 ```
 
 Restores `adm` exactly as step 1 found it and resets the sequences. Then

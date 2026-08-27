@@ -1,7 +1,7 @@
 -- ============================================================================
 --  utils/check_status.sql
 --  Run this AS DW after any script to confirm it really succeeded.
---      SQL> @"C:\Users\PC\Desktop\DW\utils\check_status.sql"
+--      SQL> @"utils\check_status.sql"
 -- ============================================================================
 SET SERVEROUTPUT ON
 SET LINESIZE 200

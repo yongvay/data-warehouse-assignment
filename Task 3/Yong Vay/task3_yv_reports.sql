@@ -3,8 +3,8 @@
 --  Domain C : Customer, Membership and Loyalty
 --  RUN AS THE DW USER
 --
---      SQL> SPOOL "C:\Users\Lenovo\Desktop\Database Warehouse\data-warehouse-assignment\Task 3 output\Yong Vay\task3_output.txt"
---      SQL> @"C:\Users\Lenovo\Desktop\Database Warehouse\data-warehouse-assignment\Task 3\Yong Vay\task3_yv_reports.sql"
+--      SQL> SPOOL "Task 3 output\Yong Vay\task3_output.txt"
+--      SQL> @"Task 3\Yong Vay\task3_yv_reports.sql"
 --      SQL> SPOOL OFF
 --
 --  TO EXPORT ONE EXHIBIT FOR CHARTING (Oracle 12.2 and later):

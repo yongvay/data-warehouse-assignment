@@ -1,26 +1,17 @@
--- SET SQLBLANKLINES ON;
--- SET SERVEROUTPUT ON;
-
--- PROMPT --- COMPILING TASK 2A DIMENSIONS ---
--- @"C:\Users\Lenovo\Desktop\Database Warehouse\data-warehouse-assignment\Task 2\Task 2a\CREATE_SEQUENCE.sql"
--- @"C:\Users\Lenovo\Desktop\Database Warehouse\data-warehouse-assignment\Task 2\Task 2a\DIM\ADDRESS_DIM.sql"
--- @"C:\Users\Lenovo\Desktop\Database Warehouse\data-warehouse-assignment\Task 2\Task 2a\DIM\BRANCH_DIM.sql"
--- @"C:\Users\Lenovo\Desktop\Database Warehouse\data-warehouse-assignment\Task 2\Task 2a\DIM\CUSTOMER_DIM_INIT.sql"
--- @"C:\Users\Lenovo\Desktop\Database Warehouse\data-warehouse-assignment\Task 2\Task 2a\DIM\DATE_DIM.sql"
--- @"C:\Users\Lenovo\Desktop\Database Warehouse\data-warehouse-assignment\Task 2\Task 2a\DIM\DELIVERY_COMPANY_DIM.sql"
--- @"C:\Users\Lenovo\Desktop\Database Warehouse\data-warehouse-assignment\Task 2\Task 2a\DIM\ITEM_DIM.sql"
--- @"C:\Users\Lenovo\Desktop\Database Warehouse\data-warehouse-assignment\Task 2\Task 2a\DIM\PROMOTION_DIM.sql"
--- @"C:\Users\Lenovo\Desktop\Database Warehouse\data-warehouse-assignment\Task 2\Task 2a\DIM\RETURN_REASON_DIM.sql"
-
--- PROMPT --- COMPILING TASK 2A FACTS ---
--- @"C:\Users\Lenovo\Desktop\Database Warehouse\data-warehouse-assignment\Task 2\Task 2a\FACT\DELIVERY_FACT.sql"
--- @"C:\Users\Lenovo\Desktop\Database Warehouse\data-warehouse-assignment\Task 2\Task 2a\FACT\POINT_FACT.sql"
--- @"C:\Users\Lenovo\Desktop\Database Warehouse\data-warehouse-assignment\Task 2\Task 2a\FACT\RETURN_FACT.sql"
--- @"C:\Users\Lenovo\Desktop\Database Warehouse\data-warehouse-assignment\Task 2\Task 2a\FACT\SALES_FACT.sql"
-
--- PROMPT --- COMPILING TASK 2A DRIVER ---
--- @"C:\Users\Lenovo\Desktop\Database Warehouse\data-warehouse-assignment\Task 2\Task 2a\run_task2a_initial_load.sql"
-
+-- ============================================================================
+--  run_task2a_initial_load.sql   -   RUN AS THE DW USER
+--
+--  Defines the Task 2(a) driver procedure.  It does NOT run the load.
+--
+--  Do not call this file directly - compile_task2a.sql runs it LAST, after
+--  every load_* procedure it calls already exists.  PL/SQL resolves called
+--  procedures at compile time, so the driver will not compile before them.
+--
+--      SQL> @"Task 2\Task 2a\compile_task2a.sql"    -- compiles this too
+--      SQL> @"utils\delete_table.sql"
+--      SQL> SET SERVEROUTPUT ON
+--      SQL> EXEC run_task2a_initial_load
+-- ============================================================================
 CREATE OR REPLACE PROCEDURE run_task2a_initial_load AS
 BEGIN
     DBMS_OUTPUT.PUT_LINE('--- STARTING TASK 2A: INITIAL HISTORICAL LOAD ---');
@@ -56,5 +47,3 @@ EXCEPTION
 END;
 /
 
--- To run it,  
---EXEC run_task2a_initial_load

@@ -1,7 +1,7 @@
 -- ============================================================================
 --  compile_task2a.sql   -   RUN AS THE DW USER
 --
---      SQL> @"C:\Users\PC\Desktop\DW\Task 2\Task 2a\compile_task2a.sql"
+--      SQL> @"Task 2\Task 2a\compile_task2a.sql"
 --
 --  Recompiles every Task 2(a) view and procedure in dependency order, then
 --  reports anything that failed.
@@ -20,29 +20,30 @@
 -- ============================================================================
 SET SERVEROUTPUT ON SIZE UNLIMITED
 SET DEFINE OFF
+SET SQLBLANKLINES ON
 SET FEEDBACK ON
 
 PROMPT
 PROMPT === COMPILING TASK 2A DIMENSIONS ===
-@"C:\Users\PC\Desktop\DW\Task 2\Task 2a\DIM\DATE_DIM.sql"
-@"C:\Users\PC\Desktop\DW\Task 2\Task 2a\DIM\RETURN_REASON_DIM.sql"
-@"C:\Users\PC\Desktop\DW\Task 2\Task 2a\DIM\DELIVERY_COMPANY_DIM.sql"
-@"C:\Users\PC\Desktop\DW\Task 2\Task 2a\DIM\BRANCH_DIM.sql"
-@"C:\Users\PC\Desktop\DW\Task 2\Task 2a\DIM\ADDRESS_DIM.sql"
-@"C:\Users\PC\Desktop\DW\Task 2\Task 2a\DIM\PROMOTION_DIM.sql"
-@"C:\Users\PC\Desktop\DW\Task 2\Task 2a\DIM\ITEM_DIM.sql"
-@"C:\Users\PC\Desktop\DW\Task 2\Task 2a\DIM\CUSTOMER_DIM_INIT.sql"
+@@DIM\DATE_DIM.sql
+@@DIM\RETURN_REASON_DIM.sql
+@@DIM\DELIVERY_COMPANY_DIM.sql
+@@DIM\BRANCH_DIM.sql
+@@DIM\ADDRESS_DIM.sql
+@@DIM\PROMOTION_DIM.sql
+@@DIM\ITEM_DIM.sql
+@@DIM\CUSTOMER_DIM_INIT.sql
 
 PROMPT
 PROMPT === COMPILING TASK 2A FACTS ===
-@"C:\Users\PC\Desktop\DW\Task 2\Task 2a\FACT\SALES_FACT.sql"
-@"C:\Users\PC\Desktop\DW\Task 2\Task 2a\FACT\RETURN_FACT.sql"
-@"C:\Users\PC\Desktop\DW\Task 2\Task 2a\FACT\DELIVERY_FACT.sql"
-@"C:\Users\PC\Desktop\DW\Task 2\Task 2a\FACT\POINT_FACT.sql"
+@@FACT\SALES_FACT.sql
+@@FACT\RETURN_FACT.sql
+@@FACT\DELIVERY_FACT.sql
+@@FACT\POINT_FACT.sql
 
 PROMPT
 PROMPT === COMPILING THE DRIVER (must be last) ===
-@"C:\Users\PC\Desktop\DW\Task 2\Task 2a\run_task2a_initial_load.sql"
+@@run_task2a_initial_load.sql
 
 SET LINESIZE 160
 SET PAGESIZE 200
@@ -125,5 +126,5 @@ PROMPT ####################################################################
 PROMPT #  If the lists above are clean, continue:                         #
 PROMPT #     @utils\delete_table.sql                                      #
 PROMPT #     EXEC run_task2a_initial_load                                 #
-PROMPT #     @utils\verify_task2a.sql                                     #
+PROMPT #     @"Task 2\Task 2a\verify_task2a.sql"                          #
 PROMPT ####################################################################

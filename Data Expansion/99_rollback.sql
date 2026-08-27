@@ -2,7 +2,7 @@
 --  99_rollback.sql
 --  RUN AS THE ADM (OPERATIONAL) USER.
 --
---      SQL> @"C:\Users\PC\Desktop\DW\Data Expansion\99_rollback.sql"
+--      SQL> @"Data Expansion\99_rollback.sql"
 --
 --  Restores the source schema to the state 00_backup_adm.sql captured.
 --  Use this if the generation goes wrong, or if you decide against the
@@ -30,7 +30,7 @@ SET FEEDBACK ON
 -- BE AWARE: this closes SQL*Plus if anything goes wrong, which looks like a
 -- crash.  That is intentional here and only here.  Spool to a file first so
 -- you keep the error message:
---     SQL> SPOOL C:\Users\PC\Desktop\DW\rollback.log
+--     SQL> SPOOL rollback.log
 WHENEVER SQLERROR EXIT SQL.SQLCODE
 
 DECLARE

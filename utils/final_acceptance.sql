@@ -1,7 +1,7 @@
 -- ============================================================================
 --  utils/final_acceptance.sql   -   RUN AS THE DW USER
 --
---      SQL> @"C:\Users\PC\Desktop\DW\utils\final_acceptance.sql"
+--      SQL> @"utils\final_acceptance.sql"
 --
 --  One run, one verdict table.  Checks every deliverable from Task 1(a)
 --  through Task 2(b) plus the 2016-2026 data span, then prints the supporting

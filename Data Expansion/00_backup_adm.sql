@@ -2,7 +2,7 @@
 --  00_backup_adm.sql
 --  RUN AS THE ADM (OPERATIONAL) USER.  RUN THIS FIRST.  NON-NEGOTIABLE.
 --
---      SQL> @"C:\Users\PC\Desktop\DW\Data Expansion\00_backup_adm.sql"
+--      SQL> @"Data Expansion\00_backup_adm.sql"
 --
 --  Takes a CTAS snapshot of every table the expansion touches, plus a row
 --  count record.  99_rollback.sql restores from these.

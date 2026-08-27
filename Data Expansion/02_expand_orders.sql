@@ -2,7 +2,7 @@
 --  02_expand_orders.sql
 --  RUN AS THE ADM (OPERATIONAL) USER.  RUN AFTER 01_expand_promotions.sql.
 --
---      SQL> @"C:\Users\PC\Desktop\DW\Data Expansion\02_expand_orders.sql"
+--      SQL> @"Data Expansion\02_expand_orders.sql"
 --
 --  Generates transaction history for 2016 onwards so the warehouse spans a
 --  full decade instead of two and a half years.

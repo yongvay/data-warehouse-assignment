@@ -4,7 +4,7 @@
 --  Requires that verify_task2a.sql was run first (it saves the BEFORE_2B rows).
 --
 --      SQL> SET SERVEROUTPUT ON
---      SQL> @"C:\Users\PC\Desktop\DW\utils\compare_after_2b.sql"
+--      SQL> @"utils\compare_after_2b.sql"
 --
 --  NOTE: no PROMPT line may end with a hyphen - in SQL*Plus a trailing "-"
 --  is the line-continuation character and swallows the next line.

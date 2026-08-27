@@ -2,7 +2,7 @@
 --  03_validate_source.sql
 --  RUN AS THE ADM (OPERATIONAL) USER, after 02_expand_orders.sql.
 --
---      SQL> @"C:\Users\PC\Desktop\DW\Data Expansion\03_validate_source.sql"
+--      SQL> @"Data Expansion\03_validate_source.sql"
 --
 --  Validates the SOURCE before any ETL touches it.  Catching an incoherent
 --  row here costs one query; catching it after the warehouse load means

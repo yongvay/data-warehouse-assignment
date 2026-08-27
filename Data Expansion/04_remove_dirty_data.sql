@@ -2,7 +2,7 @@
 --  04_remove_dirty_data.sql
 --  RUN AS THE ADM (OPERATIONAL) USER.
 --
---      SQL> @"C:\Users\PC\Desktop\DW\Data Expansion\04_remove_dirty_data.sql"
+--      SQL> @"Data Expansion\04_remove_dirty_data.sql"
 --
 --  WHY THIS EXISTS
 --
@@ -101,7 +101,7 @@ PROMPT ####################################################################
 PROMPT #  Now, as DW:                                                     #
 PROMPT #     @utils\delete_table.sql                                      #
 PROMPT #     EXEC run_task2a_initial_load                                 #
-PROMPT #     @utils\verify_task2a.sql                                     #
+PROMPT #     @"Task 2\Task 2a\verify_task2a.sql"                          #
 PROMPT #                                                                  #
 PROMPT #  THEN, back as ADM, re-run insert_dirty_data.sql, and only       #
 PROMPT #  after that run Task 2b.  That is the correct order.             #

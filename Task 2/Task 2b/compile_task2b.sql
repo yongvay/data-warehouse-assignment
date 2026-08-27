@@ -1,7 +1,7 @@
 -- ============================================================================
 --  compile_task2b.sql   -   RUN AS THE DW USER
 --
---      SQL> @"C:\Users\PC\Desktop\DW\Task 2\Task 2b\compile_task2b.sql"
+--      SQL> @"Task 2\Task 2b\compile_task2b.sql"
 --
 --  Compiles every Task 2(b) procedure in dependency order, then reports any
 --  object that failed.  The driver run_task2b MUST come last: PL/SQL resolves
@@ -12,29 +12,30 @@
 -- ============================================================================
 SET SERVEROUTPUT ON SIZE UNLIMITED
 SET DEFINE OFF
+SET SQLBLANKLINES ON
 SET FEEDBACK ON
 
 PROMPT
 PROMPT === COMPILING TASK 2B DIMENSIONS ===
-@"C:\Users\PC\Desktop\DW\Task 2\Task 2b\DIM\DATE_DIM_INCREMENTAL.sql"
-@"C:\Users\PC\Desktop\DW\Task 2\Task 2b\DIM\ADDRESS_DIM_INCREMENTAL.sql"
-@"C:\Users\PC\Desktop\DW\Task 2\Task 2b\DIM\BRANCH_DIM_INCREMENTAL.sql"
-@"C:\Users\PC\Desktop\DW\Task 2\Task 2b\DIM\DELIVERY_COMPANY_DIM_INCREMENTAL.sql"
-@"C:\Users\PC\Desktop\DW\Task 2\Task 2b\DIM\ITEM_DIM_INCREMENTAL.sql"
-@"C:\Users\PC\Desktop\DW\Task 2\Task 2b\DIM\PROMOTION_DIM_INCREMENTAL.sql"
-@"C:\Users\PC\Desktop\DW\Task 2\Task 2b\DIM\RETURN_REASON_DIM_INCREMENTAL.sql"
-@"C:\Users\PC\Desktop\DW\Task 2\Task 2b\DIM\CUSTOMER_DIM_NEW_RECORD.sql"
+@@DIM\DATE_DIM_INCREMENTAL.sql
+@@DIM\ADDRESS_DIM_INCREMENTAL.sql
+@@DIM\BRANCH_DIM_INCREMENTAL.sql
+@@DIM\DELIVERY_COMPANY_DIM_INCREMENTAL.sql
+@@DIM\ITEM_DIM_INCREMENTAL.sql
+@@DIM\PROMOTION_DIM_INCREMENTAL.sql
+@@DIM\RETURN_REASON_DIM_INCREMENTAL.sql
+@@DIM\CUSTOMER_DIM_NEW_RECORD.sql
 
 PROMPT
 PROMPT === COMPILING TASK 2B FACTS ===
-@"C:\Users\PC\Desktop\DW\Task 2\Task 2b\FACT\SALES_FACT_INCREMENTAL.sql"
-@"C:\Users\PC\Desktop\DW\Task 2\Task 2b\FACT\RETURN_FACT_INCREMENTAL.sql"
-@"C:\Users\PC\Desktop\DW\Task 2\Task 2b\FACT\DELIVERY_FACT_INCREMENTAL.sql"
-@"C:\Users\PC\Desktop\DW\Task 2\Task 2b\FACT\POINT_FACT_INCREMENTAL.sql"
+@@FACT\SALES_FACT_INCREMENTAL.sql
+@@FACT\RETURN_FACT_INCREMENTAL.sql
+@@FACT\DELIVERY_FACT_INCREMENTAL.sql
+@@FACT\POINT_FACT_INCREMENTAL.sql
 
 PROMPT
 PROMPT === COMPILING THE DRIVER (must be last) ===
-@"C:\Users\PC\Desktop\DW\Task 2\Task 2b\run_task2b.sql"
+@@run_task2b.sql
 
 -- ----------------------------------------------------------------------------
 --  DID EVERYTHING COMPILE?
