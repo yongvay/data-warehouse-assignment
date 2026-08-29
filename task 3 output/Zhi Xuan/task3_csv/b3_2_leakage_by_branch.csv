@@ -1,0 +1,13 @@
+Region,Branch,NetSales,RefundAmt,RefundToSalesPct,FulfilmentRM,QualityRM,AvgDaysToReturn,LeakRank
+Central,Cheras Branch,23794.99,721.50,3.03,536.14,185.36,5.8,3
+Central,Rawang Branch,26870.85,743.61,2.77,412.67,330.94,5.4,5
+Central,Shah Alam Branch,24650.68,633.08,2.57,334.79,298.29,6.1,6
+Central,Seremban Branch,24303.86,580.05,2.39,273.67,306.38,6.1,7
+Central,Kepong Branch,23522.57,458.93,1.95,274.43,184.50,6.0,9
+East Coast,Kuantan Branch,25702.53,481.47,1.87,269.42,212.05,5.2,10
+East Malaysia,Kuching Branch,24341.80,524.46,2.15,160.31,364.15,4.6,8
+Northern,Ipoh Branch,27103.70,831.42,3.07,486.97,344.45,4.3,2
+Northern,Georgetown Branch,26326.94,766.48,2.91,435.29,331.19,5.6,4
+Northern,Alor Setar Branch,24629.10,436.02,1.77,263.37,172.65,5.3,12
+Southern,Melaka City Branch,24254.37,754.13,3.11,316.35,437.78,4.6,1
+Southern,Johor Bahru Branch,23998.75,432.26,1.80,294.49,137.77,5.8,11

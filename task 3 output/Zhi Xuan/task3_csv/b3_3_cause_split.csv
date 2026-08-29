@@ -1,0 +1,21 @@
+Region,CauseCategory,Reason,UnitsReturned,RefundAmt,RegionSharePct,AvgDaysToReturn
+Central,Fulfilment,Wrong Item,107,1216.94,38.8,5.4
+Central,Fulfilment,Missing,94,614.76,19.6,6.2
+Central,Product Quality,Expired,75,725.41,23.1,5.8
+Central,Product Quality,Broken,58,580.06,18.5,6.3
+East Coast,Fulfilment,Wrong Item,21,166.55,34.6,7.0
+East Coast,Fulfilment,Missing,16,102.87,21.4,5.2
+East Coast,Product Quality,Broken,20,126.54,26.3,3.7
+East Coast,Product Quality,Expired,16,85.51,17.8,5.6
+East Malaysia,Fulfilment,Missing,9,89.69,17.1,4.8
+East Malaysia,Fulfilment,Wrong Item,12,70.62,13.5,5.0
+East Malaysia,Product Quality,Broken,27,218.85,41.7,4.6
+East Malaysia,Product Quality,Expired,14,145.30,27.7,3.8
+Northern,Fulfilment,Wrong Item,73,793.46,39.0,4.6
+Northern,Fulfilment,Missing,46,392.17,19.3,6.3
+Northern,Product Quality,Expired,59,459.10,22.6,4.9
+Northern,Product Quality,Broken,45,389.19,19.1,4.8
+Southern,Fulfilment,Missing,24,310.07,26.1,4.4
+Southern,Fulfilment,Wrong Item,35,300.77,25.4,5.8
+Southern,Product Quality,Broken,22,290.89,24.5,4.2
+Southern,Product Quality,Expired,43,284.66,24.0,5.7

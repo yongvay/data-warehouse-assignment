@@ -1,0 +1,377 @@
+SQL> @"C:\Users\USER\Desktop\DWT\Task 3\Zhi Xuan\task3_zx_reports.sql"
+All-branches era begins (default 2024): 2024
+Reporting year, last COMPLETE year (default 2025): 2025
+
+Resolved parameters:  era = 2024    reporting year = 2025
+
+
+
+
+
+============================================================================
+REPORT 1 - BRANCH PERFORMANCE SCORECARD BY REGION
+Facts / Dims : sales_fact x branch_dim x date_dim
+Measures     : orders, net sales, average order value, items per
+order, YoY growth, share of region, rank in region
+
+THE QUESTION: every region has a leader and a laggard. Ranking the
+twelve branches nationally hides that, because a weak branch in a
+strong region still outsells a strong branch in a weak one. This
+report ranks each branch WITHIN its own region, and the regional
+subtotals show how much of the region one branch is carrying.
+============================================================================
+
+--- EXHIBIT 1.1  Branch scorecard by region  [CHART: horizontal bar] ===
+WHAT EACH COLUMN IS FOR: Orders counts DISTINCT order numbers, not fact
+rows, because sales_fact is at line grain and a five-item basket is one
+order. AOV is how large a visit is; Items per Order is how full the
+basket is - the two together separate a price effect from a volume one.
+Share of Region is the branch measured against its own peers, and Rank
+in Region is the same thing ordered. YoY Growth compares two complete
+years only.
+
+REPORT 1 - BRANCH PERFORMANCE SCORECARD BY REGION                                                                                               Run: 30-AUG-2026
+All-branches era 2024 onward.  Growth = 2025 against 2024
+
+                                                     NET SALES AVG ORDER   ITEMS       YoY % SHARE OF   RANK
+REGION         BRANCH                   ORDERS            (RM)     VALUE  /ORDER 2025 v 2024 REGION % IN RGN
+-------------- ---------------------- -------- --------------- --------- ------- ----------- -------- ------
+Central        Seremban Branch             121       11,157.85     92.21    8.79        56.8     21.9      1
+               Kepong Branch                93       10,221.79    109.91   10.12        40.6     20.0      2
+               Cheras Branch               107       10,153.93     94.90    9.59        44.5     19.9      3
+               Shah Alam Branch            114       10,057.06     88.22    9.56        43.6     19.7      4
+               Rawang Branch               107        9,408.57     87.93    8.60         3.2     18.4      5
+**************                        -------- ---------------
+REGION TOTAL                               542       50,999.20
+
+East Coast     Kuantan Branch              121       10,925.09     90.29    8.98        38.9    100.0      1
+**************                        -------- ---------------
+REGION TOTAL                               121       10,925.09
+
+East Malaysia  Kuching Branch               94        9,053.25     96.31    9.04        10.7    100.0      1
+**************                        -------- ---------------
+REGION TOTAL                                94        9,053.25
+
+Northern       Georgetown Branch           118       12,420.73    105.26    9.30        74.5     36.5      1
+               Ipoh Branch                 127       11,537.48     90.85    9.70        23.7     33.9      2
+               Alor Setar Branch           103       10,058.36     97.65    9.18        30.6     29.6      3
+**************                        -------- ---------------
+REGION TOTAL                               348       34,016.57
+
+Southern       Johor Bahru Branch          127        9,967.00     78.48    8.56        42.4     50.1      1
+               Melaka City Branch          118        9,929.50     84.15    9.13        19.7     49.9      2
+**************                        -------- ---------------
+REGION TOTAL                               245       19,896.50
+
+
+--- EXHIBIT 1.2  Region roll-up and growth  [CHART: line] ===
+WHY IT MATTERS: Exhibit 1.1 answers who is winning inside a region.
+This one answers whether the region itself is growing. A branch ranked
+first in a region shrinking 8 percent is not a success story, and the
+two exhibits have to be read together for that to be visible.
+Branches Trading is printed because a region that gained a branch
+between the two years will show growth that is not like-for-like.
+
+               BRANCHES            2024            2025      YoY NATIONAL      2025 GROWTH
+REGION          TRADING       NET SALES       NET SALES GROWTH %  SHARE % AVG ORDER   RANK
+-------------- -------- --------------- --------------- -------- -------- --------- ------
+Central               5       37,537.27       50,999.20     35.9     40.8     94.09      3
+Northern              3       24,144.97       34,016.57     40.9     27.2     97.75      1
+Southern              2       15,296.71       19,896.50     30.1     15.9     81.21      4
+East Coast            1        7,864.73       10,925.09     38.9      8.7     90.29      2
+East Malaysia         1        8,179.13        9,053.25     10.7      7.2     96.31      5
+
+============================================================================
+REPORT 2 - PEAK TRADING HOURS AND WEEKDAY/WEEKEND PATTERN BY REGION
+Facts / Dims : sales_fact (order_hour) x date_dim (weekday_ind,
+day_week) x branch_dim (branch_region)
+Measures     : net sales by hour block, peak block, weekday and
+weekend sales, weekend share, rank
+
+THE QUESTION: staff rosters and delivery slots are set regionally,
+not nationally. Four of the five regions turn out to peak in the
+same After-work block, so the block mix alone does not justify a
+regional roster - Exhibit 2.3 is where the regions actually differ.
+
+NOTE: this report measures the SHAPE of the trading day, not growth,
+so the part year 2026 is included without distortion. Hour blocks
+
+BLOCK BOUNDARIES ARE SET FROM THE DATA, NOT FROM CONVENTION. The
+warehouse holds no orders before 08:00 and effectively none after
+22:00 - one order at 23:00 in the whole era - so the branches trade
+08:00-22:00. A conventional Morning/Afternoon/Evening/Night split
+would leave the Night column empty, and it would put 17:00 on a
+block boundary. 17:00 is the busiest single hour in the Southern
+region, so that boundary alone would decide whether Southern is
+classed Afternoon or Evening. The blocks below follow the shape of
+the trading day instead: Opening 08-11, Midday 12-16, After-work
+17-19, Late 20-22.
+============================================================================
+
+--- EXHIBIT 2.1  Trading day shape by region  [CHART: grouped column] ===
+WHAT EACH COLUMN IS FOR: the four block columns are a CASE pivot of
+order_hour, so they sum to the region total and can be read as a mix.
+Peak Block names the winning column so the reader does not have to
+compare four figures by eye. Weekend Share is the roster-critical
+number: two days carry that share, five days carry the rest, so any
+figure above 28.6 percent means the weekend is trading ABOVE its
+calendar weight.
+
+REPORT 2 - PEAK TRADING HOURS AND WEEKDAY/WEEKEND PATTERN                                                                                       Run: 30-AUG-2026
+All-branches era 2024 onward.  Weekend calendar weight = 28.6%.
+
+                    OPENING       MIDDAY   AFTER-WORK         LATE PEAK             WEEKDAY      WEEKEND WEEKEND SALES
+REGION                08-11        12-16        17-19        20-22 BLOCK              SALES        SALES SHARE %  RANK
+-------------- ------------ ------------ ------------ ------------ ----------- ------------ ------------ ------- -----
+Central              22,762       35,014       36,832       28,535 After-work        85,771       37,372    30.3     1
+Northern             14,613       21,113       24,500       17,833 After-work        52,152       25,908    33.2     2
+Southern              9,295       13,545       14,911       10,502 After-work        33,343       14,910    30.9     3
+East Coast            5,715        7,011        6,015        6,961 Midday            18,146        7,556    29.4     4
+East Malaysia         5,712        5,557        7,195        5,879 After-work        18,067        6,275    25.8     5
+
+--- EXHIBIT 2.2  Hour-by-hour profile by region  [CHART: line] ===
+WHY IT MATTERS: the four blocks in 2.1 are a management summary, but
+they hide where inside a block the peak actually sits. A shift cannot
+be scheduled on a six-hour bucket. This exhibit is the same data at
+hourly resolution, split weekday against weekend, and it is the one
+that tells the roster which hour to add a cashier to.
+The output is 15 to 16 rows per region and is meant for the chart rather
+than for reading in the report body.
+
+                         WEEKDAY      WEEKEND  WEEKDAY  WEEKEND SHARE OF
+REGION         HOUR        SALES        SALES   ORDERS   ORDERS REGION %
+-------------- ---- ------------ ------------ -------- -------- --------
+Central           8        2,726        1,490       34       17     3.42
+Central           9        3,939        1,534       38       16     4.44
+Central          10        4,134        1,527       48       20     4.60
+Central          11        5,087        2,325       56       23     6.02
+Central          12        4,889        2,367       57       23     5.89
+Central          13        5,074        2,621       57       27     6.25
+Central          14        5,482        1,293       64       17     5.50
+Central          15        4,858        1,524       56       16     5.18
+Central          16        5,366        1,541       64       22     5.61
+Central          17        9,199        4,874      103       51    11.43
+Central          18        6,262        3,534       80       43     7.95
+Central          19        8,531        4,432       95       55    10.53
+Central          20        7,489        3,074       96       40     8.58
+Central          21       12,022        4,709      113       53    13.59
+Central          22          706          513       11       11     0.99
+Central          23            7           14        1        1     0.02
+East Coast        8          653          927        9        9     6.15
+East Coast        9          752          157        7        3     3.54
+East Coast       10          941          557       11        6     5.83
+East Coast       11        1,108          619       14        7     6.72
+East Coast       12          475          216        8        4     2.69
+East Coast       13        1,533          751       15        6     8.89
+East Coast       14          728          360       11        4     4.23
+East Coast       15        1,284          302       16        3     6.17
+East Coast       16        1,027          335       10        4     5.30
+East Coast       17        1,197          555       14       10     6.82
+East Coast       18        1,679          767       20       11     9.51
+East Coast       19        1,340          478       18       13     7.07
+East Coast       20        2,038          441       26        4     9.65
+East Coast       21        3,105          651       21       16    14.62
+East Coast       22          285          440        3        2     2.82
+East Malaysia     8          989          449        9        4     5.91
+East Malaysia     9          691          288        8        3     4.02
+East Malaysia    10        1,308          930       12        7     9.19
+East Malaysia    11          599          458        9        3     4.35
+East Malaysia    12          247          297        5        4     2.24
+East Malaysia    13        1,311          190       14        4     6.16
+East Malaysia    14        1,099          215       17        2     5.40
+East Malaysia    15          424          275        7        5     2.87
+East Malaysia    16        1,236          263       17        5     6.15
+East Malaysia    17        1,405          415       18        6     7.48
+East Malaysia    18        2,284          573       24        6    11.74
+East Malaysia    19        2,276          242       25        7    10.34
+East Malaysia    20        1,771          546       21        7     9.52
+East Malaysia    21        2,116          926       23        9    12.50
+East Malaysia    22          311          209        2        2     2.13
+Northern          8        3,177          476       32        6     4.68
+Northern          9        2,095        1,365       24       11     4.43
+Northern         10        2,250        1,558       27       15     4.88
+Northern         11        2,661        1,031       31       12     4.73
+Northern         12        2,031        1,530       30       13     4.56
+Northern         13        3,438          429       35        8     4.95
+Northern         14        3,985        1,707       38       18     7.29
+Northern         15        2,577        1,472       26       17     5.19
+Northern         16        2,727        1,218       34       11     5.05
+Northern         17        5,663        2,838       70       33    10.89
+
+                         WEEKDAY      WEEKEND  WEEKDAY  WEEKEND SHARE OF
+REGION         HOUR        SALES        SALES   ORDERS   ORDERS REGION %
+-------------- ---- ------------ ------------ -------- -------- --------
+Northern         18        5,733        3,487       62       32    11.81
+Northern         19        4,292        2,487       55       32     8.68
+Northern         20        5,445        2,320       59       33     9.95
+Northern         21        4,844        3,341       55       38    10.49
+Northern         22        1,235          648       12        5     2.41
+Southern          8        1,609          272       15        5     3.90
+Southern          9        2,387          993       19        8     7.01
+Southern         10        1,574          159       21        5     3.59
+Southern         11        1,850          452       23        8     4.77
+Southern         12        2,182          891       23       11     6.37
+Southern         13        1,252        1,132       15        9     4.94
+Southern         14        1,983          894       21       14     5.96
+Southern         15        1,271        1,445       15       11     5.63
+Southern         16        1,829          667       25        9     5.17
+Southern         17        3,848        2,986       44       33    14.16
+Southern         18        3,169        1,305       47       21     9.27
+Southern         19        2,602        1,001       34       15     7.47
+Southern         20        4,187          772       43       10    10.28
+Southern         21        3,156        1,572       43       20     9.80
+Southern         22          447          369        8        5     1.69
+
+--- EXHIBIT 2.3  Weekend concentration by block  [CHART: grouped column] ===
+WHY IT MATTERS: Exhibit 2.1 shows that four of the five regions peak in
+the same After-work block, so the block mix alone is a weak basis for
+regional rostering. The real divergence is WHEN IN THE WEEK each block
+is busy. A weekend share above 28.6 percent means those two days are
+pulling more than their calendar weight in that block, and that is the
+number a regional roster is actually built on.
+
+                                 WEEKDAY      WEEKEND WEEKEND VS 28.6%
+REGION         BLOCK               SALES        SALES SHARE % CALENDAR
+-------------- ------------ ------------ ------------ ------- ------------
+Central        1 Opening          15,886        6,876    30.2 OVER
+Central        2 Midday           25,669        9,346    26.7 under
+Central        3 After-work       23,992       12,840    34.9 OVER
+Central        4 Late             20,224        8,311    29.1 OVER
+East Coast     1 Opening           3,455        2,260    39.5 OVER
+East Coast     2 Midday            5,048        1,963    28.0 under
+East Coast     3 After-work        4,215        1,800    29.9 OVER
+East Coast     4 Late              5,428        1,533    22.0 under
+East Malaysia  1 Opening           3,587        2,125    37.2 OVER
+East Malaysia  2 Midday            4,317        1,239    22.3 under
+East Malaysia  3 After-work        5,965        1,229    17.1 under
+East Malaysia  4 Late              4,198        1,681    28.6 OVER
+Northern       1 Opening          10,183        4,431    30.3 OVER
+Northern       2 Midday           14,757        6,356    30.1 OVER
+Northern       3 After-work       15,688        8,812    36.0 OVER
+Northern       4 Late             11,524        6,309    35.4 OVER
+Southern       1 Opening           7,420        1,876    20.2 under
+Southern       2 Midday            8,516        5,029    37.1 OVER
+Southern       3 After-work        9,618        5,292    35.5 OVER
+Southern       4 Late              7,790        2,713    25.8 under
+
+============================================================================
+REPORT 3 - BRANCH RETURN LEAKAGE: REFUND-TO-SALES BY CAUSE
+Facts / Dims : sales_fact + return_fact x branch_dim x
+return_reason_dim x date_dim
+Measures     : net sales, refund amount, refund-to-sales percent,
+Fulfilment vs Product Quality split, days to return
+
+THE QUESTION: a refund is revenue that was booked and then handed
+back. The percentage matters more than the absolute, because the
+largest branch will always refund the most ringgit. The cause split
+is what makes the number actionable: Fulfilment-caused returns
+(Missing, Wrong Item) are a branch picking and packing failure and
+the branch manager owns them. Quality-caused returns (Broken,
+Expired) are a supplier, handling or cold-chain failure and
+procurement owns them. Same symptom, different department.
+
+COUNTED AS LEAKAGE: return_status IN ('Approved','Refunded') only.
+A Pending or Rejected return has not cost the company anything yet.
+============================================================================
+
+--- EXHIBIT 3.1  Company-wide baseline ===
+WHY IT COMES FIRST: every branch figure in 3.2 is judged against this
+one number. It is also the value to enter as the constant reference
+line on Chart B3a - without it the bar chart shows which branch is
+worst but not whether ANY of them is unacceptable.
+
+MEASURE                                          VALUE
+------------------------------------------------ ------------------
+Net sales, 2024 onward (RM)                           299,500.14
+Refunds settled (RM)                                    7,363.41
+>>> COMPANY REFUND-TO-SALES % (reference line)      2.46
+Refunds caused by Fulfilment (RM)                       4,057.90
+Refunds caused by Product Quality (RM)                  3,305.51
+Fulfilment share of refund value (%)               55.1
+Units returned                                            816
+Average days to return                              5.4
+
+--- EXHIBIT 3.2  Return leakage by branch  [CHART: bar + reference line] ===
+WHAT EACH COLUMN IS FOR: Refund-to-Sales % is the headline and the
+rank is built on it, not on refund ringgit, so a large branch is not
+punished for being large. The two cause columns are the same refund
+value split by who owns the fix. Avg Days to Return is a diagnostic:
+a Quality problem found in two days is damage in transit, one found in
+twenty is shelf life. The subtotal rows below each region come from
+BREAK ON with COMPUTE SUM.
+
+HOW THE TWO FACTS ARE COMBINED: each fact is collapsed to one row per
+branch in its own CTE before the join. A direct join of the two line
+grain tables would multiply every sales line by every return line.
+
+REPORT 3 - BRANCH RETURN LEAKAGE BY CAUSE                                                                                                       Run: 30-AUG-2026
+All-branches era 2024 onward.  Returns matched to sales on ORDER date.
+
+                                            NET SALES       REFUNDS REFUND TO    FULFILMENT       QUALITY  AVG DAYS      RANK
+REGION         BRANCH                            (RM)          (RM)   SALES %      CAUSE RM      CAUSE RM TO RETURN WORST 1st
+-------------- ---------------------- --------------- ------------- --------- ------------- ------------- --------- ---------
+Central        Cheras Branch                23,794.99        721.50      3.03        536.14        185.36       5.8         3
+               Rawang Branch                26,870.85        743.61      2.77        412.67        330.94       5.4         5
+               Shah Alam Branch             24,650.68        633.08      2.57        334.79        298.29       6.1         6
+               Seremban Branch              24,303.86        580.05      2.39        273.67        306.38       6.1         7
+               Kepong Branch                23,522.57        458.93      1.95        274.43        184.50       6.0         9
+**************                        --------------- -------------           ------------- -------------
+REGION TOTAL                               123,142.95      3,137.17                1,831.70      1,305.47
+
+East Coast     Kuantan Branch               25,702.53        481.47      1.87        269.42        212.05       5.2        10
+**************                        --------------- -------------           ------------- -------------
+REGION TOTAL                                25,702.53        481.47                  269.42        212.05
+
+East Malaysia  Kuching Branch               24,341.80        524.46      2.15        160.31        364.15       4.6         8
+**************                        --------------- -------------           ------------- -------------
+REGION TOTAL                                24,341.80        524.46                  160.31        364.15
+
+Northern       Ipoh Branch                  27,103.70        831.42      3.07        486.97        344.45       4.3         2
+               Georgetown Branch            26,326.94        766.48      2.91        435.29        331.19       5.6         4
+               Alor Setar Branch            24,629.10        436.02      1.77        263.37        172.65       5.3        12
+**************                        --------------- -------------           ------------- -------------
+REGION TOTAL                                78,059.74      2,033.92                1,185.63        848.29
+
+Southern       Melaka City Branch           24,254.37        754.13      3.11        316.35        437.78       4.6         1
+               Johor Bahru Branch           23,998.75        432.26      1.80        294.49        137.77       5.8        11
+**************                        --------------- -------------           ------------- -------------
+REGION TOTAL                                48,253.12      1,186.39                  610.84        575.55
+
+
+--- EXHIBIT 3.3  Cause split by region  [CHART: stacked bar] ===
+WHY IT MATTERS: 3.2 gives the split as two ringgit columns per branch.
+This exhibit rolls it to region and adds the four underlying reasons,
+which is what turns a percentage into an instruction. Fulfilment
+dominated by Wrong Item is a picking and labelling problem; dominated
+by Missing it is a packing or shrinkage problem. Quality dominated by
+Expired is stock rotation; dominated by Broken it is handling or
+transit.
+
+               CAUSE                              UNITS        REFUND SHARE OF  AVG DAYS
+REGION         CATEGORY         REASON         RETURNED          (RM) REGION % TO RETURN
+-------------- ---------------- -------------- -------- ------------- -------- ---------
+Central        Fulfilment       Wrong Item          107      1,216.94     38.8       5.4
+Central        Fulfilment       Missing              94        614.76     19.6       6.2
+Central        Product Quality  Expired              75        725.41     23.1       5.8
+Central        Product Quality  Broken               58        580.06     18.5       6.3
+East Coast     Fulfilment       Wrong Item           21        166.55     34.6       7.0
+East Coast     Fulfilment       Missing              16        102.87     21.4       5.2
+East Coast     Product Quality  Broken               20        126.54     26.3       3.7
+East Coast     Product Quality  Expired              16         85.51     17.8       5.6
+East Malaysia  Fulfilment       Missing               9         89.69     17.1       4.8
+East Malaysia  Fulfilment       Wrong Item           12         70.62     13.5       5.0
+East Malaysia  Product Quality  Broken               27        218.85     41.7       4.6
+East Malaysia  Product Quality  Expired              14        145.30     27.7       3.8
+Northern       Fulfilment       Wrong Item           73        793.46     39.0       4.6
+Northern       Fulfilment       Missing              46        392.17     19.3       6.3
+Northern       Product Quality  Expired              59        459.10     22.6       4.9
+Northern       Product Quality  Broken               45        389.19     19.1       4.8
+Southern       Fulfilment       Missing              24        310.07     26.1       4.4
+Southern       Fulfilment       Wrong Item           35        300.77     25.4       5.8
+Southern       Product Quality  Broken               22        290.89     24.5       4.2
+Southern       Product Quality  Expired              43        284.66     24.0       5.7
+
+============================================================================
+END OF DOMAIN B REPORTS
+============================================================================
+SQL> spool off

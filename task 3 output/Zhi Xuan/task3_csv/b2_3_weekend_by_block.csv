@@ -1,0 +1,21 @@
+Region,Block,BlockOrder,WeekdaySales,WeekendSales,WeekendSharePct,VsCalendar
+Central,Opening 08-11,1,15886,6876,30.2,Over
+Central,Midday 12-16,2,25669,9346,26.7,Under
+Central,After-work 17-19,3,23992,12840,34.9,Over
+Central,Late 20-22,4,20224,8311,29.1,Over
+East Coast,Opening 08-11,1,3455,2260,39.5,Over
+East Coast,Midday 12-16,2,5048,1963,28.0,Under
+East Coast,After-work 17-19,3,4215,1800,29.9,Over
+East Coast,Late 20-22,4,5428,1533,22.0,Under
+East Malaysia,Opening 08-11,1,3587,2125,37.2,Over
+East Malaysia,Midday 12-16,2,4317,1239,22.3,Under
+East Malaysia,After-work 17-19,3,5965,1229,17.1,Under
+East Malaysia,Late 20-22,4,4198,1681,28.6,Over
+Northern,Opening 08-11,1,10183,4431,30.3,Over
+Northern,Midday 12-16,2,14757,6356,30.1,Over
+Northern,After-work 17-19,3,15688,8812,36.0,Over
+Northern,Late 20-22,4,11524,6309,35.4,Over
+Southern,Opening 08-11,1,7420,1876,20.2,Under
+Southern,Midday 12-16,2,8516,5029,37.1,Over
+Southern,After-work 17-19,3,9618,5292,35.5,Over
+Southern,Late 20-22,4,7790,2713,25.8,Under
