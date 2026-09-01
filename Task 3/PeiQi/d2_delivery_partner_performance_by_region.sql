@@ -479,7 +479,6 @@ PROMPT              can create extreme percentages such as 0% or 100%.
 PROMPT ====================================================================================================
 PROMPT
 
-COLUMN month_no        HEADING 'Month|No.'      FORMAT 99
 COLUMN month_name      HEADING 'Month'          FORMAT A12
 COLUMN company_name    HEADING 'Company'        FORMAT A26
 COLUMN delivered       HEADING 'Delivered'      FORMAT 999,990
@@ -525,7 +524,6 @@ WITH monthly AS (
         dc.company_name
 )
 SELECT
-    month_no,
     month_name,
     company_name,
     delivered,
