@@ -30,7 +30,7 @@ PROMPT
 SET TERMOUT OFF
 
 -- ============================================================================
--- CHART 1 - WHERE: RETURN RATE BY ITEM CATEGORY
+-- EXHIBIT D1.1 - WHERE: RETURN RATE BY ITEM CATEGORY
 -- ============================================================================
 
 SPOOL C:\Users\tpq11\task3_csv\d1_return_rate_by_category.csv
@@ -86,7 +86,7 @@ ORDER BY
 SPOOL OFF
 
 -- ============================================================================
--- CHART 2 - WHAT: RETURN REASON MIX PER ITEM CATEGORY
+-- EXHIBIT D1.2 - WHAT: RETURN REASON MIX PER ITEM CATEGORY
 -- ============================================================================
 
 SPOOL C:\Users\tpq11\task3_csv\d1_reason_mix.csv
@@ -119,7 +119,7 @@ ORDER BY i.category_name;
 SPOOL OFF
 
 -- ============================================================================
--- CHART 3 - WHO: REFUND RESPONSIBILITY
+-- EXHIBIT D1.3 - WHO: REFUND RESPONSIBILITY
 -- ============================================================================
 
 SPOOL C:\Users\tpq11\task3_csv\d1_refund_by_reason_category.csv
@@ -156,7 +156,14 @@ ORDER BY refund_amount DESC;
 SPOOL OFF
 
 -- ============================================================================
--- CHART 4 - WHEN: RETURN TIMING
+-- EXHIBIT D1.4 - WHY: DOMINANT RETURN REASON BY ITEM CATEGORY
+-- Supporting table only.
+-- No separate CSV/chart export is required because the category-level reason
+-- pattern is already visualised in Exhibit D1.2.
+-- ============================================================================
+
+-- ============================================================================
+-- EXHIBIT D1.5 - WHEN: RETURN TIMING
 -- ============================================================================
 
 SPOOL C:\Users\tpq11\task3_csv\d1_return_timing.csv
