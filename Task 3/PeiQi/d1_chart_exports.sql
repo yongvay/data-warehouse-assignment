@@ -3,8 +3,8 @@
 -- D1 CHART CSV EXPORT - ORACLE SQL*PLUS 11g COMPATIBLE
 --
 -- Creates:
---   D:\data-warehouse-assignment\Task 3\PeiQi\task3_csv\d1_reason_mix.csv
---   D:\data-warehouse-assignment\Task 3\PeiQi\task3_csv\d1_refund_by_reason_category.csv
+--   C:\data-warehouse-assignment\Task 3\PeiQi\task3_csv\d1_reason_mix.csv
+--   C:\data-warehouse-assignment\Task 3\PeiQi\task3_csv\d1_refund_by_reason_category.csv
 -- ============================================================================
 
 SET DEFINE ON
@@ -30,7 +30,7 @@ PROMPT
 
 SET TERMOUT OFF
 
-SPOOL "D:\data-warehouse-assignment\Task 3\PeiQi\task3_csv\d1_reason_mix.csv"
+SPOOL "C:\data-warehouse-assignment\Task 3\PeiQi\task3_csv\d1_reason_mix.csv"
 
 PROMPT Category,Missing,Broken,Expired,Wrong Item
 
@@ -65,7 +65,7 @@ SPOOL OFF
 -- CSV 2: REFUND VALUE BY REASON CATEGORY
 -- ============================================================================
 
-SPOOL "D:\data-warehouse-assignment\Task 3\PeiQi\task3_csv\d1_refund_by_reason_category.csv"
+SPOOL "C:\data-warehouse-assignment\Task 3\PeiQi\task3_csv\d1_refund_by_reason_category.csv"
 
 PROMPT Reason Category,Refund Amount,Refund Share %
 
