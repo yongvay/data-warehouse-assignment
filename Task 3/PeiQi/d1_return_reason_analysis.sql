@@ -22,6 +22,7 @@
 --   prevent fact-to-fact fan-out/double counting.
 -- ============================================================================
 
+SET DEFINE ON
 SET SQLBLANKLINES ON
 SET VERIFY OFF
 SET FEEDBACK OFF
