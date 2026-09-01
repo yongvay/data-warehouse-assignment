@@ -27,8 +27,7 @@ PROMPT
 -- MAIN REPORT
 -- ============================================================================
 
-TTITLE LEFT 'D1 - RETURN REASON ANALYSIS BY ITEM CATEGORY' -
-       RIGHT 'Page ' FORMAT 999 SQL.PNO SKIP 1 -
+TTITLE LEFT 'D1 - RETURN REASON ANALYSIS BY ITEM CATEGORY' SKIP 1 -
        LEFT 'Original Order Cohort Year: &p_year' SKIP 2
 
 COLUMN return_rank         HEADING 'Rank'                   FORMAT 99999
