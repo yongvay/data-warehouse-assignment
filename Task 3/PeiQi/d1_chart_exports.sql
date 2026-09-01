@@ -1,38 +1,49 @@
 -- ============================================================================
--- D1 CHART CSV EXPORT
--- Run with the same p_year used for d1_return_reason_analysis.sql
+-- TASK 3 - STUDENT D (PEI QI)
+-- D1 CHART CSV EXPORT - ORACLE SQL*PLUS 11g COMPATIBLE
 --
 -- Creates:
---   d1_reason_mix.csv
---   d1_refund_by_reason_category.csv
---
--- Before running, create a folder called:
---   task3_csv
--- in your current SQL*Plus working directory.
+--   D:\data-warehouse-assignment\Task 3\PeiQi\task3_csv\d1_reason_mix.csv
+--   D:\data-warehouse-assignment\Task 3\PeiQi\task3_csv\d1_refund_by_reason_category.csv
 -- ============================================================================
 
+SET DEFINE ON
 SET VERIFY OFF
 SET FEEDBACK OFF
-SET HEADING ON
+SET HEADING OFF
+SET ECHO OFF
+SET TERMOUT ON
 SET PAGESIZE 0
 SET LINESIZE 32767
 SET TRIMSPOOL ON
-SET MARKUP CSV ON DELIMITER , QUOTE ON
+SET TAB OFF
 
-ACCEPT p_year NUMBER DEFAULT 2025 PROMPT 'Enter original order cohort year [2025]: '
+ACCEPT p_year CHAR DEFAULT '2025' PROMPT 'Enter original order cohort year [2025]: '
 
-SPOOL task3_csv/d1_reason_mix.csv
+PROMPT
+PROMPT Exporting D1 chart data for &p_year ...
+PROMPT
+
+-- ============================================================================
+-- CSV 1: RETURN REASON MIX PER ITEM CATEGORY
+-- ============================================================================
+
+SET TERMOUT OFF
+
+SPOOL "D:\data-warehouse-assignment\Task 3\PeiQi\task3_csv\d1_reason_mix.csv"
+
+PROMPT Category,Missing,Broken,Expired,Wrong Item
 
 SELECT
-    i.category_name AS "Category",
-    SUM(CASE WHEN rr.reason_name = 'Missing'
-             THEN rf.quantity_returned ELSE 0 END) AS "Missing",
-    SUM(CASE WHEN rr.reason_name = 'Broken'
-             THEN rf.quantity_returned ELSE 0 END) AS "Broken",
-    SUM(CASE WHEN rr.reason_name = 'Expired'
-             THEN rf.quantity_returned ELSE 0 END) AS "Expired",
-    SUM(CASE WHEN rr.reason_name = 'Wrong Item'
-             THEN rf.quantity_returned ELSE 0 END) AS "Wrong Item"
+    '"' || REPLACE(i.category_name, '"', '""') || '",' ||
+    TO_CHAR(SUM(CASE WHEN rr.reason_name = 'Missing'
+                     THEN rf.quantity_returned ELSE 0 END)) || ',' ||
+    TO_CHAR(SUM(CASE WHEN rr.reason_name = 'Broken'
+                     THEN rf.quantity_returned ELSE 0 END)) || ',' ||
+    TO_CHAR(SUM(CASE WHEN rr.reason_name = 'Expired'
+                     THEN rf.quantity_returned ELSE 0 END)) || ',' ||
+    TO_CHAR(SUM(CASE WHEN rr.reason_name = 'Wrong Item'
+                     THEN rf.quantity_returned ELSE 0 END))
 FROM return_fact rf
 JOIN return_reason_dim rr
   ON rr.reason_key = rf.reason_key
@@ -40,7 +51,7 @@ JOIN item_dim i
   ON i.item_key = rf.item_key
 JOIN date_dim d
   ON d.date_key = rf.order_date_key
-WHERE d.cal_year = &p_year
+WHERE d.cal_year = TO_NUMBER('&p_year')
   AND i.category_id <> 'UNKN'
   AND rr.reason_name <> 'Unknown'
 GROUP BY
@@ -50,7 +61,13 @@ ORDER BY i.category_name;
 
 SPOOL OFF
 
-SPOOL task3_csv/d1_refund_by_reason_category.csv
+-- ============================================================================
+-- CSV 2: REFUND VALUE BY REASON CATEGORY
+-- ============================================================================
+
+SPOOL "D:\data-warehouse-assignment\Task 3\PeiQi\task3_csv\d1_refund_by_reason_category.csv"
+
+PROMPT Reason Category,Refund Amount,Refund Share %
 
 WITH refund_reason AS (
     SELECT
@@ -61,25 +78,35 @@ WITH refund_reason AS (
       ON rr.reason_key = rf.reason_key
     JOIN date_dim d
       ON d.date_key = rf.order_date_key
-    WHERE d.cal_year = &p_year
+    WHERE d.cal_year = TO_NUMBER('&p_year')
       AND rr.reason_category <> 'Unknown'
     GROUP BY rr.reason_category
 )
 SELECT
-    reason_category AS "Reason Category",
-    ROUND(refund_amount, 2) AS "Refund Amount",
-    ROUND(
-        100 * refund_amount /
-        NULLIF(SUM(refund_amount) OVER (), 0),
-        2
-    ) AS "Refund Share %"
+    '"' || REPLACE(reason_category, '"', '""') || '",' ||
+    TO_CHAR(refund_amount, 'FM999999990.00') || ',' ||
+    TO_CHAR(
+        ROUND(
+            100 * refund_amount /
+            NULLIF(SUM(refund_amount) OVER (), 0),
+            2
+        ),
+        'FM990.00'
+    )
 FROM refund_reason
 ORDER BY refund_amount DESC;
 
 SPOOL OFF
 
-SET MARKUP CSV OFF
+SET TERMOUT ON
 SET HEADING ON
 SET FEEDBACK ON
+
+PROMPT
+PROMPT Export complete.
+PROMPT Files created:
+PROMPT   D:\data-warehouse-assignment\Task 3\PeiQi\task3_csv\d1_reason_mix.csv
+PROMPT   D:\data-warehouse-assignment\Task 3\PeiQi\task3_csv\d1_refund_by_reason_category.csv
+PROMPT
 
 UNDEFINE p_year
