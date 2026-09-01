@@ -49,12 +49,12 @@ PROMPT =========================================================================
 PROMPT
 
 -- ============================================================================
--- EXHIBIT D1-1
+-- EXHIBIT D1.1
 -- WHERE: WHICH ITEM CATEGORIES CARRY THE HIGHEST RETURN EXPOSURE?
 -- ============================================================================
 
 PROMPT ==========================================================================================
-PROMPT EXHIBIT D1-1 - WHERE: RETURN EXPOSURE BY ITEM CATEGORY
+PROMPT EXHIBIT D1.1 - WHERE: RETURN EXPOSURE BY ITEM CATEGORY
 PROMPT Chart type : Horizontal Bar Chart
 PROMPT Purpose    : Ranks item categories by Return Rate % to show where exposure is highest.
 PROMPT Ranked by Return Rate %, then returned quantity and refund amount.
@@ -174,14 +174,14 @@ CLEAR COLUMNS
 TTITLE OFF
 
 -- ============================================================================
--- EXHIBIT D1-A
+-- EXHIBIT D1.2
 -- WHAT: WHAT RETURN REASONS ARE OCCURRING?
 -- CHART: STACKED COLUMN
 -- ============================================================================
 
 PROMPT
 PROMPT ==========================================================================================
-PROMPT EXHIBIT D1-A - WHAT: RETURN REASON MIX PER ITEM CATEGORY
+PROMPT EXHIBIT D1.2 - WHAT: RETURN REASON MIX PER ITEM CATEGORY
 PROMPT Chart type : Stacked Column Chart
 PROMPT Purpose    : Shows Missing, Broken, Expired and Wrong Item quantities by category.
 PROMPT ==========================================================================================
@@ -229,14 +229,14 @@ ORDER BY category_name;
 CLEAR COLUMNS
 
 -- ============================================================================
--- EXHIBIT D1-B
+-- EXHIBIT D1.3
 -- WHO: WHICH RESPONSIBILITY AREA CARRIES THE REFUND EXPOSURE?
 -- CHART: PIE
 -- ============================================================================
 
 PROMPT
 PROMPT ==========================================================================================
-PROMPT EXHIBIT D1-B - WHO: REFUND RESPONSIBILITY BY RETURN REASON CATEGORY
+PROMPT EXHIBIT D1.3 - WHO: REFUND RESPONSIBILITY BY RETURN REASON CATEGORY
 PROMPT Chart type      : Pie Chart
 PROMPT Purpose         : Compares refund exposure between Fulfilment and Product Quality.
 PROMPT Fulfilment      : Missing + Wrong Item
@@ -275,13 +275,13 @@ ORDER BY refund_amount DESC;
 CLEAR COLUMNS
 
 -- ============================================================================
--- EXHIBIT D1-C
+-- EXHIBIT D1.4
 -- WHY: DOMINANT RETURN REASON WITHIN EACH ITEM CATEGORY
 -- ============================================================================
 
 PROMPT
 PROMPT ==========================================================================================
-PROMPT EXHIBIT D1-C - WHY: DOMINANT RETURN REASON BY ITEM CATEGORY
+PROMPT EXHIBIT D1.4 - WHY: DOMINANT RETURN REASON BY ITEM CATEGORY
 PROMPT Chart type : Supporting Table (No Separate Chart)
 PROMPT Purpose    : Identifies the main return driver within each category.
 PROMPT ==========================================================================================
@@ -351,13 +351,13 @@ ORDER BY category_name, dominant_reason;
 CLEAR COLUMNS
 
 -- ============================================================================
--- EXHIBIT D1-D
+-- EXHIBIT D1.5
 -- WHEN: HOW SOON AFTER THE ORIGINAL SALE ARE PRODUCTS RETURNED?
 -- ============================================================================
 
 PROMPT
 PROMPT ==========================================================================================
-PROMPT EXHIBIT D1-D - WHEN: RETURN TIMING AFTER ORIGINAL SALE
+PROMPT EXHIBIT D1.5 - WHEN: RETURN TIMING AFTER ORIGINAL SALE
 PROMPT Chart type : Column Chart
 PROMPT Purpose    : Shows how quickly returned units come back after the original purchase.
 PROMPT ==========================================================================================
