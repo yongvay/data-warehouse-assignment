@@ -105,8 +105,8 @@ SET FEEDBACK ON
 PROMPT
 PROMPT Export complete.
 PROMPT Files created:
-PROMPT   D:\data-warehouse-assignment\Task 3\PeiQi\task3_csv\d1_reason_mix.csv
-PROMPT   D:\data-warehouse-assignment\Task 3\PeiQi\task3_csv\d1_refund_by_reason_category.csv
+PROMPT   C:\Users\tpq11\task3_csv\d1_reason_mix.csv
+PROMPT   C:\Users\tpq11\task3_csv\d1_refund_by_reason_category.csv
 PROMPT
 
 UNDEFINE p_year
