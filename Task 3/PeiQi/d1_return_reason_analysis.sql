@@ -1,25 +1,6 @@
 -- ============================================================================
 -- TASK 3 - STUDENT D (PEI QI)
 -- D1. RETURN REASON ANALYSIS BY ITEM CATEGORY
---
--- Question:
---   What are we getting back, and why?
---
--- Facts / Dimensions:
---   RETURN_FACT + RETURN_REASON_DIM + ITEM_DIM
---   SALES_FACT is used separately for the quantity-sold denominator.
---   DATE_DIM is used only to select a comparable original-order cohort year.
---
--- IMPORTANT ANALYTICAL RULE:
---   Returns are filtered by RETURN_FACT.ORDER_DATE_KEY (the original sale date),
---   and SALES_FACT is filtered by the same year. This keeps:
---
---      Return Rate % = Qty Returned / Qty Sold
---
---   on the same sales cohort.
---
---   RETURN_FACT and SALES_FACT are aggregated separately BEFORE joining, to
---   prevent fact-to-fact fan-out/double counting.
 -- ============================================================================
 
 SET DEFINE ON
@@ -27,40 +8,45 @@ SET SQLBLANKLINES ON
 SET VERIFY OFF
 SET FEEDBACK OFF
 SET TRIMSPOOL ON
-SET LINESIZE 220
+SET TAB OFF
+SET LINESIZE 170
 SET PAGESIZE 100
+SET NULL '-'
 
-ACCEPT p_year NUMBER DEFAULT 2025 PROMPT 'Enter original order cohort year [2025]: '
+ACCEPT p_year CHAR DEFAULT '2025' PROMPT 'Enter original order cohort year [2025]: '
 
 PROMPT
-PROMPT ============================================================================
+PROMPT ==========================================================================================
 PROMPT D1 - RETURN REASON ANALYSIS BY ITEM CATEGORY
-PROMPT Question: What are we getting back, and why?
-PROMPT Cohort: Items originally sold in &p_year
-PROMPT ============================================================================
+PROMPT Question : What are we getting back, and why?
+PROMPT Cohort   : Items originally sold in &p_year
+PROMPT ==========================================================================================
 PROMPT
 
-TTITLE CENTER 'D1 - RETURN REASON ANALYSIS BY ITEM CATEGORY' -
-       RIGHT 'Page:' FORMAT 999 SQL.PNO SKIP 1 -
-       CENTER 'Original Order Cohort Year: &p_year' SKIP 2
+-- ============================================================================
+-- MAIN REPORT
+-- ============================================================================
 
-COLUMN return_rank         HEADING 'Rank'              FORMAT 999
-COLUMN category_name       HEADING 'Category'          FORMAT A24
-COLUMN missing_qty         HEADING 'Missing'           FORMAT 999,990
-COLUMN broken_qty          HEADING 'Broken'            FORMAT 999,990
-COLUMN expired_qty         HEADING 'Expired'           FORMAT 999,990
-COLUMN wrong_item_qty      HEADING 'Wrong|Item'        FORMAT 999,990
-COLUMN total_qty_returned  HEADING 'Total Qty|Returned' FORMAT 999,990
-COLUMN refund_amount       HEADING 'Refund|Amount (RM)' FORMAT 999,999,990.00
-COLUMN return_rate_pct     HEADING 'Return|Rate %'     FORMAT 990.99
-COLUMN avg_days_to_return  HEADING 'Avg Days|to Return' FORMAT 990.99
+TTITLE LEFT 'D1 - RETURN REASON ANALYSIS BY ITEM CATEGORY' -
+       RIGHT 'Page ' FORMAT 999 SQL.PNO SKIP 1 -
+       LEFT 'Original Order Cohort Year: &p_year' SKIP 2
+
+COLUMN return_rank         HEADING 'Rank'                   FORMAT 99999
+COLUMN category_name       HEADING 'Category'               FORMAT A22
+COLUMN missing_qty         HEADING 'Missing'                FORMAT 999,990
+COLUMN broken_qty          HEADING 'Broken'                 FORMAT 999,990
+COLUMN expired_qty         HEADING 'Expired'                FORMAT 999,990
+COLUMN wrong_item_qty      HEADING 'Wrong|Item'             FORMAT 999,990
+COLUMN total_qty_returned  HEADING 'Total Qty|Returned'     FORMAT 999,990
+COLUMN refund_amount       HEADING 'Refund Amount|(RM)'     FORMAT 999,999,990.00
+COLUMN return_rate_pct     HEADING 'Return|Rate %'          FORMAT 990.99
+COLUMN avg_days_to_return  HEADING 'Avg Days|to Return'     FORMAT 990.99
 
 BREAK ON REPORT
 COMPUTE SUM LABEL 'TOTAL' OF missing_qty broken_qty expired_qty wrong_item_qty -
     total_qty_returned refund_amount ON REPORT
 
 WITH
--- CTE 1: quantity sold by item category for the selected original-order year.
 sales_by_category AS (
     SELECT
         i.category_id,
@@ -71,16 +57,12 @@ sales_by_category AS (
       ON i.item_key = sf.item_key
     JOIN date_dim d
       ON d.date_key = sf.order_date_key
-    WHERE d.cal_year = &p_year
+    WHERE d.cal_year = TO_NUMBER('&p_year')
       AND i.category_id <> 'UNKN'
     GROUP BY
         i.category_id,
         i.category_name
 ),
-
--- CTE 2: returned quantity by reason, category, and the SAME original-order year.
--- The four reason names are constrained by RETURN_REASON_DIM:
--- Missing, Broken, Expired, Wrong Item.
 returns_by_category AS (
     SELECT
         i.category_id,
@@ -121,15 +103,13 @@ returns_by_category AS (
       ON i.item_key = rf.item_key
     JOIN date_dim d
       ON d.date_key = rf.order_date_key
-    WHERE d.cal_year = &p_year
+    WHERE d.cal_year = TO_NUMBER('&p_year')
       AND i.category_id <> 'UNKN'
       AND rr.reason_name <> 'Unknown'
     GROUP BY
         i.category_id,
         i.category_name
 ),
-
--- CTE 3: combine the two fact aggregates only after each has reached category grain.
 category_metrics AS (
     SELECT
         r.category_id,
@@ -150,8 +130,6 @@ category_metrics AS (
     JOIN sales_by_category s
       ON s.category_id = r.category_id
 ),
-
--- CTE 4: rank categories by return-rate exposure, then returned volume.
 ranked AS (
     SELECT
         cm.*,
@@ -163,7 +141,6 @@ ranked AS (
         ) AS return_rank
     FROM category_metrics cm
 )
-
 SELECT
     return_rank,
     category_name,
@@ -185,15 +162,18 @@ CLEAR COMPUTES
 CLEAR COLUMNS
 TTITLE OFF
 
+-- ============================================================================
+-- CHART EXHIBIT D1-A
+-- ============================================================================
+
 PROMPT
-PROMPT ============================================================================
-PROMPT CHART EXHIBIT D1-A
-PROMPT STACKED COLUMN: RETURN REASON MIX PER ITEM CATEGORY
-PROMPT Use Category as X-axis and the four reason-quantity columns as stacks.
-PROMPT ============================================================================
+PROMPT ==========================================================================================
+PROMPT CHART EXHIBIT D1-A - RETURN REASON MIX PER ITEM CATEGORY
+PROMPT Chart type: Stacked Column
+PROMPT ==========================================================================================
 PROMPT
 
-COLUMN category_name   HEADING 'Category'   FORMAT A24
+COLUMN category_name   HEADING 'Category'   FORMAT A22
 COLUMN missing_qty     HEADING 'Missing'    FORMAT 999,990
 COLUMN broken_qty      HEADING 'Broken'     FORMAT 999,990
 COLUMN expired_qty     HEADING 'Expired'    FORMAT 999,990
@@ -218,7 +198,7 @@ WITH reason_mix AS (
       ON i.item_key = rf.item_key
     JOIN date_dim d
       ON d.date_key = rf.order_date_key
-    WHERE d.cal_year = &p_year
+    WHERE d.cal_year = TO_NUMBER('&p_year')
       AND i.category_id <> 'UNKN'
       AND rr.reason_name <> 'Unknown'
     GROUP BY
@@ -236,19 +216,22 @@ ORDER BY category_name;
 
 CLEAR COLUMNS
 
+-- ============================================================================
+-- CHART EXHIBIT D1-B
+-- ============================================================================
+
 PROMPT
-PROMPT ============================================================================
-PROMPT CHART EXHIBIT D1-B
-PROMPT PIE: REFUND VALUE BY REASON CATEGORY
-PROMPT RETURN_REASON_DIM maps:
-PROMPT   Fulfilment     = Missing + Wrong Item
-PROMPT   Product Quality = Broken + Expired
-PROMPT ============================================================================
+PROMPT ==========================================================================================
+PROMPT CHART EXHIBIT D1-B - REFUND VALUE BY RETURN REASON CATEGORY
+PROMPT Chart type: Pie
+PROMPT Fulfilment      = Missing + Wrong Item
+PROMPT Product Quality = Broken + Expired
+PROMPT ==========================================================================================
 PROMPT
 
-COLUMN reason_category HEADING 'Reason Category' FORMAT A20
-COLUMN refund_amount   HEADING 'Refund Amount (RM)' FORMAT 999,999,990.00
-COLUMN refund_share_pct HEADING 'Refund Share %' FORMAT 990.99
+COLUMN reason_category   HEADING 'Reason Category'    FORMAT A20
+COLUMN refund_amount     HEADING 'Refund Amount|(RM)' FORMAT 999,999,990.00
+COLUMN refund_share_pct  HEADING 'Refund|Share %'     FORMAT 990.99
 
 WITH refund_reason AS (
     SELECT
@@ -259,7 +242,7 @@ WITH refund_reason AS (
       ON rr.reason_key = rf.reason_key
     JOIN date_dim d
       ON d.date_key = rf.order_date_key
-    WHERE d.cal_year = &p_year
+    WHERE d.cal_year = TO_NUMBER('&p_year')
       AND rr.reason_category <> 'Unknown'
     GROUP BY rr.reason_category
 )
@@ -276,52 +259,68 @@ ORDER BY refund_amount DESC;
 
 CLEAR COLUMNS
 
+-- ============================================================================
+-- DATA QUALITY CHECK
+-- ============================================================================
+
 PROMPT
-PROMPT ============================================================================
-PROMPT D1 DATA-QUALITY CHECK
-PROMPT Categories with Return Rate > 100% indicate inconsistent source/test data.
-PROMPT Do NOT hide these rows; mention them in the report if they appear.
-PROMPT ============================================================================
+PROMPT ==========================================================================================
+PROMPT D1 DATA QUALITY CHECK - RETURN RATE ABOVE 100%
+PROMPT ==========================================================================================
 PROMPT
+
+COLUMN dq_status FORMAT A72 HEADING 'DQ Status'
 
 WITH
 sales_by_category AS (
     SELECT
         i.category_id,
-        i.category_name,
         SUM(sf.quantity) AS qty_sold
     FROM sales_fact sf
-    JOIN item_dim i ON i.item_key = sf.item_key
-    JOIN date_dim d ON d.date_key = sf.order_date_key
-    WHERE d.cal_year = &p_year
+    JOIN item_dim i
+      ON i.item_key = sf.item_key
+    JOIN date_dim d
+      ON d.date_key = sf.order_date_key
+    WHERE d.cal_year = TO_NUMBER('&p_year')
       AND i.category_id <> 'UNKN'
-    GROUP BY i.category_id, i.category_name
+    GROUP BY i.category_id
 ),
 returns_by_category AS (
     SELECT
         i.category_id,
-        i.category_name,
         SUM(rf.quantity_returned) AS qty_returned
     FROM return_fact rf
-    JOIN item_dim i ON i.item_key = rf.item_key
-    JOIN date_dim d ON d.date_key = rf.order_date_key
-    WHERE d.cal_year = &p_year
+    JOIN item_dim i
+      ON i.item_key = rf.item_key
+    JOIN date_dim d
+      ON d.date_key = rf.order_date_key
+    WHERE d.cal_year = TO_NUMBER('&p_year')
       AND i.category_id <> 'UNKN'
-    GROUP BY i.category_id, i.category_name
+    GROUP BY i.category_id
+),
+bad_categories AS (
+    SELECT COUNT(*) AS bad_count
+    FROM returns_by_category r
+    JOIN sales_by_category s
+      ON s.category_id = r.category_id
+    WHERE 100 * r.qty_returned / NULLIF(s.qty_sold, 0) > 100
 )
 SELECT
-    r.category_name,
-    s.qty_sold,
-    r.qty_returned,
-    ROUND(100 * r.qty_returned / NULLIF(s.qty_sold, 0), 2) AS return_rate_pct
-FROM returns_by_category r
-JOIN sales_by_category s
-  ON s.category_id = r.category_id
-WHERE 100 * r.qty_returned / NULLIF(s.qty_sold, 0) > 100
-ORDER BY return_rate_pct DESC;
+    CASE
+        WHEN bad_count = 0
+        THEN 'PASS - No item category has a return rate above 100%.'
+        ELSE 'CHECK - ' || bad_count || ' item category/categories exceed a 100% return rate.'
+    END AS dq_status
+FROM bad_categories;
+
+CLEAR COLUMNS
 
 PROMPT
-PROMPT End of D1.
+PROMPT ==========================================================================================
+PROMPT END OF D1 - RETURN REASON ANALYSIS BY ITEM CATEGORY
+PROMPT ==========================================================================================
 PROMPT
 
 UNDEFINE p_year
+
+SET FEEDBACK ON
