@@ -55,6 +55,8 @@ PROMPT
 
 PROMPT ==========================================================================================
 PROMPT EXHIBIT D1-1 - WHERE: RETURN EXPOSURE BY ITEM CATEGORY
+PROMPT Chart type : Horizontal Bar Chart
+PROMPT Purpose    : Ranks item categories by Return Rate % to show where exposure is highest.
 PROMPT Ranked by Return Rate %, then returned quantity and refund amount.
 PROMPT ==========================================================================================
 PROMPT
@@ -180,7 +182,7 @@ TTITLE OFF
 PROMPT
 PROMPT ==========================================================================================
 PROMPT EXHIBIT D1-A - WHAT: RETURN REASON MIX PER ITEM CATEGORY
-PROMPT Chart type : Stacked Column
+PROMPT Chart type : Stacked Column Chart
 PROMPT Purpose    : Shows Missing, Broken, Expired and Wrong Item quantities by category.
 PROMPT ==========================================================================================
 PROMPT
@@ -235,7 +237,8 @@ CLEAR COLUMNS
 PROMPT
 PROMPT ==========================================================================================
 PROMPT EXHIBIT D1-B - WHO: REFUND RESPONSIBILITY BY RETURN REASON CATEGORY
-PROMPT Chart type      : Pie
+PROMPT Chart type      : Pie Chart
+PROMPT Purpose         : Compares refund exposure between Fulfilment and Product Quality.
 PROMPT Fulfilment      : Missing + Wrong Item
 PROMPT Product Quality : Broken + Expired
 PROMPT ==========================================================================================
@@ -279,7 +282,8 @@ CLEAR COLUMNS
 PROMPT
 PROMPT ==========================================================================================
 PROMPT EXHIBIT D1-C - WHY: DOMINANT RETURN REASON BY ITEM CATEGORY
-PROMPT Purpose: Identifies the main return driver within each category.
+PROMPT Chart type : Supporting Table (No Separate Chart)
+PROMPT Purpose    : Identifies the main return driver within each category.
 PROMPT ==========================================================================================
 PROMPT
 
@@ -354,7 +358,8 @@ CLEAR COLUMNS
 PROMPT
 PROMPT ==========================================================================================
 PROMPT EXHIBIT D1-D - WHEN: RETURN TIMING AFTER ORIGINAL SALE
-PROMPT Purpose: Shows how quickly returned units come back after the original purchase.
+PROMPT Chart type : Column Chart
+PROMPT Purpose    : Shows how quickly returned units come back after the original purchase.
 PROMPT ==========================================================================================
 PROMPT
 
