@@ -348,15 +348,17 @@ PROMPT Note       : Positive On-Time vs Avg = better than regional courier avera
 PROMPT ====================================================================================================
 PROMPT
 
-COLUMN address_region              HEADING 'Region'                 FORMAT A18
-COLUMN company_name                HEADING 'Company'                FORMAT A26
-COLUMN deliveries                  HEADING 'Deliveries'             FORMAT 999,990
-COLUMN avg_delivery_charge         HEADING 'Avg Charge|(RM)'        FORMAT 999,990.00
-COLUMN charge_vs_region_avg        HEADING 'Charge vs Avg|(RM)'     FORMAT 999,990.00
-COLUMN on_time_pct                 HEADING 'On-Time|%'              FORMAT 990.99
-COLUMN on_time_vs_region_avg       HEADING 'On-Time vs Avg|(pp)'    FORMAT 9990.99
-COLUMN cancelled_pct               HEADING 'Cancelled|%'            FORMAT 990.99
-COLUMN cost_per_delivered_order    HEADING 'Cost / Delivered|(RM)'  FORMAT 999,990.00
+SET LINESIZE 220
+
+COLUMN address_region            HEADING 'Region'           FORMAT A12
+COLUMN company_name              HEADING 'Company'          FORMAT A24
+COLUMN deliveries                HEADING 'Deliveries'       FORMAT 999,990
+COLUMN avg_delivery_charge       HEADING 'Avg Charge'       FORMAT 9,990.99
+COLUMN charge_vs_region_avg      HEADING 'Charge Gap'       FORMAT 9,990.99
+COLUMN on_time_pct               HEADING 'On-Time %'        FORMAT 990.99
+COLUMN on_time_vs_region_avg     HEADING 'On-Time Gap'      FORMAT 9,990.99
+COLUMN cancelled_pct             HEADING 'Cancel %'         FORMAT 990.99
+COLUMN cost_per_delivered_order  HEADING 'Cost/Delivered'   FORMAT 9,990.99
 
 WITH base AS (
     SELECT
