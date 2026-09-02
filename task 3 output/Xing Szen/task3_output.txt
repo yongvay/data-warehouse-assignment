@@ -1,394 +1,287 @@
-SQL> @"C:\Users\PC\Desktop\DW\Task 3\task3_xs_reports.sql"
+SQL> @"C:\Users\PC\Desktop\DW\Task 3\Xing Szen\task3_xs_reports.sql"
 
-============================================================================
-REPORT 1 - RANGE EXPANSION AND SEASONAL DEMAND
-Dimensions: date_dim (year, quarter) x item_dim (category)
-Measures  : orders, order lines, gross, discount, net revenue
-============================================================================
+Creating analytical views ...
+Views created.
 
---- EXHIBIT 1.1  Trading range and revenue, by year ------------------------ PROMPT WHAT: the headline. Range doubles, revenue grows roughly fivefold.
-NOTE: 2026 is Jan-Aug only and is shown for completeness, not comparison.
+============================================================
+Report 1 - Range Expansion and Seasonal Demand
+============================================================
+Please provide the analysis period. It applies to all three reports.
+Enter Start Year (e.g., 2016): 2016
+Enter End Year   (e.g., 2025): 2025
 
-  CAL_YEAR CATEGORIES ITEMS_SOLD     ORDERS ORDER_LINES NET_REVENUE AVG_BASKET
----------- ---------- ---------- ---------- ----------- ----------- ----------
-      2016          6         28        250         695       14337      57.35
-      2017          7         32        330         937       19155      58.05
-      2018          8         36        430        1242       26101       60.7
-      2019          9         39        540        1493       32144      59.53
-      2020         10         43        330         878       19640      59.51
-      2021         10         47        450        1235       28213       62.7
-      2022         11         49        680        1796       47682      70.12
-      2023         12         54        900        2438       73699      81.89
-      2024         12         54       1100        3012       93023      84.57
-      2025         12         54       1350        3746      124891      92.51
-      2026         12         54       1002        2709       81865       81.7
+          ============================================================
+                             Annual Trading Summary
+                             For Years 2016 to 2025
+          ============================================================
+Report Generated on: 02-SEP-26                                  Page:          1
 
---- EXHIBIT 1.2  Year-on-year growth, and the 2020 shock ------------------ PROMPT WHY: isolates the pandemic dip and the speed of recovery.
-2026 excluded - a part year cannot carry a YoY percentage.
+                                Ord per   Net Revenue Avg Basket
+ Year Brch   Cust Items  Orders    Cust          (RM)       (RM) YoY
+----- ---- ------ ----- ------- ------- ------------- ---------- --------
+ 2016    4    103    28     250    2.43     14,337.46      57.35      -
+ 2017    6    166    32     330    1.99     19,154.95      58.05  +33.6%
+ 2018    7    233    36     430    1.85     26,100.75      60.70  +36.3%
+ 2019    9    309    39     540    1.75     32,144.30      59.53  +23.2%
+ 2020    9    236    43     330    1.40     19,639.82      59.51  -38.9%
+ 2021   10    319    47     450    1.41     28,212.97      62.70  +43.7%
+ 2022   11    451    49     680    1.51     47,681.58      70.12  +69.0%
+ 2023   12    592    54     900    1.52     73,698.64      81.89  +54.6%
+ 2024   12    645    54   1,100    1.71     93,022.81      84.57  +26.2%
+ 2025   12    742    54   1,350    1.82    124,890.61      92.51  +34.3%
+                        -------         -------------
+TOTAL                     6,360            478,883.89
 
-  CAL_YEAR     ORDERS NET_REVENUE REVENUE_CHANGE    YOY_PCT
----------- ---------- ----------- -------------- ----------
-      2016        250       14337
-      2017        330       19155           4818       33.6
-      2018        430       26101           6946       36.3
-      2019        540       32144           6043       23.2
-      2020        330       19640         -12504      -38.9
-      2021        450       28213           8573       43.7
-      2022        680       47682          19469         69
-      2023        900       73699          26017       54.6
-      2024       1100       93023          19324       26.2
-      2025       1350      124891          31868       34.3
+          ============================================================
+                              Growth Decomposition
+                             2016 compared with 2025
+          ============================================================
+Report Generated on: 02-SEP-26                                  Page:          1
 
---- EXHIBIT 1.3  Revenue by category by year  [CHART: stacked area] ------- PROMPT Long format on purpose - this is the shape Excel wants for a stacked chart.
+Component                Start Year     End Year       Multiple
+------------------------ -------------- -------------- --------
+Active customers         103            742                7.20
+Orders per customer      2.43           1.82               0.75
+Average basket (RM)      57.35          92.51              1.61
+NET REVENUE (RM)         14337          124891             8.71
 
-  CAL_YEAR CATEGORY_NAME            NET_REVENUE
----------- ------------------------ -----------
-      2016 Bakery                          1352
-      2016 Beverages                       1772
-      2016 Dairy and Eggs                  2960
-      2016 Frozen Food                     3690
-      2016 Rice and Noodles                2487
-      2016 Snacks                          2076
-      2017 Bakery                          1570
-      2017 Beverages                       2396
-      2017 Cooking Essentials              3087
-      2017 Dairy and Eggs                  3942
-      2017 Frozen Food                     3602
-      2017 Rice and Noodles                2317
-      2017 Snacks                          2242
-      2018 Bakery                          1880
-      2018 Beverages                       2704
-      2018 Canned Food                     1811
-      2018 Cooking Essentials              4137
-      2018 Dairy and Eggs                  4165
-      2018 Frozen Food                     5630
-      2018 Rice and Noodles                3153
-      2018 Snacks                          2621
-      2019 Bakery                          2171
-      2019 Beverages                       3186
-      2019 Canned Food                     3132
-      2019 Cooking Essentials              3846
-      2019 Dairy and Eggs                  4876
-      2019 Frozen Food                     6213
-      2019 Personal Care                   2023
-      2019 Rice and Noodles                3875
-      2019 Snacks                          2821
-      2020 Bakery                          1290
-      2020 Beverages                       1540
-      2020 Canned Food                     1729
-      2020 Cooking Essentials              2473
-      2020 Dairy and Eggs                  2602
-      2020 Frozen Food                     3074
-      2020 Household Cleaning               351
-      2020 Personal Care                   3039
-      2020 Rice and Noodles                1956
-      2020 Snacks                          1586
-      2021 Bakery                          1333
-      2021 Beverages                       1999
-      2021 Canned Food                     2480
-      2021 Cooking Essentials              3553
-      2021 Dairy and Eggs                  3533
-      2021 Frozen Food                     4429
-      2021 Household Cleaning              3132
-      2021 Personal Care                   3113
-      2021 Rice and Noodles                2595
-      2021 Snacks                          2045
-      2022 Baby Products                   9695
-      2022 Bakery                          2260
-      2022 Beverages                       2604
-      2022 Canned Food                     3196
-      2022 Cooking Essentials              4868
-      2022 Dairy and Eggs                  3704
-      2022 Frozen Food                     5671
-      2022 Household Cleaning              4518
-      2022 Personal Care                   5064
-      2022 Rice and Noodles                3517
-      2022 Snacks                          2586
-      2023 Baby Products                  15237
-      2023 Bakery                          2598
-      2023 Beverages                       3598
-      2023 Canned Food                     4997
-      2023 Cooking Essentials              5807
-      2023 Dairy and Eggs                  5505
-      2023 Frozen Food                     6662
-      2023 Household Cleaning              4512
-      2023 Personal Care                   7385
-      2023 Pet Care                       10566
-      2023 Rice and Noodles                4165
-      2023 Snacks                          2667
-      2024 Baby Products                  18182
-      2024 Bakery                          3611
-      2024 Beverages                       5599
-      2024 Canned Food                     5784
-      2024 Cooking Essentials              7751
-      2024 Dairy and Eggs                  8091
-      2024 Frozen Food                     9495
-      2024 Household Cleaning              6982
-      2024 Personal Care                   7408
-      2024 Pet Care                       11440
-      2024 Rice and Noodles                5134
-      2024 Snacks                          3547
-      2025 Baby Products                  27619
-      2025 Bakery                          4546
-      2025 Beverages                       5860
-      2025 Canned Food                     7066
-      2025 Cooking Essentials              8454
-      2025 Dairy and Eggs                  9392
-      2025 Frozen Food                    11385
-      2025 Household Cleaning              8903
-      2025 Personal Care                   9667
-      2025 Pet Care                       18969
-      2025 Rice and Noodles                8724
-      2025 Snacks                          4305
-      2026 Baby Products                  16073
-      2026 Bakery                          3099
-      2026 Beverages                       4033
-      2026 Canned Food                     4065
-      2026 Cooking Essentials              6538
-      2026 Dairy and Eggs                  7466
-      2026 Frozen Food                     8135
-      2026 Household Cleaning              5814
-      2026 Personal Care                   6580
-      2026 Pet Care                       11917
-      2026 Rice and Noodles                4697
-      2026 Snacks                          3448
+Enter Year to Drill Down (e.g., 2025): 2025
 
---- EXHIBIT 1.4  When each category entered the range --------------------- PROMPT WHAT CAUSED IT: revenue growth is partly volume, partly a wider range.
-This separates the two.
+          ============================================================
+                           Category Demand by Quarter
+                                  For Year 2025
+          ============================================================
+Report Generated on: 02-SEP-26                                  Page:          1
 
-CATEGORY_NAME            FIRST_YEAR_SOLD ITEMS_IN_CATEGORY LIFETIME_REVENUE PCT_OF_TOTAL
------------------------- --------------- ----------------- ---------------- ------------
-Frozen Food                         2016                 5            67987         12.1
-Dairy and Eggs                      2016                 4            56235           10
-Rice and Noodles                    2016                 4            42621          7.6
-Beverages                           2016                 5            35290          6.3
-Snacks                              2016                 5            29943          5.3
-Bakery                              2016                 5            25708          4.6
-Cooking Essentials                  2017                 5            50514            9
-Canned Food                         2018                 5            34259          6.1
-Personal Care                       2019                 4            44281          7.9
-Household Cleaning                  2020                 5            34212          6.1
-Baby Products                       2022                 4            86807         15.5
-Pet Care                            2023                 4            52892          9.4
+                                                         Q1
+Category              Q1 (RM)  Q2 (RM)  Q3 (RM)  Q4 (RM) Share
+-------------------- -------- -------- -------- -------- --------
+Baby Products           5,864    8,271    6,882    6,602   21.2%
+Pet Care                5,124    3,476    6,205    4,164   27.0%
+Frozen Food             2,968    3,208    2,430    2,779   26.1%
+Personal Care           2,390    2,166    2,568    2,543   24.7%
+Dairy and Eggs          2,522    2,408    2,207    2,255   26.9%
+Household Cleaning      2,320    2,219    2,536    1,828   26.1%
+Rice and Noodles        1,898    2,404    1,891    2,532   21.8%
+Cooking Essentials      1,559    3,247    1,427    2,222   18.4%
+Canned Food             1,641    1,395    2,062    1,968   23.2%
+Beverages               1,217    1,525    1,744    1,374   20.8%
+Bakery                  1,143    1,182    1,150    1,071   25.2%
+Snacks                    845    1,184      990    1,286   19.6%
+                     -------- -------- -------- --------
+TOTAL:                 29,491   32,685   32,092   30,624
 
---- EXHIBIT 1.5  Quarterly seasonality  [CHART: column] ------------------- PROMPT Indexed so 100 = the average quarter. Q1 is Chinese New Year,
-Q4 the year-end run, Q3 the mid-year trough.
-2026 excluded: it contributes to Q1-Q3 only and would distort the index.
+Report 1 complete.
 
-CA     ORDERS NET_REVENUE ORDER_INDEX
--- ---------- ----------- -----------
-Q1       1709      121694         107
-Q2       1544      120135          97
-Q3       1455      112070          92
-Q4       1652      124984         104
+============================================================
+Report 2 - Supplier Concentration and Return Exposure
+============================================================
 
---- EXHIBIT 1.6  Does every category share the same season? --------------- PROMPT HOW: a category whose Q1 share is well above 25% is CNY-driven.
-PIVOT ( ROUND(SUM(net_sales_amt)) FOR cal_quarter
-        *
-ERROR at line 8:
-ORA-56902: expect aggregate function inside pivot operation
+          ============================================================
+                Supplier Revenue Pareto and Sole-Source Exposure
+                             For Years 2016 to 2025
+          ============================================================
+Report Generated on: 02-SEP-26                                  Page:          1
 
+                                            Net Revenue
+Supplier                 Category Supplie          (RM) % Total  Cum %
+------------------------ ---------------- ------------- -------- --------
+LittleStar Baby Products Baby Products        70,733.54   14.77%   14.77%
+Polar Frozen Foods       Frozen Food          59,851.56   12.50%   27.27%
+Fresh Dairy Farm         Dairy and Eggs       48,769.07   10.18%   37.45%
+Selera Cooking Products  Cooking Essentia     43,976.04    9.18%   46.64%
+                         ls
+PetJoy Trading           Pet Care             40,975.17    8.56%   55.19%
+Padi Emas Rice Mills     Rice and Noodles     37,924.22    7.92%   63.11%
+CarePlus Consumer Goods  Personal Care        37,701.01    7.87%   70.98%
+Sunshine Beverages       Beverages            31,256.78    6.53%   77.51%
+Ocean Canned Food        Canned Food          30,194.03    6.31%   83.82%
+KleenHome Supplies       Household Cleani     28,397.96    5.93%   89.75%
+                         ng
+Snacko Food Industries   Snacks               26,495.75    5.53%   95.28%
+Gardenview Bakery        Bakery               22,608.76    4.72%  100.00%
+                                          -------------
+TOTAL:                                       478,883.89
 
+          ============================================================
+                  Return Rate by Supplier, With the Noise Band
+                             For Years 2016 to 2025
+          ============================================================
+Report Generated on: 02-SEP-26                                  Page:          1
 
-============================================================================
-REPORT 2 - SUPPLIER CONTRIBUTION AND RETURN EXPOSURE
-Dimensions: item_dim (supplier, category) x return_reason_dim x date_dim
-Measures  : revenue, concentration, units returned, return rate
+                            Units   Units           Expected z-score
+Supplier                     Sold     Ret Return %     Units    (SD)
+------------------------ -------- ------- -------- --------- -------
+KleenHome Supplies          3,740     138    3.69%     109.6   +2.71
+PetJoy Trading              2,191      78    3.56%      64.2   +1.72
+Polar Frozen Foods          6,000     197    3.28%     175.9   +1.59
+Ocean Canned Food           5,095     164    3.22%     149.3   +1.20
+LittleStar Baby Products    2,493      74    2.97%      73.1   +0.11
+Fresh Dairy Farm            4,743     138    2.91%     139.0   -0.09
+Padi Emas Rice Mills        4,753     137    2.88%     139.3   -0.20
+Gardenview Bakery           5,838     168    2.88%     171.1   -0.24
+Selera Cooking Products     5,314     140    2.63%     155.8   -1.26
+CarePlus Consumer Goods     3,309      86    2.60%      97.0   -1.12
+Sunshine Beverages          5,889     150    2.55%     172.6   -1.72
+Snacko Food Industries      5,190     129    2.49%     152.1   -1.87
 
-FRAMING: this is a CONCENTRATION and EXPOSURE report, not a quality
-scorecard. Exhibit 2.3 shows why - return rates cluster too tightly
-for any supplier to be called an outlier.
-============================================================================
+          ============================================================
+               Supplier Concentration Compared Across Two Periods
+                     Range 2016 to 2025, split at       2020
+          ============================================================
+Report Generated on: 02-SEP-26                                  Page:          1
 
---- EXHIBIT 2.1  Supplier revenue Pareto  [CHART: Pareto] ---------------- PROMPT WHAT: how much of the business rests on how few suppliers.
+               Sole   Net Revenue                        Largest  Top 4
+Period      Sources          (RM) Largest Supplier             %      %
+----------- ------- ------------- ---------------------- ------- ------
+2016 - 2020      10    111,377.28 Polar Frozen Foods        19.9   61.1
+2021 - 2025      12    367,506.61 LittleStar Baby Produc    19.2   49.5
+                                  ts
 
-SUPPLIER_NAME                      ITEMS_SUPPLIED NET_REVENUE PCT_OF_TOTAL CUMULATIVE_PCT
----------------------------------- -------------- ----------- ------------ --------------
-LittleStar Baby Products Sdn Bhd                4       86807         15.5           15.5
-Polar Frozen Foods Sdn Bhd                      5       67987         12.1           27.6
-Fresh Dairy Farm Sdn Bhd                        4       56235           10           37.6
-PetJoy Trading Sdn Bhd                          4       52892          9.4             47
-Selera Cooking Products Sdn Bhd                 5       50514            9             56
-CarePlus Consumer Goods Sdn Bhd                 4       44281          7.9           63.9
-Padi Emas Rice Mills Sdn Bhd                    4       42621          7.6           71.5
-Sunshine Beverages Sdn Bhd                      5       35290          6.3           77.8
-Ocean Canned Food Sdn Bhd                       5       34259          6.1           83.9
-KleenHome Supplies Sdn Bhd                      5       34212          6.1             90
-Snacko Food Industries Sdn Bhd                  5       29943          5.3           95.3
-Gardenview Bakery Sdn Bhd                       5       25708          4.6           99.9
+Enter Supplier to Drill Down (e.g., KleenHome Supplies): KleenHome Supplies
 
---- EXHIBIT 2.2  Supplier x category contribution ------------------------ PROMPT WHERE the dependency sits: a supplier that is the sole source of a
-category is a single point of failure regardless of its revenue rank.
+          ============================================================
+                            Return Reason Drill-Down
+                          Supplier: KleenHome Supplies
+                             For Years 2016 to 2025
+          ============================================================
+Report Generated on: 02-SEP-26                                  Page:          1
 
-SUPPLIER_NAME                      CATEGORY_NAME                 ITEMS NET_REVENUE
----------------------------------- ------------------------ ---------- -----------
-LittleStar Baby Products Sdn Bhd   Baby Products                     4       86807
-Polar Frozen Foods Sdn Bhd         Frozen Food                       5       67987
-Fresh Dairy Farm Sdn Bhd           Dairy and Eggs                    4       56235
-PetJoy Trading Sdn Bhd             Pet Care                          4       52892
-Selera Cooking Products Sdn Bhd    Cooking Essentials                5       50514
-CarePlus Consumer Goods Sdn Bhd    Personal Care                     4       44281
-Padi Emas Rice Mills Sdn Bhd       Rice and Noodles                  4       42621
-Sunshine Beverages Sdn Bhd         Beverages                         5       35290
-Ocean Canned Food Sdn Bhd          Canned Food                       5       34259
-KleenHome Supplies Sdn Bhd         Household Cleaning                5       34212
-Snacko Food Industries Sdn Bhd     Snacks                            5       29943
-Gardenview Bakery Sdn Bhd          Bakery                            5       25708
+                                                       Refund    Avg
+Reason Group       Reason           Lines   Units        (RM)   Days
+------------------ -------------- ------- ------- ----------- ------
+Fulfilment         Wrong Item          18      38      314.70    5.8
+                   Missing             13      28      208.30    7.2
+******************                ------- ------- -----------
+Group Total:                           31      66      523.00
 
---- EXHIBIT 2.3  Return rate by supplier, WITH the noise band ------------- PROMPT THE KEY EXHIBIT. expected_returns is what each supplier would see if
-returns were distributed purely in proportion to units sold.
-z_score measures how far the actual result sits from that expectation
-in standard deviations. Roughly: |z| under 2 is indistinguishable from
-chance. If every supplier lands inside that band, there is no quality
-outlier and the honest finding is that no supplier warrants action.
-           (SELECT NVL(SUM(units_returned), 0) FROM returned) AS all_returned
-                   *
-ERROR at line 14:
-ORA-00937: not a single-group group function
+Product Quality    Expired             22      44      295.40    5.3
+                   Broken              15      28      214.90    6.5
+******************                ------- ------- -----------
+Group Total:                           37      72      510.30
 
+Report 2 complete.
 
+============================================================
+Report 3 - Channel Migration: Online versus Walk-in
+============================================================
 
---- EXHIBIT 2.4  Why customers return  [CHART: 100% stacked bar] ---------- PROMPT Fulfilment failures are an operations problem; Product Quality is a
-supplier problem. The split tells management which lever to pull.
+          ============================================================
+                   Channel Mix by Year - Online versus Walk-in
+                             For Years 2016 to 2025
+          ============================================================
+Report Generated on: 02-SEP-26                                  Page:          1
 
-REASON_GROUP       REASON_NAME    RETURN_LINES      UNITS REFUND_VALUE PCT_OF_RETURNS
------------------- -------------- ------------ ---------- ------------ --------------
-Fulfilment         Wrong Item              243        482         4493           25.7
-Product Quality    Broken                  235        435         3906           24.9
-Product Quality    Expired                 233        454         4161           24.7
-Fulfilment         Missing                 233        465         4619           24.7
+                                          Avg Basket   Net Revenue
+ Year Channel      Cust  Orders % of Year       (RM)          (RM)
+----- ---------- ------ ------- --------- ---------- -------------
+ 2016 Online         34      44   17.60%       59.90      2,635.47
+      Walk-in        99     206   82.40%       56.81     11,701.99
+*****                   -------                      -------------
+Year                        250                          14,337.46
 
---- EXHIBIT 2.5  Is the return rate getting worse over time? -------------- PROMPT 2026 included but flagged: a part year, so read the RATE not the volume.
+ 2017 Online         59      68   20.61%       60.37      4,104.83
+      Walk-in       152     262   79.39%       57.44     15,050.12
+*****                   -------                      -------------
+Year                        330                          19,154.95
 
-  CAL_YEAR UNITS_SOLD UNITS_RETURNED RETURN_PCT
----------- ---------- -------------- ----------
-      2016       2091             52       2.49
-      2017       2750             77        2.8
-      2018       3682             65       1.77
-      2019       4457            109       2.45
-      2020       2683             55       2.05
-      2021       3703             95       2.57
-      2022       5391            140        2.6
-      2023       7378            209       2.83
-      2024      10003            321       3.21
-      2025      12417            479       3.86
-      2026       8657            234        2.7
+ 2018 Online        101     120   27.91%       57.83      6,939.90
+      Walk-in       196     310   72.09%       61.81     19,160.85
+*****                   -------                      -------------
+Year                        430                          26,100.75
 
---- EXHIBIT 2.6  Speed of return - an operational service metric --------- SELECT rr.reason_category AS reason_group,
-SP2-0734: unknown command beginning "COUNT(*)  ..." - rest of line ignored.
-SP2-0734: unknown command beginning "ROUND(AVG(..." - rest of line ignored.
-SP2-0734: unknown command beginning "MIN(r.days..." - rest of line ignored.
-SP2-0734: unknown command beginning "MAX(r.days..." - rest of line ignored.
-SP2-0044: For a list of known commands enter HELP
-and to leave enter EXIT.
-SP2-0734: unknown command beginning "FROM   ret..." - rest of line ignored.
-SP2-0734: unknown command beginning "JOIN   ret..." - rest of line ignored.
-SP2-0734: unknown command beginning "GROUP  BY ..." - rest of line ignored.
-SP2-0734: unknown command beginning "ORDER  BY ..." - rest of line ignored.
-SP2-0044: For a list of known commands enter HELP
-and to leave enter EXIT.
+ 2019 Online        137     164   30.37%       61.40     10,069.25
+      Walk-in       252     376   69.63%       58.71     22,075.05
+*****                   -------                      -------------
+Year                        540                          32,144.30
 
-============================================================================
-REPORT 3 - CHANNEL MIGRATION: ONLINE VERSUS WALK-IN
-Dimensions: date_dim x branch_dim (region) x customer_dim (membership)
-Measures  : order share, basket value, delivery lead time
+ 2020 Online        105     114   34.55%       58.58      6,678.18
+      Walk-in       171     216   65.45%       60.01     12,961.64
+*****                   -------                      -------------
+Year                        330                          19,639.82
 
-membership comes from customer_dim, which sales_fact joins on a
-point-in-time basis - so a customer who changed tier is counted
-correctly in each era rather than being back-dated. That is the
-Type 2 dimension doing real work.
-============================================================================
+ 2021 Online        146     167   37.11%       63.46     10,598.30
+      Walk-in       235     283   62.89%       62.24     17,614.67
+*****                   -------                      -------------
+Year                        450                          28,212.97
 
---- EXHIBIT 3.1  The migration  [CHART: line] ----------------------------- PROMPT WHAT: online share of orders, year by year. 2026 is a part year but the
-SHARE is unaffected by that - only the volume is.
+ 2022 Online        245     290   42.65%       70.66     20,491.47
+      Walk-in       309     390   57.35%       69.72     27,190.11
+*****                   -------                      -------------
+Year                        680                          47,681.58
 
-  CAL_YEAR     ORDERS ONLINE_ORDERS ONLINE_PCT
----------- ---------- ------------- ----------
-      2016        250            44       17.6
-      2017        330            68       20.6
-      2018        430           120       27.9
-      2019        540           164       30.4
-      2020        330           114       34.5
-      2021        450           167       37.1
-      2022        680           290       42.6
-      2023        900           384       42.7
-      2024       1100           471       42.8
-      2025       1350           606       44.9
-      2026       1002           506       50.5
+ 2023 Online        317     384   42.67%       76.55     29,395.25
+      Walk-in       395     516   57.33%       85.86     44,303.39
+*****                   -------                      -------------
+Year                        900                          73,698.64
 
---- EXHIBIT 3.2  Channel by region, 2024-2026 ONLY  [CHART: bar] --------- PROMPT WHY RESTRICTED: online share rises every year, so a branch that opened
-in 2021 trades only in the online-heavy era and appears digitally
-advanced when it is merely young. From 2024 every branch was trading,
-so this comparison is like for like and any gap is real.
+          ============================================================
+                   Channel Mix by Year - Online versus Walk-in
+                             For Years 2016 to 2025
+          ============================================================
+Report Generated on: 02-SEP-26                                  Page:          2
 
-BRANCH_REGION      BRANCHES     ORDERS ONLINE_PCT AVG_BASKET
----------------- ---------- ---------- ---------- ----------
-Northern                  3        876       48.5      89.46
-East Malaysia             1        287         46      83.86
-Central                   5       1403       45.9      87.47
-East Coast                1        299       44.8      85.37
-Southern                  2        587       42.2      83.62
+                                          Avg Basket   Net Revenue
+ Year Channel      Cust  Orders % of Year       (RM)          (RM)
+----- ---------- ------ ------- --------- ---------- -------------
+ 2024 Online        351     471   42.82%       84.35     39,729.33
+      Walk-in       454     629   57.18%       84.73     53,293.48
+*****                   -------                      -------------
+Year                      1,100                          93,022.81
 
---- EXHIBIT 3.3  Who is migrating - by membership tier ------------------- PROMPT Only members can take delivery: Delivery.AddressID references
-MemberAddress, which references Member. So membership is structurally
-tied to the online channel, and this quantifies how tightly.
+ 2025 Online        452     606   44.89%       92.02     55,767.11
+      Walk-in       532     744   55.11%       92.91     69,123.50
+*****                   -------                      -------------
+Year                      1,350                         124,890.61
 
-MEMBERSHIP         ORDERS ONLINE_PCT AVG_BASKET NET_REVENUE
--------------- ---------- ---------- ---------- -----------
-Normal               2776       43.1      77.27      214490
-Non-Member           2368       31.4      74.45      176303
-VIP                  2218       44.9      76.63      169955
+Enter Year From Which All Branches Were Trading (e.g., 2024): 2024
 
---- EXHIBIT 3.4  Is an online basket worth more than a walk-in one? ------ PROMPT SO WHAT: if online baskets are larger, the migration is accretive and
-should be accelerated. If not, it is merely cannibalising the stores.
+          ============================================================
+                              Channel Mix by Region
+                       Like-for-like window: 2024 to 2025
+          ============================================================
+Report Generated on: 02-SEP-26                                  Page:          1
 
-  CAL_YEAR CHANNEL        ORDERS AVG_UNITS_PER_LINE AVG_BASKET
----------- ---------- ---------- ------------------ ----------
-      2022 Online            290               3.02      70.66
-      2022 Walk-in           390               2.99      69.72
-      2023 Online            384               2.96      76.55
-      2023 Walk-in           516               3.07      85.86
-      2024 Online            471                3.3      84.35
-      2024 Walk-in           629               3.34      84.73
-      2025 Online            606               3.29      92.02
-      2025 Walk-in           744               3.34      92.91
-      2026 Online            506                3.2      81.54
-      2026 Walk-in           496               3.19      81.87
+                                        Avg Basket
+Region           Brch  Orders Online %        (RM)
+---------------- ---- ------- --------- ----------
+Northern            3     633   47.6%        91.88
+Central             5     994   43.5%        89.07
+East Malaysia       1     196   43.4%        87.92
+Southern            2     416   42.5%        84.60
+East Coast          1     211   38.9%        89.05
+                      -------
+TOTAL:                  2,450
 
---- EXHIBIT 3.5  Can fulfilment keep up?  [CHART: line, dual axis] ------- PROMPT HOW the migration is being served. Rising volume with a rising lead
-time is a capacity warning; rising volume with a flat lead time says
-the network is coping.
+Enter Year to Drill Down (e.g., 2025): 2025
 
-  CAL_YEAR DELIVERIES AVG_LEAD_DAYS  DELIVERED  CANCELLED CANCEL_PCT
----------- ---------- ------------- ---------- ---------- ----------
-      2016         29           3.7         27          2        6.9
-      2017         34          3.97         31          3       8.82
-      2018         64          4.18         61          3       4.69
-      2019         97          3.74         85         12      12.37
-      2020         63          4.46         54          9      14.29
-      2021         95          4.39         84         11      11.58
-      2022        147          4.02        129         18      12.24
-      2023        219          3.99        199         20       9.13
-      2024        349           2.6        329         20       5.73
-      2025        408          2.87        387         21       5.15
-      2026        317          3.08        279         28       8.83
+          ============================================================
+                     Membership Tier and Channel Drill-Down
+                                  For Year 2025
+          ============================================================
+Report Generated on: 02-SEP-26                                  Page:          1
 
---- EXHIBIT 3.6  Which courier serves which region ----------------------- SELECT dc.company_name, b.branch_region,
-SP2-0734: unknown command beginning "COUNT(*) A..." - rest of line ignored.
-SP2-0734: unknown command beginning "ROUND(AVG(..." - rest of line ignored.
-SP2-0734: unknown command beginning "ROUND(AVG(..." - rest of line ignored.
-SP2-0734: unknown command beginning "FROM   del..." - rest of line ignored.
-SP2-0044: For a list of known commands enter HELP
-and to leave enter EXIT.
-SP2-0734: unknown command beginning "JOIN   del..." - rest of line ignored.
-SP2-0734: unknown command beginning "JOIN   bra..." - rest of line ignored.
-SP2-0734: unknown command beginning "WHERE  f.d..." - rest of line ignored.
-SP2-0734: unknown command beginning "GROUP  BY ..." - rest of line ignored.
-SP2-0044: For a list of known commands enter HELP
-and to leave enter EXIT.
-SP2-0734: unknown command beginning "ORDER  BY ..." - rest of line ignored.
+                                                   Avg Basket
+Membership     Channel      Cust  Orders % of Tier       (RM)
+-------------- ---------- ------ ------- --------- ----------
+Non-Member     Online         96     105   28.23%       85.06
+               Walk-in       195     267   71.77%       91.25
+**************                   -------
+Tier Total:                          372
 
-============================================================================
-END OF EXHIBITS
-============================================================================
+Normal         Online        193     267   49.72%       92.95
+               Walk-in       188     270   50.28%       99.44
+**************                   -------
+Tier Total:                          537
+
+VIP            Online        163     234   53.06%       94.09
+               Walk-in       149     207   46.94%       86.53
+**************                   -------
+Tier Total:                          441
+
+Report 3 complete.
+
+============================================================
+All three reports complete.
+============================================================
 SQL> SPOOL OFF
