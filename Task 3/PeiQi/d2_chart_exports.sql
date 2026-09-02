@@ -9,7 +9,7 @@
 --
 -- Chart mapping:
 --   Exhibit D2.2 -> Grouped Bar Chart
---   Exhibit D2.4 -> Line Chart
+--   Exhibit D2.4 -> Line Chart (Overall Monthly On-Time %)
 -- ============================================================================
 
 SET DEFINE ON
@@ -129,41 +129,33 @@ SPOOL OFF
 
 -- ============================================================================
 -- EXHIBIT D2.4
--- LINE CHART: MONTHLY ON-TIME % BY DELIVERY COMPANY
+-- LINE CHART: OVERALL MONTHLY ON-TIME DELIVERY %
 -- ============================================================================
 
 SPOOL C:\Users\tpq11\task3_csv\d2_monthly_ontime.csv
 
-PROMPT Month,Month Order,Company,Delivered,On-Time,On-Time %
+PROMPT Month,Month Order,Delivered,On-Time,On-Time %
 
 WITH monthly AS (
     SELECT
         d.cal_month_year AS month_order,
         d.cal_month_name AS month_name,
-        dc.company_name,
-
         SUM(CASE
                 WHEN df.delivery_status = 'Delivered'
                 THEN 1 ELSE 0
             END) AS delivered,
-
         SUM(CASE
                 WHEN df.delivery_status = 'Delivered'
                  AND df.delivery_lead_days <= 3
                 THEN 1 ELSE 0
             END) AS on_time
-
     FROM delivery_fact df
-    JOIN delivery_company_dim dc
-      ON dc.delivery_company_key = df.delivery_company_key
     JOIN address_dim a
       ON a.address_key = df.address_key
     JOIN date_dim d
       ON d.date_key = df.order_date_key
     WHERE d.cal_year = TO_NUMBER('&p_year')
-      AND df.delivery_company_key <> -1
       AND df.address_key <> -1
-      AND UPPER(dc.company_name) <> 'UNKNOWN'
       AND UPPER(a.address_region) <> 'UNKNOWN'
       AND (
             UPPER(TRIM('&p_region')) = 'ALL'
@@ -171,13 +163,11 @@ WITH monthly AS (
           )
     GROUP BY
         d.cal_month_year,
-        d.cal_month_name,
-        dc.company_name
+        d.cal_month_name
 )
 SELECT
     '"' || month_name || '",' ||
     TO_CHAR(month_order) || ',' ||
-    '"' || REPLACE(company_name, '"', '""') || '",' ||
     TO_CHAR(delivered) || ',' ||
     TO_CHAR(on_time) || ',' ||
     TO_CHAR(
@@ -187,8 +177,7 @@ SELECT
 FROM monthly
 WHERE delivered > 0
 ORDER BY
-    month_order,
-    company_name;
+    month_order;
 
 SPOOL OFF
 
