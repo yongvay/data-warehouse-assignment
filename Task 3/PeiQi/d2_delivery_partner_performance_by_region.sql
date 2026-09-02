@@ -464,55 +464,45 @@ CLEAR COLUMNS
 -- ============================================================================
 -- EXHIBIT D2.4
 -- WHEN
--- HOW DOES ON-TIME PERFORMANCE CHANGE MONTH BY MONTH?
+-- HOW DOES OVERALL ON-TIME PERFORMANCE CHANGE MONTH BY MONTH?
 -- REQUIRED CHART: LINE
 -- ============================================================================
 
 PROMPT
 PROMPT ====================================================================================================
-PROMPT EXHIBIT D2.4 - WHEN: MONTHLY ON-TIME PERFORMANCE TREND
+PROMPT EXHIBIT D2.4 - WHEN: OVERALL MONTHLY ON-TIME PERFORMANCE TREND
 PROMPT Chart type : Line Chart
-PROMPT Chart      : Monthly On-Time % by Delivery Company
-PROMPT Purpose    : Shows whether courier service is stable or changes during the year.
-PROMPT Note       : Interpret On-Time % together with Delivered volume because small monthly samples
-PROMPT              can create extreme percentages such as 0% or 100%.
+PROMPT Chart      : Overall Monthly On-Time Delivery %
+PROMPT Purpose    : Shows when overall delivery reliability improves or weakens during the year.
+PROMPT Note       : Delivered volume is shown beside the percentage so low-volume months are not over-interpreted.
 PROMPT ====================================================================================================
 PROMPT
 
 COLUMN month_name      HEADING 'Month'          FORMAT A12
-COLUMN company_name    HEADING 'Company'        FORMAT A26
 COLUMN delivered       HEADING 'Delivered'      FORMAT 999,990
 COLUMN on_time         HEADING 'On-Time'        FORMAT 999,990
 COLUMN on_time_pct     HEADING 'On-Time|%'      FORMAT 990.99
 
 WITH monthly AS (
     SELECT
-        d.cal_month_year AS month_no,
+        d.cal_month_year AS month_order,
         d.cal_month_name AS month_name,
-        dc.company_name,
-
         SUM(CASE
                 WHEN df.delivery_status = 'Delivered'
                 THEN 1 ELSE 0
             END) AS delivered,
-
         SUM(CASE
                 WHEN df.delivery_status = 'Delivered'
                  AND df.delivery_lead_days <= 3
                 THEN 1 ELSE 0
             END) AS on_time
-
     FROM delivery_fact df
-    JOIN delivery_company_dim dc
-      ON dc.delivery_company_key = df.delivery_company_key
     JOIN address_dim a
       ON a.address_key = df.address_key
     JOIN date_dim d
       ON d.date_key = df.order_date_key
     WHERE d.cal_year = TO_NUMBER('&p_year')
-      AND df.delivery_company_key <> -1
       AND df.address_key <> -1
-      AND UPPER(dc.company_name) <> 'UNKNOWN'
       AND UPPER(a.address_region) <> 'UNKNOWN'
       AND (
             UPPER(TRIM('&p_region')) = 'ALL'
@@ -520,12 +510,10 @@ WITH monthly AS (
           )
     GROUP BY
         d.cal_month_year,
-        d.cal_month_name,
-        dc.company_name
+        d.cal_month_name
 )
 SELECT
     month_name,
-    company_name,
     delivered,
     on_time,
     ROUND(
@@ -535,8 +523,7 @@ SELECT
 FROM monthly
 WHERE delivered > 0
 ORDER BY
-    month_no,
-    company_name;
+    month_order;
 
 CLEAR COLUMNS
 
