@@ -51,7 +51,7 @@ SET VERIFY OFF
 SET FEEDBACK OFF
 SET TRIMSPOOL ON
 SET TAB OFF
-SET LINESIZE 220
+SET LINESIZE 240
 SET PAGESIZE 100
 SET NULL '-'
 
@@ -79,18 +79,18 @@ PROMPT Note       : Duration Days = active promotion days inside the selected re
 PROMPT ==========================================================================================================
 PROMPT
 
-COLUMN effectiveness_rank       HEADING 'Rank'                    FORMAT 9999
-COLUMN promo_name               HEADING 'Promotion'               FORMAT A30
-COLUMN discount_type            HEADING 'Type'                    FORMAT A10
-COLUMN active_days              HEADING 'Duration|Days'           FORMAT 9990
-COLUMN qty_sold                 HEADING 'Qty Sold'                FORMAT 999,990
-COLUMN gross_sales              HEADING 'Gross Sales|(RM)'        FORMAT 999,990.00
-COLUMN discount_given           HEADING 'Discount|(RM)'           FORMAT 999,990.00
-COLUMN net_sales                HEADING 'Net Sales|(RM)'          FORMAT 999,990.00
-COLUMN discount_to_gross_pct    HEADING 'Discount/Gross|%'        FORMAT 990.99
-COLUMN sales_per_promo_day      HEADING 'Sales / Promo Day|(RM)'  FORMAT 999,990.00
-COLUMN uplift_pct               HEADING 'Uplift vs|Baseline %'    FORMAT 9990.99
-COLUMN uplift_per_rm_discount   HEADING 'Uplift / RM|Discount'    FORMAT 9990.99
+COLUMN effectiveness_rank       HEADING 'Rank'          FORMAT 9999
+COLUMN promo_name               HEADING 'Promotion'     FORMAT A28
+COLUMN discount_type            HEADING 'Type'          FORMAT A10
+COLUMN active_days              HEADING 'Days'          FORMAT 9990
+COLUMN qty_sold                 HEADING 'Qty'           FORMAT 999,990
+COLUMN gross_sales              HEADING 'Gross RM'      FORMAT 999,990.00
+COLUMN discount_given           HEADING 'Disc RM'       FORMAT 999,990.00
+COLUMN net_sales                HEADING 'Net RM'        FORMAT 999,990.00
+COLUMN discount_to_gross_pct    HEADING 'Disc %'        FORMAT 990.99
+COLUMN sales_per_promo_day      HEADING 'Sales/Day RM'  FORMAT 999,990.00
+COLUMN uplift_pct               HEADING 'Uplift %'      FORMAT 9990.99
+COLUMN uplift_per_rm_discount   HEADING 'Uplift/RM'     FORMAT 9990.99
 
 WITH
 year_bounds AS (
@@ -236,14 +236,14 @@ PROMPT Purpose    : Tests whether the same promoted items sell more strongly dur
 PROMPT ==========================================================================================================
 PROMPT
 
-COLUMN promo_name                HEADING 'Promotion'               FORMAT A30
-COLUMN promoted_item_count       HEADING 'Items'                   FORMAT 9990
-COLUMN active_days               HEADING 'Promo|Days'              FORMAT 9990
-COLUMN baseline_days             HEADING 'Baseline|Days'           FORMAT 9990
-COLUMN promo_sales_per_day       HEADING 'Promo Sales / Day|(RM)'  FORMAT 999,990.00
-COLUMN baseline_sales_per_day    HEADING 'Non-Promo / Day|(RM)'    FORMAT 999,990.00
-COLUMN uplift_pct                HEADING 'Uplift|%'                FORMAT 9990.99
-COLUMN estimated_uplift_value    HEADING 'Est. Uplift|(RM)'        FORMAT 999,990.00
+COLUMN promo_name                HEADING 'Promotion'       FORMAT A28
+COLUMN promoted_item_count       HEADING 'Items'           FORMAT 9990
+COLUMN active_days               HEADING 'Promo Days'      FORMAT 9990
+COLUMN baseline_days             HEADING 'Base Days'       FORMAT 9990
+COLUMN promo_sales_per_day       HEADING 'Promo/Day RM'    FORMAT 999,990.00
+COLUMN baseline_sales_per_day    HEADING 'Base/Day RM'     FORMAT 999,990.00
+COLUMN uplift_pct                HEADING 'Uplift %'        FORMAT 9990.99
+COLUMN estimated_uplift_value    HEADING 'Est Uplift RM'   FORMAT 999,990.00
 
 WITH
 year_bounds AS (
@@ -360,18 +360,20 @@ PROMPT =========================================================================
 PROMPT EXHIBIT D3.3 - WHICH MECHANIC: PERCENTAGE VS FIXED DISCOUNT PERFORMANCE
 PROMPT Chart type : Supporting Table (No Separate Chart)
 PROMPT Purpose    : Compares whether Percentage or Fixed campaigns create stronger average uplift and efficiency.
+PROMPT Note       : Avg Uplift % is a simple campaign average; Uplift/RM uses total estimated uplift / total discount.
+PROMPT Note       : Therefore Avg Uplift % can be positive while Uplift/RM is negative if a larger campaign loses more.
 PROMPT ==========================================================================================================
 PROMPT
 
-COLUMN discount_type              HEADING 'Discount Type'        FORMAT A14
-COLUMN campaign_count             HEADING 'Campaigns'            FORMAT 9990
-COLUMN qty_sold                   HEADING 'Qty Sold'              FORMAT 999,990
-COLUMN gross_sales                HEADING 'Gross Sales|(RM)'      FORMAT 999,990.00
-COLUMN discount_given             HEADING 'Discount|(RM)'         FORMAT 999,990.00
-COLUMN net_sales                  HEADING 'Net Sales|(RM)'        FORMAT 999,990.00
-COLUMN discount_to_gross_pct      HEADING 'Discount/Gross|%'      FORMAT 990.99
-COLUMN avg_uplift_pct             HEADING 'Avg Uplift|%'          FORMAT 9990.99
-COLUMN uplift_per_rm_discount     HEADING 'Uplift / RM|Discount'  FORMAT 9990.99
+COLUMN discount_type              HEADING 'Type'          FORMAT A12
+COLUMN campaign_count             HEADING 'Campaigns'     FORMAT 9990
+COLUMN qty_sold                   HEADING 'Qty'           FORMAT 999,990
+COLUMN gross_sales                HEADING 'Gross RM'      FORMAT 999,990.00
+COLUMN discount_given             HEADING 'Disc RM'       FORMAT 999,990.00
+COLUMN net_sales                  HEADING 'Net RM'        FORMAT 999,990.00
+COLUMN discount_to_gross_pct      HEADING 'Disc %'        FORMAT 990.99
+COLUMN avg_uplift_pct             HEADING 'Avg Uplift %'  FORMAT 9990.99
+COLUMN uplift_per_rm_discount     HEADING 'Uplift/RM'     FORMAT 9990.99
 
 WITH
 year_bounds AS (
@@ -503,14 +505,14 @@ PROMPT Note       : Returns are attributed through RETURN_FACT.ORDER_DATE_KEY to
 PROMPT ==========================================================================================================
 PROMPT
 
-COLUMN promo_name               HEADING 'Promotion'                FORMAT A30
-COLUMN qty_sold                 HEADING 'Qty Sold'                 FORMAT 999,990
-COLUMN qty_returned             HEADING 'Qty Returned'             FORMAT 999,990
-COLUMN return_rate_pct          HEADING 'Return|%'                 FORMAT 990.99
-COLUMN refund_exposure          HEADING 'Refund|(RM)'              FORMAT 999,990.00
-COLUMN net_sales                HEADING 'Net Sales|(RM)'           FORMAT 999,990.00
-COLUMN net_after_returns        HEADING 'Net After Returns|(RM)'   FORMAT 999,990.00
-COLUMN refund_to_net_pct        HEADING 'Refund / Net|%'           FORMAT 990.99
+COLUMN promo_name               HEADING 'Promotion'       FORMAT A28
+COLUMN qty_sold                 HEADING 'Qty Sold'        FORMAT 999,990
+COLUMN qty_returned             HEADING 'Qty Ret'         FORMAT 999,990
+COLUMN return_rate_pct          HEADING 'Return %'        FORMAT 990.99
+COLUMN refund_exposure          HEADING 'Refund RM'       FORMAT 999,990.00
+COLUMN net_sales                HEADING 'Net RM'          FORMAT 999,990.00
+COLUMN net_after_returns        HEADING 'Net After Ret RM' FORMAT 999,990.00
+COLUMN refund_to_net_pct        HEADING 'Refund/Net %'    FORMAT 990.99
 
 WITH
 promo_sales AS (
