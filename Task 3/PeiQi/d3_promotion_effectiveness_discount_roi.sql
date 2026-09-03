@@ -1,6 +1,6 @@
 -- ============================================================================
 -- TASK 3 - STUDENT D (TEO PEI QI)
--- D3. PROMOTION EFFECTIVENESS & DISCOUNT ROI
+-- D3. PROMOTION EFFECTIVENESS AND DISCOUNT ROI
 --
 -- Business Question:
 --   Which promotions generate the strongest sales uplift for the discount
@@ -59,7 +59,7 @@ ACCEPT p_year CHAR DEFAULT '2025' PROMPT 'Enter promotion analysis year [2025]: 
 
 PROMPT
 PROMPT ==========================================================================================================
-PROMPT D3 - PROMOTION EFFECTIVENESS & DISCOUNT ROI
+PROMPT D3 - PROMOTION EFFECTIVENESS AND DISCOUNT ROI
 PROMPT Business Question : Which promotions generate the strongest uplift for the discount value given?
 PROMPT Analysis Year     : &p_year
 PROMPT Final Charts      : 2
@@ -633,7 +633,7 @@ CLEAR COLUMNS
 
 PROMPT
 PROMPT ==========================================================================================================
-PROMPT END OF D3 - PROMOTION EFFECTIVENESS & DISCOUNT ROI
+PROMPT END OF D3 - PROMOTION EFFECTIVENESS AND DISCOUNT ROI
 PROMPT ==========================================================================================================
 PROMPT
 
