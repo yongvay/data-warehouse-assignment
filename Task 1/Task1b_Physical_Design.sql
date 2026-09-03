@@ -172,7 +172,7 @@ CREATE TABLE customer_dim
 CREATE TABLE item_dim
 (
     item_key             NUMBER(10)     NOT NULL,
-    item_id              VARCHAR2(5)    NOT NULL,                 -- 'UNKN' on the -1 Unknown row
+    item_id              VARCHAR2(5)    NOT NULL,                
     item_name            VARCHAR2(100)  DEFAULT 'Unknown' NOT NULL,
     item_unit_price      NUMBER(8,2)    DEFAULT 0         NOT NULL,
     item_status          VARCHAR2(12)   DEFAULT 'Unknown' NOT NULL,
@@ -210,7 +210,7 @@ CREATE TABLE item_dim
 CREATE TABLE branch_dim
 (
     branch_key         NUMBER(10)    NOT NULL,
-    branch_id          VARCHAR2(5)   NOT NULL,                    -- 'UNKN' on the -1 Unknown row
+    branch_id          VARCHAR2(5)   NOT NULL,                   
     branch_name        VARCHAR2(60)  DEFAULT 'Unknown' NOT NULL,
     branch_city        VARCHAR2(50)  DEFAULT 'Unknown' NOT NULL,
     branch_state       VARCHAR2(30)  DEFAULT 'Unknown' NOT NULL,
@@ -238,7 +238,7 @@ CREATE TABLE branch_dim
 CREATE TABLE address_dim
 (
     address_key       NUMBER(10)     NOT NULL,
-    address_id        VARCHAR2(5)    NOT NULL,                    -- 'UNKN' on the -1 Unknown row
+    address_id        VARCHAR2(5)    NOT NULL,                  
     address_line      VARCHAR2(150)  DEFAULT 'Unknown' NOT NULL,
     address_state     VARCHAR2(30)   DEFAULT 'Unknown' NOT NULL,
     address_postcode  CHAR(5)        DEFAULT '00000'   NOT NULL,
@@ -269,7 +269,7 @@ CREATE TABLE address_dim
 CREATE TABLE promotion_dim
 (
     promo_key            NUMBER(10)     NOT NULL,
-    promotion_id         VARCHAR2(5)    NOT NULL,                 -- 'NONE' on key 0, 'UNKN' on key -1
+    promotion_id         VARCHAR2(5)    NOT NULL,                 
     promo_name           VARCHAR2(100)  DEFAULT 'No Promotion' NOT NULL,
     discount_type        VARCHAR2(12)   DEFAULT 'None'         NOT NULL,
     discount_value       NUMBER(6,2)    DEFAULT 0              NOT NULL,
@@ -304,7 +304,7 @@ CREATE TABLE promotion_dim
 CREATE TABLE return_reason_dim
 (
     reason_key       NUMBER(10)    NOT NULL,
-    reason_id        VARCHAR2(4)   NOT NULL,                      -- 'UNKN' on the -1 Unknown row
+    reason_id        VARCHAR2(4)   NOT NULL,                      
     reason_name      VARCHAR2(30)  DEFAULT 'Unknown' NOT NULL,
     reason_category  VARCHAR2(20)  DEFAULT 'Unknown' NOT NULL,
     etl_batch_id     NUMBER(8)     NOT NULL,
@@ -327,7 +327,7 @@ CREATE TABLE return_reason_dim
 CREATE TABLE delivery_company_dim
 (
     delivery_company_key  NUMBER(10)     NOT NULL,
-    delivery_company_id   VARCHAR2(4)    NOT NULL,                -- 'UNKN' on the -1 Unknown row
+    delivery_company_id   VARCHAR2(4)    NOT NULL,                
     company_name          VARCHAR2(100)  DEFAULT 'Unknown' NOT NULL,
     company_contact_no    VARCHAR2(15)   DEFAULT 'Unknown' NOT NULL,
     etl_batch_id          NUMBER(8)      NOT NULL,
