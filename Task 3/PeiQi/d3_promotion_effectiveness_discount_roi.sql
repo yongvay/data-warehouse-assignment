@@ -79,18 +79,21 @@ PROMPT Note       : Duration Days = active promotion days inside the selected re
 PROMPT ==========================================================================================================
 PROMPT
 
-COLUMN effectiveness_rank       HEADING 'Rank'          FORMAT 9999
-COLUMN promo_name               HEADING 'Promotion'     FORMAT A28
-COLUMN discount_type            HEADING 'Type'          FORMAT A10
-COLUMN active_days              HEADING 'Days'          FORMAT 9990
-COLUMN qty_sold                 HEADING 'Qty'           FORMAT 999,990
-COLUMN gross_sales              HEADING 'Gross RM'      FORMAT 999,990.00
-COLUMN discount_given           HEADING 'Disc RM'       FORMAT 999,990.00
-COLUMN net_sales                HEADING 'Net RM'        FORMAT 999,990.00
-COLUMN discount_to_gross_pct    HEADING 'Disc %'        FORMAT 990.99
-COLUMN sales_per_promo_day      HEADING 'Sales/Day RM'  FORMAT 999,990.00
-COLUMN uplift_pct               HEADING 'Uplift %'      FORMAT 9990.99
-COLUMN uplift_per_rm_discount   HEADING 'Uplift/RM'     FORMAT 9990.99
+PROMPT
+PROMPT ----------------------------------------------------------------------------------------------------------
+PROMPT D3.1A - CAMPAIGN FINANCIAL PERFORMANCE
+PROMPT ----------------------------------------------------------------------------------------------------------
+PROMPT
+
+COLUMN effectiveness_rank       HEADING 'Rank'              FORMAT 9999
+COLUMN promo_name               HEADING 'Promotion'         FORMAT A28
+COLUMN discount_type            HEADING 'Type'              FORMAT A10
+COLUMN active_days              HEADING 'Days'              FORMAT 9990
+COLUMN qty_sold                 HEADING 'Qty Sold'          FORMAT 999,990
+COLUMN gross_sales              HEADING 'Gross|RM'          FORMAT 999,990.00
+COLUMN discount_given           HEADING 'Discount|RM'       FORMAT 999,990.00
+COLUMN net_sales                HEADING 'Net Sales|RM'      FORMAT 999,990.00
+COLUMN discount_to_gross_pct    HEADING 'Discount /|Gross %' FORMAT 990.99
 
 WITH
 year_bounds AS (
@@ -214,9 +217,146 @@ SELECT
     ROUND(gross_sales, 2) AS gross_sales,
     ROUND(discount_given, 2) AS discount_given,
     ROUND(net_sales, 2) AS net_sales,
-    ROUND(discount_to_gross_pct, 2) AS discount_to_gross_pct,
+    ROUND(discount_to_gross_pct, 2) AS discount_to_gross_pct
+FROM ranked
+ORDER BY effectiveness_rank, promo_name;
+
+CLEAR COLUMNS
+
+PROMPT
+PROMPT ----------------------------------------------------------------------------------------------------------
+PROMPT D3.1B - CAMPAIGN EFFECTIVENESS AND DISCOUNT EFFICIENCY
+PROMPT ----------------------------------------------------------------------------------------------------------
+PROMPT
+
+COLUMN effectiveness_rank       HEADING 'Rank'                FORMAT 9999
+COLUMN promo_name               HEADING 'Promotion'           FORMAT A28
+COLUMN sales_per_promo_day      HEADING 'Promo / Day|RM'      FORMAT 999,990.00
+COLUMN baseline_sales_per_day   HEADING 'Baseline / Day|RM'   FORMAT 999,990.00
+COLUMN uplift_pct               HEADING 'Uplift|%'            FORMAT 9990.99
+COLUMN estimated_uplift_value   HEADING 'Est. Uplift|RM'      FORMAT 999,990.00
+COLUMN uplift_per_rm_discount   HEADING 'Uplift / RM|Discount' FORMAT 9990.99
+
+WITH
+year_bounds AS (
+    SELECT
+        TO_DATE('&p_year' || '0101', 'YYYYMMDD') AS year_start,
+        TO_DATE('&p_year' || '1231', 'YYYYMMDD') AS year_end
+    FROM dual
+),
+promo_sales AS (
+    SELECT
+        sf.promo_key,
+        SUM(sf.quantity) AS qty_sold,
+        SUM(sf.gross_sales_amt) AS gross_sales,
+        SUM(sf.discount_amt) AS discount_given,
+        SUM(sf.net_sales_amt) AS net_sales
+    FROM sales_fact sf
+    JOIN date_dim d
+      ON d.date_key = sf.order_date_key
+    WHERE d.cal_year = TO_NUMBER('&p_year')
+      AND sf.promo_key > 0
+    GROUP BY sf.promo_key
+),
+promo_window AS (
+    SELECT
+        p.promo_key,
+        p.promo_name,
+        p.discount_type,
+        GREATEST(p.promo_start_date, y.year_start) AS active_start,
+        LEAST(p.promo_end_date, y.year_end) AS active_end,
+        CASE
+            WHEN LEAST(p.promo_end_date, y.year_end)
+                 >= GREATEST(p.promo_start_date, y.year_start)
+            THEN LEAST(p.promo_end_date, y.year_end)
+                 - GREATEST(p.promo_start_date, y.year_start) + 1
+            ELSE 0
+        END AS active_days,
+        y.year_end - y.year_start + 1 AS year_days
+    FROM promotion_dim p
+    CROSS JOIN year_bounds y
+    WHERE p.promo_key > 0
+),
+promo_items AS (
+    SELECT DISTINCT
+        sf.promo_key,
+        sf.item_key
+    FROM sales_fact sf
+    JOIN date_dim d
+      ON d.date_key = sf.order_date_key
+    WHERE d.cal_year = TO_NUMBER('&p_year')
+      AND sf.promo_key > 0
+),
+baseline_sales AS (
+    SELECT
+        pi.promo_key,
+        SUM(sf.net_sales_amt) AS baseline_net_sales
+    FROM promo_items pi
+    JOIN promo_window pw
+      ON pw.promo_key = pi.promo_key
+    JOIN sales_fact sf
+      ON sf.item_key = pi.item_key
+     AND sf.promo_key = 0
+    JOIN date_dim d
+      ON d.date_key = sf.order_date_key
+    WHERE d.cal_year = TO_NUMBER('&p_year')
+      AND (d.cal_date < pw.active_start OR d.cal_date > pw.active_end)
+    GROUP BY pi.promo_key
+),
+campaign AS (
+    SELECT
+        ps.promo_key,
+        pw.promo_name,
+        pw.discount_type,
+        pw.active_days,
+        ps.qty_sold,
+        ps.gross_sales,
+        ps.discount_given,
+        ps.net_sales,
+        100 * ps.discount_given / NULLIF(ps.gross_sales, 0)
+            AS discount_to_gross_pct,
+        ps.net_sales / NULLIF(pw.active_days, 0)
+            AS sales_per_promo_day,
+        NVL(bs.baseline_net_sales, 0)
+            / NULLIF(pw.year_days - pw.active_days, 0)
+            AS baseline_sales_per_day
+    FROM promo_sales ps
+    JOIN promo_window pw
+      ON pw.promo_key = ps.promo_key
+    LEFT JOIN baseline_sales bs
+      ON bs.promo_key = ps.promo_key
+),
+scored AS (
+    SELECT
+        c.*,
+        100 * (c.sales_per_promo_day - c.baseline_sales_per_day)
+            / NULLIF(c.baseline_sales_per_day, 0)
+            AS uplift_pct,
+        (c.sales_per_promo_day - c.baseline_sales_per_day) * c.active_days
+            AS estimated_uplift_value,
+        ((c.sales_per_promo_day - c.baseline_sales_per_day) * c.active_days)
+            / NULLIF(c.discount_given, 0)
+            AS uplift_per_rm_discount
+    FROM campaign c
+),
+ranked AS (
+    SELECT
+        s.*,
+        DENSE_RANK() OVER (
+            ORDER BY
+                s.uplift_per_rm_discount DESC NULLS LAST,
+                s.uplift_pct DESC NULLS LAST,
+                s.net_sales DESC
+        ) AS effectiveness_rank
+    FROM scored s
+)
+SELECT
+    effectiveness_rank,
+    promo_name,
     ROUND(sales_per_promo_day, 2) AS sales_per_promo_day,
+    ROUND(baseline_sales_per_day, 2) AS baseline_sales_per_day,
     ROUND(uplift_pct, 2) AS uplift_pct,
+    ROUND(estimated_uplift_value, 2) AS estimated_uplift_value,
     ROUND(uplift_per_rm_discount, 2) AS uplift_per_rm_discount
 FROM ranked
 ORDER BY effectiveness_rank, promo_name;
