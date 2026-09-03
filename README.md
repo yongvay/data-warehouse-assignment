@@ -343,7 +343,7 @@ SQL> SPOOL OFF
 SQL> SET MARKUP CSV OFF
 ```
 
-#### Run the charts
+#### Run the charts — the notebook route
 
 ```powershell
 cd "Task 3\Yong Vay"
@@ -362,6 +362,36 @@ one you are in:
   reload the warehouse, the numbers in the notebook do **not** update themselves —
   re-run the SQL and update the lists in the data cell. It writes into a local
   `charts/` folder; the committed copies live in `Task 3 output/Xing Szen/`.
+
+#### Run the charts — the Power BI route (Domain C)
+
+Domain C is also charted in **Power BI Desktop**, which does not need Python at all.
+The SQL stays the single source of truth: a companion export script spools each
+exhibit to CSV, and Power BI only visualises them.
+
+```sql
+sqlplus dw/<password>@localhost:1521/FREEPDB1
+SQL> @"Task 3\Yong Vay\task3_yv_csv_export.sql"     -- writes 18 CSVs
+```
+
+Then follow **[Task 3/Yong Vay/POWERBI_GUIDE.md](Task%203/Yong%20Vay/POWERBI_GUIDE.md)**
+— install, import, the field wells for all seventeen visuals across three pages,
+formatting for print, and getting the images into Word. The palette lives in
+`task3_yv_theme.json` and matches Domain A, so the compiled report reads as one
+document.
+
+Two things the guide insists on, both correctness rather than taste:
+
+- **Do not use Power BI's Analytics "Average line" as the national reference line**
+  on the dormancy-by-state chart. It averages the plotted state *percentages*, an
+  unweighted mean that is not the national rate. The export carries the correctly
+  weighted figure as its own column.
+- **Re-run the export after every ETL reload.** Nothing in Power BI will tell you
+  the CSVs have gone stale — same class of trap as the stale compiled procedures in
+  Stage 3.
+
+The notebook above remains on disk and still works; it is the alternative route, not
+a prerequisite.
 
 #### Four rules baked into every Task 3 report
 

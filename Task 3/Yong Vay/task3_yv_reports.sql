@@ -17,10 +17,10 @@
 --  ......................................................................
 --  FOUR STANDING RULES, APPLIED THROUGHOUT
 --
---  1. 2026 IS A PART YEAR.  It covers January to August only.  No YoY or
---     growth column includes it, because a part year charted against a
---     whole one reads as a collapse that did not happen.  Level tables
---     show it and say so.
+--  1. 2026 IS A PART YEAR.  It ends at the latest order date held in the
+--     warehouse, not 31 December.  No YoY or growth column includes it,
+--     because a part year charted against a whole one reads as a collapse
+--     that did not happen.  Level tables show it and label it.
 --
 --  2. CUSTOMER_DIM IS TYPE 2.  A customer who upgraded Normal -> VIP owns
 --     more than one customer_key.  Joining sales_fact straight through the
@@ -49,7 +49,7 @@
 --  ......................................................................
 -- ============================================================================
 SET SQLBLANKLINES ON
-SET LINESIZE 200
+SET LINESIZE 250
 SET PAGESIZE 400
 SET FEEDBACK OFF
 SET VERIFY OFF
@@ -418,7 +418,7 @@ SELECT s.cal_year,
        NVL(e.points_earned, 0)     AS points_earned,
        ROUND(NVL(e.points_earned, 0) / NULLIF(s.net_sales, 0), 3)
            AS points_per_rm,
-       CASE WHEN s.cal_year = 2026 THEN 'Part year, Jan-Aug'
+       CASE WHEN s.cal_year = 2026 THEN 'Part year to ' || TO_CHAR((SELECT MAX(dd.cal_date) FROM sales_fact ss JOIN date_dim dd ON dd.date_key = ss.order_date_key), 'DD Mon')
             ELSE '-' END           AS verdict
 FROM   sold s
 LEFT   JOIN earned e ON e.cal_year = s.cal_year
@@ -543,9 +543,14 @@ ORDER  BY dormancy_pct DESC;
 PROMPT
 PROMPT --- EXHIBIT 3.2  Down to city, so the campaign has an address ===
 PROMPT WHERE exactly. A state-level dormancy figure is not actionable; a
-PROMPT branch city is. Subtotals per state come from BREAK and COMPUTE.
+PROMPT branch city is.
+PROMPT SUBTOTALS COME FROM GROUP BY ROLLUP, NOT FROM COMPUTE. Two reasons.
+PROMPT COMPUTE prints a row of asterisks at every break, which no amount of
+PROMPT formatting removes. And COMPUTE can only ADD columns up - it leaves
+PROMPT dormancy_pct and avg_months_since blank on the subtotal rows, because
+PROMPT a rate cannot be summed. ROLLUP recomputes both correctly over the
+PROMPT whole state, and adds a company total for free.
 BREAK ON branch_state SKIP 1
-COMPUTE SUM LABEL 'State total' OF base_customers dormant ON branch_state
 
 WITH bounds AS (
     SELECT MAX(d.cal_date) AS as_of
@@ -570,8 +575,11 @@ WITH bounds AS (
            AND    d.cal_year >= &p_era_yr )
     WHERE  rn = 1
 )
-SELECT cs.branch_state,
-       cs.branch_city,
+SELECT CASE WHEN GROUPING(cs.branch_state) = 1 THEN 'COMPANY TOTAL'
+            ELSE cs.branch_state END                    AS branch_state,
+       CASE WHEN GROUPING(cs.branch_state) = 1 THEN 'All states'
+            WHEN GROUPING(cs.branch_city)  = 1 THEN 'State total'
+            ELSE cs.branch_city END                     AS branch_city,
        COUNT(*) AS base_customers,
        SUM(CASE WHEN MONTHS_BETWEEN(bo.as_of, cl.last_order_date) > 6
                 THEN 1 ELSE 0 END) AS dormant,
@@ -582,8 +590,11 @@ SELECT cs.branch_state,
 FROM   cust_last  cl
 JOIN   cust_state cs ON cs.customer_id = cl.customer_id
 CROSS  JOIN bounds bo
-GROUP  BY cs.branch_state, cs.branch_city
-ORDER  BY cs.branch_state, dormancy_pct DESC;
+GROUP  BY ROLLUP(cs.branch_state, cs.branch_city)
+ORDER  BY GROUPING(cs.branch_state),
+          cs.branch_state,
+          GROUPING(cs.branch_city),
+          dormancy_pct DESC;
 
 CLEAR BREAKS
 CLEAR COMPUTES

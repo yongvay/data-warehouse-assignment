@@ -1,0 +1,550 @@
+SQL>  @"Task 3\Yong Vay\task3_yv_reports.sql"
+Report START year (default 2016): 2016
+Report END year   (default 2026): 2026
+All-branches era begins (default 2024): 2024
+
+============================================================================
+REPORT 1 - MEMBERSHIP TIER ECONOMICS: DOES VIP EARN ITS KEEP
+Dimensions: customer_dim (membership_type) x date_dim (year)
+Measures  : orders, net revenue, basket value, spend per customer,
+annual fee revenue, points accrued
+
+THE QUESTION: VIP costs the member RM12 a year and costs the company
+a doubled point-earn rate. Report 1 asks whether the extra spend a
+VIP brings is large enough to cover what the tier gives away.
+============================================================================
+
+--- EXHIBIT 1.1  Tier value scorecard  [CHART: grouped column] ===
+WHAT: the headline. Spend per customer is the column that decides the
+question - average order value alone hides how OFTEN each tier shops.
+Headcount is DISTINCT customer_id, so tier upgraders are counted once.
+
+MEMBERSHIP_TYP  CUSTOMERS     ORDERS ORDERS_PER_CUST  NET_SALES SALES_SHARE_PCT AVG_ORDER_VALUE SPEND_PER_CUST VALUE_RANK
+-------------- ---------- ---------- --------------- ---------- --------------- --------------- -------------- ----------
+Normal                354       2780            7.85     215351            38.4           77.46         608.34          1
+VIP                   292       2216            7.59     169080            30.2            76.3         579.04          2
+Non-Member            348       2366             6.8     175847            31.4           74.32         505.31          3
+
+--- EXHIBIT 1.2  What the tier costs, against what it collects ===
+WHY IT MATTERS: fee revenue is the only DIRECT income the tier earns.
+Points accrued are the direct cost, and VIP accrues at twice the rate
+per ringgit spent. If VIP fee income is trivial next to the point
+overhang, the tier has to justify itself on incremental spend alone.
+Fee revenue counts CURRENT member versions only, so a lapsed
+membership is not still billed.
+
+MEMBERSHIP_TYP CURRENT_MEMBERS EARN_RATE_PER_RM ANNUAL_FEE_REVENUE POINTS_EARNED POINTS_REDEEMED POINTS_OUTSTANDING POINTS_PER_RM_SOLD
+-------------- --------------- ---------------- ------------------ ------------- --------------- ------------------ ------------------
+VIP                        294                2               3528        342790           22432             320358               2.03
+Non-Member                 351                0                  0             0               0                  0                  0
+Normal                     356                1                  0        217684           11643             206041               1.01
+
+--- EXHIBIT 1.3  Revenue by tier by year  [CHART: stacked column] ===
+Long format on purpose - this is the shape a stacked chart wants.
+Because customer_dim is Type 2, a customer who upgraded mid-decade
+appears under Normal in the early years and VIP in the later ones.
+That is the Type 2 dimension doing real work, not a data error.
+
+  CAL_YEAR MEMBERSHIP         ORDERS  NET_SALES
+---------- -------------- ---------- ----------
+      2016 Non-Member             91       6014
+      2016 Normal                 89       4703
+      2016 VIP                    70       3621
+      2017 Non-Member            115       6982
+      2017 VIP                   104       6295
+      2017 Normal                111       5878
+      2018 Normal                161      10196
+      2018 Non-Member            156       9709
+      2018 VIP                   113       6196
+      2019 Normal                195      12169
+      2019 Non-Member            187      11274
+      2019 VIP                   158       8701
+      2020 Normal                120       7410
+      2020 Non-Member            127       6918
+      2020 VIP                    83       5312
+      2021 Non-Member            163      10186
+      2021 Normal                163      10034
+      2021 VIP                   124       7993
+      2022 Non-Member            251      17965
+      2022 Normal                241      15894
+      2022 VIP                   188      13823
+      2023 Normal                330      27250
+      2023 Non-Member            318      27078
+      2023 VIP                   252      19371
+      2024 Normal                453      38797
+      2024 VIP                   360      30554
+      2024 Non-Member            287      23672
+      2025 Normal                537      51668
+      2025 VIP                   441      39929
+      2025 Non-Member            372      33293
+      2026 Normal                380      31351
+      2026 VIP                   323      27286
+      2026 Non-Member            299      22757
+
+--- EXHIBIT 1.4  Year on year growth by tier ===
+2026 EXCLUDED: a part year cannot carry a growth percentage.
+WHAT TO LOOK FOR: a tier whose share is rising is winning the mix even
+if every tier is growing in absolute terms.
+
+  CAL_YEAR MEMBERSHIP      NET_SALES SALES_CHANGE    YOY_PCT SHARE_OF_YEAR_PCT
+---------- -------------- ---------- ------------ ---------- -----------------
+      2016 Non-Member           6014                                      41.9
+      2017 Non-Member           6982          968       16.1              36.5
+      2018 Non-Member           9709         2727       39.1              37.2
+      2019 Non-Member          11274         1565       16.1              35.1
+      2020 Non-Member           6918        -4356      -38.6              35.2
+      2021 Non-Member          10186         3268       47.2              36.1
+      2022 Non-Member          17965         7779       76.4              37.7
+      2023 Non-Member          27078         9113       50.7              36.7
+      2024 Non-Member          23672        -3406      -12.6              25.4
+      2025 Non-Member          33293         9621       40.6              26.7
+      2016 Normal               4703                                      32.8
+      2017 Normal               5878         1175         25              30.7
+      2018 Normal              10196         4318       73.5              39.1
+      2019 Normal              12169         1973       19.4              37.9
+      2020 Normal               7410        -4759      -39.1              37.7
+      2021 Normal              10034         2624       35.4              35.6
+      2022 Normal              15894         5860       58.4              33.3
+      2023 Normal              27250        11356       71.4                37
+      2024 Normal              38797        11547       42.4              41.7
+      2025 Normal              51668        12871       33.2              41.4
+      2016 VIP                  3621                                      25.3
+      2017 VIP                  6295         2674       73.8              32.9
+      2018 VIP                  6196          -99       -1.6              23.7
+      2019 VIP                  8701         2505       40.4              27.1
+      2020 VIP                  5312        -3389      -38.9                27
+      2021 VIP                  7993         2681       50.5              28.3
+      2022 VIP                 13823         5830       72.9                29
+      2023 VIP                 19371         5548       40.1              26.3
+      2024 VIP                 30554        11183       57.7              32.8
+      2025 VIP                 39929         9375       30.7                32
+
+--- EXHIBIT 1.5  Tier movement, straight out of the Type 2 dimension ===
+HOW: a customer with more than one version row has changed tier at
+least once. version_no and the effective dates record exactly when.
+This exhibit exists because it is the clearest single piece of
+evidence that the SCD Type 2 requirement in Task 1b actually works.
+
+MOVEMENT                    CUSTOMERS
+-------------------------- ----------
+Never changed tier               1000
+Other tier change                   1
+
+--- EXHIBIT 1.6  Basket behaviour by tier ===
+SO WHAT: separates the two ways a tier can be worth more - bigger
+baskets, or more frequent visits. The fix differs. A tier that buys
+big but rarely needs a frequency campaign; one that visits often for
+little needs basket-building at the till.
+
+MEMBERSHIP         ORDERS AVG_UNITS_PER_LINE LINES_PER_ORDER AVG_BASKET DISCOUNT_GIVEN DISCOUNT_TAKE_PCT
+-------------- ---------- ------------------ --------------- ---------- -------------- -----------------
+Normal               2780               3.16            2.73      77.46           7082              3.18
+VIP                  2216               3.14            2.76       76.3           5213              2.99
+Non-Member           2366               3.08            2.75      74.32           5590              3.08
+
+============================================================================
+REPORT 2 - LOYALTY POINTS: EARN, REDEEM AND THE OUTSTANDING LIABILITY
+Dimensions: customer_dim (membership_type) x date_dim (year, month)
+Measures  : points earned, points redeemed, net points, redemption
+rate, participation, cumulative balance
+
+FRAMING: this is a LIABILITY and PARTICIPATION report, not a trend
+report. See standing rule 3 - redemptions in this source are sparse
+and late-clustered, so the decade-long monthly series would describe
+the data generator rather than the business. Exhibits 2.1 to 2.3 and
+2.5 need no time axis at all; 2.4 carries one and is restricted.
+
+Redeem rows carry no order and therefore no branch - they land on
+branch_key = -1. Nothing in this report groups points by branch.
+============================================================================
+
+--- EXHIBIT 2.1  The standing position ===
+WHAT: the headline liability. Every point ever issued, every point
+ever taken back, and the gap the company still owes its members.
+
+METRIC                                         FIGURE
+---------------------------------------------- ------------------
+Points issued (Earn)                                560,474
+Points returned (Redeem)                             34,075
+Outstanding balance (unfunded liability)            526,399
+Redemption rate, points redeemed over issued      6.08 %
+Members holding points                              645
+Members who have EVER redeemed                      147
+
+--- EXHIBIT 2.2  Participation: who has ever taken anything back ===
+THE KEY EXHIBIT. A redemption RATE measured in points can be dragged
+around by a handful of large redemptions. Participation - the share of
+point-holding members who have ever redeemed even once - cannot. If
+participation is low while balances rise, the reward catalogue is the
+problem, not the earn rate.
+
+MEMBERSHIP     POINT_HOLDERS EVER_REDEEMED PARTICIPATION_PCT AVG_POINTS_EARNED AVG_BALANCE_HELD LARGEST_BALANCE
+-------------- ------------- ------------- ----------------- ----------------- ---------------- ---------------
+VIP                      291            89              30.6              1178             1101            4070
+Normal                   354            58              16.4               615              582            2111
+
+--- EXHIBIT 2.3  Where the liability sits  [CHART: stacked bar] ===
+WHY: VIP earns at 2.00 points per ringgit against Normal at 1.00, so
+VIP should hold a share of the liability well above its share of the
+membership. Quantifying that gap is what turns Report 1's repricing
+question into a number.
+
+MEMBERSHIP_TYP    MEMBERS MEMBER_SHARE_PCT     EARNED   REDEEMED    BALANCE LIABILITY_SHARE_PCT REDEMPTION_PCT
+-------------- ---------- ---------------- ---------- ---------- ---------- ------------------- --------------
+VIP                   291             45.1     342790      22432     320358                60.9           6.54
+Normal                354             54.9     217684      11643     206041                39.1           5.35
+
+--- EXHIBIT 2.4  Monthly earn against redeem  [CHART: column plus line] ===
+RESTRICTED WINDOW, AND HERE IS WHY. In the source a member holds at
+most one redemption, dated at their most recent earn, so redemptions
+bunch toward the end of each member's life rather than spreading
+across the decade. Charted from 2016 the series would show a generator
+artefact. From the all-branches era onward the monthly shape is
+trustworthy. Read the cumulative balance line, not the redeem bars.
+
+CAL_YEAR_ POINTS_EARNED POINTS_REDEEMED NET_POINTS REDEMPTION_PCT CUMULATIVE_BALANCE
+--------- ------------- --------------- ---------- -------------- ------------------
+2024-01            7239               0       7239              0               7239
+2024-02            8506               0       8506              0              15745
+2024-03            7607             189       7418           2.48              23163
+2024-04           11420               0      11420              0              34583
+2024-05            9265               0       9265              0              43848
+2024-06            5338               0       5338              0              49186
+2024-07            7162               0       7162              0              56348
+2024-08            8136               0       8136              0              64484
+2024-09            9167               0       9167              0              73651
+2024-10            8460               0       8460              0              82111
+2024-11            9973             173       9800           1.73              91911
+2024-12            7223               0       7223              0              99134
+2025-01           12472               0      12472              0             111606
+2025-02            6513               0       6513              0             118119
+2025-03           10677               0      10677              0             128796
+2025-04           11222             620      10602           5.52             139398
+2025-05           11902             132      11770           1.11             151168
+2025-06           12190            1600      10590          13.13             161758
+2025-07           14347            1600      12747          11.15             174505
+2025-08           10785            2390       8395          22.16             182900
+2025-09            7868            3200       4668          40.67             187568
+2025-10           11449            2469       8980          21.57             196548
+2025-11            9931            1853       8078          18.66             204626
+2025-12           10848            1602       9246          14.77             213872
+2026-01           13805            1725      12080           12.5             225952
+2026-02           11985            3400       8585          28.37             234537
+2026-03            9890            2271       7619          22.96             242156
+2026-04           11100            2341       8759          21.09             250915
+2026-05           10684            2991       7693             28             258608
+2026-06           12374            3383       8991          27.34             267599
+2026-07            7919             594       7325            7.5             274924
+2026-08            5219             794       4425          15.21             279349
+2026-09            3923             748       3175          19.07             282524
+
+--- EXHIBIT 2.5  What a point costs to issue ===
+HOW the programme scales with trade. Points issued per ringgit of net
+sales should track the tier mix - if it drifts upward year on year
+without a tier-mix shift behind it, the programme is getting more
+generous by accident.
+2026 shown but flagged: a part year, so read the RATIO not the volume.
+
+  CAL_YEAR  NET_SALES POINTS_EARNED POINTS_PER_RM VERDICT
+---------- ---------- ------------- ------------- ----------------------
+      2016      14337         12707          .886 -
+      2017      19155         19423         1.014 -
+      2018      26101         23620          .905 -
+      2019      32144         30652          .954 -
+      2020      19640         18594          .947 -
+      2021      28213         26697          .946 -
+      2022      47682         44593          .935 -
+      2023      73699         67589          .917 -
+      2024      93023         99496          1.07 -
+      2025     124891        130204         1.043 -
+      2026      81394         86899         1.068 Part year to 02 Sep
+
+--- EXHIBIT 2.6  Size of the balances being carried ===
+SO WHAT: an expiry policy or a voucher sweep only pays for itself if
+the balances are concentrated. If most members hold very little, the
+liability is diffuse and a blanket campaign wastes most of its budget.
+
+BAND                    MEMBERS PCT_OF_MEMBERS TOTAL_POINTS PCT_OF_LIABILITY
+-------------------- ---------- -------------- ------------ ----------------
+1. Under 100                 20            3.1         1089               .2
+2. 100 to 399               149           23.1        40159              7.6
+3. 400 to 999               279           43.3       182675             34.7
+4. 1,000 to 2,499           186           28.8       270786             51.4
+5. 2,500 and over            11            1.7        31690                6
+
+============================================================================
+REPORT 3 - CUSTOMER RETENTION AND DORMANCY BY STATE
+Dimensions: branch_dim (state, city) x customer_dim x date_dim
+Measures  : active and dormant headcount, retention rate, dormancy
+rate, months since last order
+
+TWO DEFINITIONS THIS REPORT COMMITS TO, BOTH DEFENSIBLE, BOTH STATED
+BECAUSE THEY ARE CHOICES RATHER THAN FACTS:
+
+(a) A CUSTOMER'S STATE is the state of the branch they LAST shopped
+at. customer_dim holds no geography and address_dim only reaches
+delivery_fact, so branch is the available proxy. A customer who
+moved is attributed to where they shop now, which is the right
+answer for a win-back campaign.
+
+(b) THE AS-AT DATE is the latest order date in the warehouse, not
+SYSDATE. Anchoring to the data keeps the report reproducible
+when it is re-run on a rebuilt database next week.
+
+Population restricted to the all-branches era - see standing rule 4.
+============================================================================
+
+--- EXHIBIT 3.1  Retention and dormancy by state  [CHART: bar] ===
+WHAT: where the leakage is. Dormant means no order in the six months
+to the as-at date. The national average is the reference line the
+chart needs - a state below it is losing customers faster than the
+company as a whole, which is the only comparison that justifies
+spending win-back budget there rather than everywhere.
+
+BRANCH_STATE         BASE_CUSTOMERS     ACTIVE    DORMANT RETENTION_PCT DORMANCY_PCT AVG_MONTHS_SINCE STATE_SHARE_PCT WORST_FIRST_RANK
+-------------------- -------------- ---------- ---------- ------------- ------------ ---------------- --------------- ----------------
+Negeri Sembilan                  80         36         44            45           55              8.3             8.3                1
+Johor                            77         36         41          46.8         53.2              7.6               8                2
+Pahang                           83         41         42          49.4         50.6              8.4             8.6                3
+Selangor                        166         82         84          49.4         50.6              7.1            17.2                3
+Kedah                            77         40         37          51.9         48.1              7.9               8                5
+Kuala Lumpur                    154         82         72          53.2         46.8              7.8              16                6
+Perak                            81         45         36          55.6         44.4              7.4             8.4                7
+Melaka                           81         46         35          56.8         43.2                8             8.4                8
+Sarawak                          79         47         32          59.5         40.5              6.9             8.2                9
+Pulau Pinang                     86         52         34          60.5         39.5              7.4             8.9               10
+
+--- EXHIBIT 3.2  Down to city, so the campaign has an address ===
+WHERE exactly. A state-level dormancy figure is not actionable; a
+branch city is.
+SUBTOTALS COME FROM GROUP BY ROLLUP, NOT FROM COMPUTE. Two reasons.
+COMPUTE prints a row of asterisks at every break, which no amount of
+formatting removes. And COMPUTE can only ADD columns up - it leaves
+dormancy_pct and avg_months_since blank on the subtotal rows, because
+a rate cannot be summed. ROLLUP recomputes both correctly over the
+whole state, and adds a company total for free.
+
+BRANCH_STATE         BRANCH_CITY          BASE_CUSTOMERS    DORMANT DORMANCY_PCT AVG_MONTHS_SINCE
+-------------------- -------------------- -------------- ---------- ------------ ----------------
+Johor                Johor Bahru                      77         41         53.2              7.6
+                     State total                      77         41         53.2              7.6
+
+Kedah                Alor Setar                       77         37         48.1              7.9
+                     State total                      77         37         48.1              7.9
+
+Kuala Lumpur         Kepong                           67         34         50.7              8.1
+                     Cheras                           87         38         43.7              7.6
+                     State total                     154         72         46.8              7.8
+
+Melaka               Melaka City                      81         35         43.2                8
+                     State total                      81         35         43.2                8
+
+Negeri Sembilan      Seremban                         80         44           55              8.3
+                     State total                      80         44           55              8.3
+
+Pahang               Kuantan                          83         42         50.6              8.4
+                     State total                      83         42         50.6              8.4
+
+Perak                Ipoh                             81         36         44.4              7.4
+                     State total                      81         36         44.4              7.4
+
+Pulau Pinang         Georgetown                       86         34         39.5              7.4
+                     State total                      86         34         39.5              7.4
+
+Sarawak              Kuching                          79         32         40.5              6.9
+                     State total                      79         32         40.5              6.9
+
+Selangor             Shah Alam                        79         45           57              7.2
+                     Rawang                           87         39         44.8                7
+                     State total                     166         84         50.6              7.1
+
+COMPANY TOTAL        All states                      964        457         47.4              7.6
+
+
+--- EXHIBIT 3.3  Active customers by month  [CHART: line] ===
+WHEN the base grew and when it stalled. Counted as customers who
+placed at least one order in the month, so this is a trading base, not
+a registration count - a registered customer who never shops again is
+correctly absent.
+
+CAL_YEAR_ ACTIVE_CUSTOMERS     ORDERS  NET_SALES ORDERS_PER_ACTIVE
+--------- ---------------- ---------- ---------- -----------------
+2016-01                 21         23       1465               1.1
+2016-02                 19         25       1436              1.32
+2016-03                 18         19       1227              1.06
+2016-04                 20         20        956                 1
+2016-05                 19         20       1032              1.05
+2016-06                 19         20       1036              1.05
+2016-07                 17         17       1013                 1
+2016-08                 15         18        937               1.2
+2016-09                 17         18        873              1.06
+2016-10                 20         20       1261                 1
+2016-11                 20         21       1389              1.05
+2016-12                 27         29       1711              1.07
+2017-01                 30         31       1714              1.03
+2017-02                 30         33       1451               1.1
+2017-03                 23         26       1798              1.13
+2017-04                 27         27       1641                 1
+2017-05                 22         27       2000              1.23
+2017-06                 26         27       1275              1.04
+2017-07                 23         23       1024                 1
+2017-08                 21         24       1238              1.14
+2017-09                 23         24       1494              1.04
+2017-10                 25         27       1714              1.08
+2017-11                 27         28       1863              1.04
+2017-12                 32         33       1942              1.03
+2018-01                 39         40       2525              1.03
+2018-02                 40         43       2476              1.08
+2018-03                 33         33       1901                 1
+2018-04                 34         35       2147              1.03
+2018-05                 33         35       2431              1.06
+2018-06                 33         35       2099              1.06
+2018-07                 29         30       2481              1.03
+2018-08                 31         32       1625              1.03
+2018-09                 31         32       1835              1.03
+2018-10                 33         35       2005              1.06
+2018-11                 36         37       2280              1.03
+2018-12                 42         43       2296              1.02
+2019-01                 48         50       2224              1.04
+2019-02                 49         54       3457               1.1
+2019-03                 41         42       3114              1.02
+2019-04                 44         44       2691                 1
+2019-05                 43         44       2434              1.02
+2019-06                 42         44       2468              1.05
+2019-07                 36         38       2255              1.06
+2019-08                 40         40       2543                 1
+2019-09                 39         40       2843              1.03
+2019-10                 44         44       2911                 1
+2019-11                 45         46       2702              1.02
+2019-12                 50         54       2502              1.08
+2020-01                 29         31       1667              1.07
+2020-02                 32         33       1509              1.03
+2020-03                 26         26       1464                 1
+2020-04                 27         27       1855                 1
+2020-05                 25         27       1701              1.08
+2020-06                 27         27       1509                 1
+2020-07                 23         23       1329                 1
+2020-08                 24         24       1689                 1
+2020-09                 23         24       1172              1.04
+2020-10                 25         27       1904              1.08
+2020-11                 26         28       1895              1.08
+2020-12                 33         33       1945                 1
+2021-01                 42         42       2948                 1
+2021-02                 44         45       2924              1.02
+2021-03                 32         35       2215              1.09
+2021-04                 37         37       2306                 1
+2021-05                 36         37       2146              1.03
+2021-06                 37         37       2498                 1
+2021-07                 30         31       1932              1.03
+2021-08                 32         33       1666              1.03
+2021-09                 33         33       2096                 1
+2021-10                 35         37       2357              1.06
+2021-11                 34         38       2815              1.12
+2021-12                 45         45       2309                 1
+2022-01                 61         63       4357              1.03
+2022-02                 68         69       5012              1.01
+2022-03                 51         53       3001              1.04
+2022-04                 52         55       3554              1.06
+2022-05                 52         55       4017              1.06
+2022-06                 53         55       3993              1.04
+2022-07                 44         47       3923              1.07
+2022-08                 48         50       3608              1.04
+2022-09                 47         50       3451              1.06
+2022-10                 54         55       4486              1.02
+2022-11                 54         58       3315              1.07
+2022-12                 68         70       4966              1.03
+2023-01                 81         84       6194              1.04
+2023-02                 85         91       8143              1.07
+2023-03                 67         70       5283              1.04
+2023-04                 71         73       5660              1.03
+2023-05                 72         73       6432              1.01
+2023-06                 72         73       5695              1.01
+2023-07                 62         63       6142              1.02
+2023-08                 64         66       4728              1.03
+2023-09                 63         66       5037              1.05
+2023-10                 68         73       6795              1.07
+2023-11                 74         77       6749              1.04
+2023-12                 86         91       6840              1.06
+2024-01                 94         97       7654              1.03
+2024-02                 97        104       7875              1.07
+2024-03                 81         88       7168              1.09
+2024-04                 88         94       8997              1.07
+2024-05                 77         82       8200              1.06
+2024-06                 78         81       6677              1.04
+2024-07                 93         98       7353              1.05
+2024-08                 89         95       7550              1.07
+2024-09                 83         87       8143              1.05
+2024-10                 94         98       7600              1.04
+2024-11                 87         90       8810              1.03
+2024-12                 82         86       6997              1.05
+2025-01                124        134      10994              1.08
+2025-02                101        103       7689              1.02
+2025-03                111        122      10809               1.1
+2025-04                101        108      10536              1.07
+2025-05                120        126      12695              1.05
+2025-06                 94         99       9454              1.05
+2025-07                105        110      12085              1.05
+2025-08                107        115      11369              1.07
+2025-09                100        104       8637              1.04
+2025-10                101        106      10752              1.05
+2025-11                 88         97       8896               1.1
+2025-12                123        126      10977              1.02
+2026-01                132        139      11844              1.05
+2026-02                130        143      10705               1.1
+2026-03                120        126       9891              1.05
+2026-04                114        121       9633              1.06
+2026-05                123        129      12920              1.05
+2026-06                120        130      10131              1.08
+2026-07                 89         92       6445              1.03
+2026-08                 59         60       4842              1.02
+2026-09                 58         62       4984              1.07
+
+--- EXHIBIT 3.4  Does the membership programme actually retain ===
+THE PAYOFF EXHIBIT, and the one that closes the loop with Report 1.
+Report 1 asks whether VIP spends more. This asks whether VIP STAYS.
+A tier that spends more but churns at the same rate is buying revenue,
+not loyalty, and the fee cannot be defended on retention grounds.
+
+MEMBERSHIP     BASE_CUSTOMERS     ACTIVE RETENTION_PCT AVG_MONTHS_SINCE
+-------------- -------------- ---------- ------------- ----------------
+VIP                       288        162          56.3              6.9
+Normal                    346        186          53.8              7.2
+Non-Member                330        159          48.2              8.7
+
+--- EXHIBIT 3.5  Recency bands: how far gone is the dormant base ===
+HOW to spend the budget. A customer three months quiet needs a nudge
+one two years quiet needs a reacquisition offer or writing off. The
+bands price the difference.
+
+RECENCY_BAND            CUSTOMERS PCT_OF_BASE CUMULATIVE_CUSTOMERS
+---------------------- ---------- ----------- --------------------
+1. 0 to 3 months              289          30                  289
+2. 3 to 6 months              218        22.6                  507
+3. 6 to 12 months             253        26.2                  760
+4. 12 to 24 months            165        17.1                  925
+5. Over 24 months              39           4                  964
+
+--- EXHIBIT 3.6  Acquisition cohorts: do newer customers stick ===
+WHY the base looks the way it does. Grouping by the year of a
+customer's FIRST order shows whether retention is a recent problem or
+a long-standing one, and whether the cohorts acquired during the
+growth years were ever as loyal as the earlier ones.
+
+COHORT_YEAR CUSTOMERS_ACQUIRED STILL_ACTIVE STILL_ACTIVE_PCT AVG_LIFETIME_ORDERS AVG_LIFETIME_SALES
+----------- ------------------ ------------ ---------------- ------------------- ------------------
+       2016                103           57             55.3                13.3             902.76
+       2017                 82           45             54.9                11.2             767.02
+       2018                 95           41             43.2                 9.9             720.45
+       2019                106           53               50                 8.6              675.3
+       2020                 53           26             49.1                 7.8             629.59
+       2021                 89           41             46.1                 6.7             545.06
+       2022                145           78             53.8                   6             475.94
+       2023                182           93             51.1                 4.9             404.29
+       2024                 96           47               49                 3.8             323.49
+       2025                 34           18             52.9                 2.4             208.31
+       2026                  9            8             88.9                 1.7             196.17
+
+============================================================================
+END OF REPORTS - STUDENT YV
+============================================================================
+SQL> SPOOL OFF

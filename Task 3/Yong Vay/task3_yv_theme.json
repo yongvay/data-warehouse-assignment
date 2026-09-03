@@ -1,0 +1,107 @@
+{
+  "name": "Task 3 Domain C - Yong Vay",
+  "dataColors": [
+    "#2a78d6",
+    "#eb6834",
+    "#1baf7a",
+    "#e34948",
+    "#8a8985",
+    "#52514e",
+    "#8fb9e8",
+    "#f2a87f"
+  ],
+  "foreground": "#1a1a19",
+  "foregroundNeutralSecondary": "#52514e",
+  "foregroundNeutralTertiary": "#8a8985",
+  "background": "#ffffff",
+  "backgroundLight": "#f5f4f1",
+  "backgroundNeutral": "#e6e5e1",
+  "tableAccent": "#2a78d6",
+  "good": "#1baf7a",
+  "neutral": "#8a8985",
+  "bad": "#e34948",
+  "maximum": "#2a78d6",
+  "center": "#e6e5e1",
+  "minimum": "#eb6834",
+  "textClasses": {
+    "title": {
+      "fontFace": "Segoe UI Semibold",
+      "fontSize": 13,
+      "color": "#1a1a19"
+    },
+    "label": {
+      "fontFace": "Segoe UI",
+      "fontSize": 10,
+      "color": "#52514e"
+    },
+    "callout": {
+      "fontFace": "Segoe UI Light",
+      "fontSize": 34,
+      "color": "#1a1a19"
+    }
+  },
+  "visualStyles": {
+    "*": {
+      "*": {
+        "background": [
+          { "show": true, "color": { "solid": { "color": "#ffffff" } }, "transparency": 0 }
+        ],
+        "border": [ { "show": false } ],
+        "dropShadow": [ { "show": false } ],
+        "title": [
+          {
+            "show": true,
+            "alignment": "left",
+            "fontColor": { "solid": { "color": "#1a1a19" } },
+            "background": { "solid": { "color": "#ffffff" } },
+            "fontSize": 13,
+            "titleWrap": true
+          }
+        ],
+        "categoryAxis": [
+          {
+            "show": true,
+            "showAxisTitle": true,
+            "labelColor": { "solid": { "color": "#52514e" } },
+            "fontSize": 10,
+            "gridlineShow": false
+          }
+        ],
+        "valueAxis": [
+          {
+            "show": true,
+            "showAxisTitle": true,
+            "labelColor": { "solid": { "color": "#52514e" } },
+            "fontSize": 10,
+            "gridlineShow": true,
+            "gridlineColor": { "solid": { "color": "#e6e5e1" } },
+            "gridlineThickness": 1,
+            "gridlineStyle": "solid"
+          }
+        ],
+        "legend": [
+          {
+            "show": true,
+            "position": "Top",
+            "showTitle": false,
+            "labelColor": { "solid": { "color": "#52514e" } },
+            "fontSize": 10
+          }
+        ],
+        "labels": [
+          {
+            "show": false,
+            "color": { "solid": { "color": "#52514e" } },
+            "fontSize": 9
+          }
+        ]
+      }
+    },
+    "card": {
+      "*": {
+        "labels": [ { "color": { "solid": { "color": "#1a1a19" } }, "fontSize": 34 } ],
+        "categoryLabels": [ { "show": true, "color": { "solid": { "color": "#8a8985" } }, "fontSize": 10 } ]
+      }
+    }
+  }
+}
