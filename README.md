@@ -2,6 +2,8 @@
 
 **BMIT3003 Data Warehouse Technology — Assignment**
 
+An academic retail data warehouse based on an 88 Speedmart business scenario. The project uses Oracle SQL and PL/SQL to implement eight dimension tables and four fact tables, with initial and incremental ETL, data quality checks, and SCD Type 2 customer history. Analytical reports explore sales, customers, loyalty, promotions, returns, and delivery performance, supported by Python visualisations and a Power BI reporting workflow.
+
 This is the run guide for the whole project, Task 1 through Task 3. If you follow
 it top to bottom on a clean Oracle instance you will end up with a loaded
 warehouse and reproducible Task 3 reports.
